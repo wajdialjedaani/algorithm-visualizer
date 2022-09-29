@@ -3,3 +3,21 @@
     height: 50px;
     background-color: black;
 }
+
+img {
+    object-fit: contain;
+}
+
+#Header {
+    text-align: center;
+    color: white;
+}
+
+.card {
+    width: 18rem;
+    top: 1rem;
+}
+
+.card-body>a {
+    float: right;
+}
