@@ -21,3 +21,15 @@ img {
 .card-body>a {
     float: right;
 }
+
+.wall {
+    background-color: blue;
+}
+
+.startnode {
+    background-color: green;
+}
+
+.endnode {
+    background-color: red;
+}

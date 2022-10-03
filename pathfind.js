@@ -3,12 +3,13 @@ document.querySelector("#generate").addEventListener("click", () => {
 })
 
 class Node {
-    constructor(x, y) {
+    constructor(x, y, walkable) {
         this.x = x
         this.y = y
         this.f = Infinity
         this.g = Infinity
         this.h = 0
+        this.walkable = walkable
     }
 }
 
@@ -16,19 +17,30 @@ function FindPath(table)
 {
     const nodes = []
     table.childNodes.forEach(row => {
+        let temp = []
         row.childNodes.forEach((cell) => {
-            if(cell.className !== "wall")
-            {
+            if(cell.className !== "wall") {
                 coords = cell.id.split(",")
-                nodes.push(new Node(coords[0], coords[1]))
+                temp.push(new Node(coords[0], coords[1]))
+            }
+            else {
+                temp.push(new Node(coords[0], coords[1], undefined))
             }
         })
+        nodes.push(temp)
     });
 
-    for(node of nodes)
-    {
-        console.log(`${node.x}, ${node.y}`)
-    }
+    //let str = ""
+    //for(let i=0; i<nodes.length; i++)
+    //{
+    //    for(let j=0; j<nodes[i].length; j++)
+    //    {
+    //        if(nodes[i][j] !== undefined)
+    //        str = str + (`${nodes[i][j].x},${nodes[i][j].y} `)
+    //    }
+    //    str = str + "\n"
+    //}
+    //console.log(str)
     //These don't exist yet, names are placeholders
     let start = 1
     let end = 1

@@ -43,7 +43,11 @@
                 for(let x=0; x<20; x++) {
                     let cell = document.createElement("td")
                     cell.id = (`${y},${x}`)
-                    cell.addEventListener('mousedown', function(){this.classList.add("wall")})
+                    cell.addEventListener('mousedown', function(){this.className="wall"})
+                    cell.addEventListener('auxclick', function(){this.className="startnode"})
+                    if(x==18 && y==13) {
+                        cell.className = "endnode"
+                    }
                     row.appendChild(cell)
                 }
                 table.appendChild(row)
