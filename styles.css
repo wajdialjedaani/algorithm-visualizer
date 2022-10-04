@@ -33,3 +33,25 @@ img {
 .endnode {
     background-color: red;
 }
+
+.btn-primary {
+    --bs-btn-font-weight: 600;
+    --bs-btn-color: white;
+    --bs-btn-bg: #F26419;
+    --bs-btn-border-color: #F26419;
+    --bs-btn-hover-color: white;
+
+    /*
+    --bs-btn-hover-bg: shade(#F26419, 10%);
+    --bs-btn-hover-border-color: shade(#F26419, 10%);
+    --bs-btn-focus-shadow-rgb: #F26419;
+    --bs-btn-active-color: var(--bs-btn-hover-color);
+    --bs-btn-active-bg: shade(#F26419, 20%);
+    --bs-btn-active-border-color: shade(#F26419, 20%);
+    */
+}
+
+.modal-content {
+    background-color: #84A98C;
+    color: white;
+}
