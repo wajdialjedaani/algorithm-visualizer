@@ -72,56 +72,45 @@ function FindPath(table)
 
     open.push(start)
     start.g = 0
-    //console.log(`end: ${end.x},${end.y}`)
+    
     while (open.length != 0) {
         console.log(`outer loop ${open.length}`)
         open.sort((a, b) => {return a.f-b.f}) //Sort ascending by cost
-        //console.log(open)
+
         let current = open.shift()
-        //console.log(`current: ${current.x},${current.y}`)
         closed.push(current)
-        //console.log(closed)
 
         if (current === end) {//If the current node is the end node
-            //console.log("GOTTEM")
             let path = []
             while(current) {
                 path.push(current)
                 document.getElementById(`${current.y},${current.x}`).style.backgroundColor = 'yellow'
                 current = current.parent
             }
-            //console.log(path)
             return path
         }
 
         let children = []
-        //TODO - for each child of current, append it to children
+        //get list of neighbors
         for (neighbor of graph.adjList.get(current)) {
-            //console.log(`add child ${neighbor.x},${neighbor.y}`)
             children.push(neighbor)
         }
 
         //for each child
         for (child of children) { //Continue if child has already been searched
             if(closed.some((element) => {return element === child})) {
-                //console.log("searched")
                 continue
             }
 
             let g = current.g+1
-            //console.log(g)
             let h = Math.abs(child.x - end.x) + Math.abs(child.y - end.y)
-            //console.log(h)
             let f = g + h
-            //console.log(f)
 
-
+            //Continue if better path has already been found
             if(open.some(element => {return element.x == child.x && element.y == child.y}) && child.g < g) {
-                //console.log(g)
-                //console.log(`already pathed ${child.x},${child.y}`)
                 continue
             }
-
+            //Dont add child to search list if its a wall
             if(!child.walkable) {
                 continue
             }
@@ -131,11 +120,12 @@ function FindPath(table)
             child.f = f
             child.parent = current
             
-            //console.log(`push child ${child.x},${child.y}`)
+            //If node isn't already in seearch list, add it
             if(!open.some((element) => {return element === child})) {
                 open.push(child)
             }
         }
     }
+    //Only executed upon failure to find end
     return []
 }

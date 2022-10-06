@@ -22,18 +22,6 @@ img {
     float: right;
 }
 
-.wall {
-    background-color: blue;
-}
-
-.startnode {
-    background-color: green;
-}
-
-.endnode {
-    background-color: red;
-}
-
 .btn-primary {
     --bs-btn-font-weight: 600;
     --bs-btn-color: white;
