@@ -80,57 +80,65 @@ function FindPath(table)
     while (open.length != 0) {
         console.log(`outer loop ${open.length}`)
         open.sort((a, b) => {return a.f-b.f}) //Sort ascending by cost
-        console.log(open)
+        //console.log(open)
         let current = open.shift()
-        console.log(`current: ${current.x},${current.y}`)
+        //console.log(`current: ${current.x},${current.y}`)
         closed.push(current)
-        console.log(closed)
+        //console.log(closed)
 
         if (current === end) {//If the current node is the end node
-            console.log("GOTTEM")
+            //console.log("GOTTEM")
             let path = []
             while(current) {
                 path.push(current)
+                document.getElementById(`${current.y},${current.x}`).style.backgroundColor = 'yellow'
                 current = current.parent
             }
-            console.log(path)
+            //console.log(path)
             return path
         }
 
         let children = []
         //TODO - for each child of current, append it to children
         for (neighbor of graph.adjList.get(current)) {
-            console.log(`add child ${neighbor.x},${neighbor.y}`)
+            //console.log(`add child ${neighbor.x},${neighbor.y}`)
             children.push(neighbor)
         }
 
         //for each child
         for (child of children) { //Continue if child has already been searched
             if(closed.some((element) => {return element === child})) {
-                console.log("searched")
+                //console.log("searched")
                 continue
             }
 
             let g = current.g+1
-            console.log(g)
+            //console.log(g)
             let h = Math.abs(child.x - end.x) + Math.abs(child.y - end.y)
-            console.log(h)
+            //console.log(h)
             let f = g + h
-            console.log(f)
+            //console.log(f)
 
 
             if(open.some(element => {return element.x == child.x && element.y == child.y}) && child.g < g) {
-                console.log(g)
-                console.log(`already pathed ${child.x},${child.y}`)
+                //console.log(g)
+                //console.log(`already pathed ${child.x},${child.y}`)
                 continue
             }
+
+            if(!child.walkable) {
+                continue
+            }
+
             child.g = g
             child.h = h
             child.f = f
             child.parent = current
             
-            console.log(`push child ${child.x},${child.y}`)
-            open.push(child)
+            //console.log(`push child ${child.x},${child.y}`)
+            if(!open.some((element) => {return element === child})) {
+                open.push(child)
+            }
         }
     }
     return []
