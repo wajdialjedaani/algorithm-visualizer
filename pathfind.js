@@ -67,16 +67,12 @@ function FindPath(table)
         })
     });
 
-    //These don't exist yet, names are placeholders
-
-    //Dont forget to undo these ^^^^^
-
     const open = []
     const closed = []
 
     open.push(start)
     start.g = 0
-    console.log(`end: ${end.x},${end.y}`)
+    //console.log(`end: ${end.x},${end.y}`)
     while (open.length != 0) {
         console.log(`outer loop ${open.length}`)
         open.sort((a, b) => {return a.f-b.f}) //Sort ascending by cost
