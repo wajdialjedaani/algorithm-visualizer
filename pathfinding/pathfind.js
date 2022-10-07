@@ -2,6 +2,46 @@ document.querySelector("#generate").addEventListener("click", () => {
     FindPath(document.querySelector("tbody"))
 })
 
+window.onload = () => {
+    let table = document.createElement("tbody")
+    document.querySelector("table").appendChild(table)
+    for(let y=0; y<15; y++) {
+        let row = document.createElement("tr")
+        for(let x=0; x<20; x++) {
+            let cell = document.createElement("td")
+            cell.id = (`${y},${x}`)
+            cell.addEventListener('mousedown', function(){this.className="wall"})
+            cell.addEventListener('auxclick', function(){this.className="startnode"})
+            if(x==18 && y==13) {
+                cell.className = "endnode"
+            }
+            row.appendChild(cell)
+        }
+        table.appendChild(row)
+    }
+}
+
+//pathAnimation = function(path) {
+//    console.log("pathing")
+//    anime({
+//    targets: path,
+//    delay: anime.stagger(100),
+//    backgroundColor: '#FFFF00'
+//})}
+//searchTimeline.add({
+//    targets: closed,
+//        delay: anime.stagger(10),
+//        backgroundColor: '#A020F0',
+//})
+//.add({
+//    targets: path,
+//    delay: anime.stagger(100),
+//    backgroundColor: '#FFFF00'
+//})
+//searchAnimation = function(closed, path) {
+//    anime({
+//})}
+
 class Vertex {
     constructor(x, y, walkable, start=false, end=false) {
         this.x = x
@@ -34,6 +74,7 @@ class Graph {
 
 function FindPath(table)
 {
+    document.querySelector("#animate").addEventListener("click", () => {searchTimeline.play()})
     let start = undefined
     let end = undefined
 
@@ -67,6 +108,36 @@ function FindPath(table)
         })
     });
 
+    const results = AStar(graph, start, end)
+    searchTimeline = anime.timeline({autoplay: false})
+    console.log("start loop")
+    for(path of results.untakenPaths)
+    {
+        //searchTimeline.pause()
+        searchTimeline.add({
+            targets: path,
+            autoplay: false,
+            //Zap the whole line red
+            backgroundColor: [
+                {value: "#FF0000", duration: 10},
+                {value: "#A020F0", delay: 20, duration: 10}
+            ]
+            //Zap the whole line purple
+        })
+    }
+    console.log("end loop")
+    searchTimeline.add({
+        targets: results.pathCells,
+        delay: anime.stagger(50),
+        duration: 500,
+        backgroundColor: '#FFFF00',
+        autoplay: false
+    })
+    console.log("test")
+    //searchTimeline.restart()
+}
+
+function AStar(graph, start, end) {
     const open = []
     const closed = []
 
@@ -81,13 +152,26 @@ function FindPath(table)
         closed.push(current)
 
         if (current === end) {//If the current node is the end node
-            let path = []
+            const pathArr = []
+            const pathCells = []
             while(current) {
-                path.push(current)
-                document.getElementById(`${current.y},${current.x}`).style.backgroundColor = 'yellow'
+                pathArr.push(current)
+                pathCells.push(document.getElementById(`${current.y},${current.x}`))
                 current = current.parent
             }
-            return path
+            return {
+                path: pathArr.reverse(),
+                pathCells: pathCells.reverse(),
+                searched: closed.map((element) => document.getElementById(`${element.y},${element.x}`)),
+                untakenPaths: closed.map((element) => {
+                    let path = []
+                    while(element) {
+                        path.push(document.getElementById(`${element.y},${element.x}`))
+                        element = element.parent
+                    }
+                    return path
+                })
+            }
         }
 
         let children = []
