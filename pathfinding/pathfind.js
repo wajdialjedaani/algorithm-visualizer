@@ -72,7 +72,7 @@ class Graph {
     }
 }
 
-function FindPath(table)
+async function FindPath(table)
 {
     document.querySelector("#animate").addEventListener("click", () => {searchTimeline.play()})
     let start = undefined
@@ -109,32 +109,29 @@ function FindPath(table)
     });
 
     const results = AStar(graph, start, end)
-    searchTimeline = anime.timeline({autoplay: false})
-    console.log("start loop")
-    for(path of results.untakenPaths)
-    {
-        //searchTimeline.pause()
-        searchTimeline.add({
-            targets: path,
-            autoplay: false,
-            //Zap the whole line red
-            backgroundColor: [
-                {value: "#FF0000", duration: 10},
-                {value: "#A020F0", delay: 20, duration: 10}
-            ]
-            //Zap the whole line purple
-        })
-    }
-    console.log("end loop")
-    searchTimeline.add({
-        targets: results.pathCells,
-        delay: anime.stagger(50),
-        duration: 500,
-        backgroundColor: '#FFFF00',
-        autoplay: false
-    })
-    console.log("test")
-    //searchTimeline.restart()
+
+    //searchTimeline = anime.timeline({autoplay: false})
+    for(path of results.untakenPaths) {
+            //searchTimeline.add
+            await anime({
+                targets: path,
+                //autoplay: false,
+                //Zap the whole line red
+                backgroundColor: [
+                    {value: "#FF0000", duration: 0},
+                    {value: "#A020F0", delay: 30, duration: 20}
+                ]
+                //Zap the whole line purple
+            }).finished
+        }
+    //searchTimeline.add
+    await anime({
+    targets: results.pathCells,
+    delay: anime.stagger(50),
+    duration: 500,
+    backgroundColor: '#FFFF00',
+    //autoplay: false
+    }).finished
 }
 
 function AStar(graph, start, end) {
