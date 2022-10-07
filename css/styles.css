@@ -1,0 +1,80 @@
+:root {
+    --charcoal: #2F3E46;
+    --ashGray: #CAD2C5;
+    --darkSeaGreen: #84A98C;
+    --orangeRed: #F26419;
+    --unitedNationsBlue: #6290C8;
+    --ming: #28666E;
+    --navajoWhite: #FEDC97;
+    --outerSpaceCrayola: #2C3639;
+    --darkSlateGray: #3F4E4F;
+    --graniteGray: #696464;
+}
+
+img {
+    object-fit: contain;
+}
+
+#Header {
+    text-align: center;
+    color: white;
+}
+
+.back {
+    background-color: var(--ashGray);
+    transition: .5s;
+}
+
+.back-dark {
+    background-color: var(--outerSpaceCrayola);
+}
+
+.bar {
+    background-color: var(--charcoal);
+}
+
+.card {
+    width: 18rem;
+    top: 1rem;
+}
+
+.card-body>a {
+    float: right;
+}
+
+.card-algorithm-type {
+    --bs-card-bg: var(--darkSeaGreen);
+    transition: .5s;
+}
+
+.card-algorithm-type-dark {
+    --bs-card-bg: var(--darkSlateGray);
+    --bs-card-color: white;
+}
+
+.btn-orangeRed {
+     --bs-btn-color: white;
+     --bs-btn-bg: var(--orangeRed);
+     --bs-btn-border-color: var(--bs-btn-bg);
+     --bs-btn-hover-color: var(--bs-btn-color);
+     --bs-btn-hover-bg: var(--bs-btn-bg);
+     --bs-btn-active-color: var(--bs-btn-color);
+     --bs-btn-active-bg: var(--bs-btn-bg);
+     --bs-btn-active-border-color: var(--bs-btn-bg);
+     transition: .5s;
+}
+
+.btn-orangeRed:hover {
+    transform: scale(1.1);
+}
+
+.modal-setting {
+    --bs-modal-bg: var(--darkSeaGreen);
+    --bs-modal-color: black;
+    transition: .5s;
+}
+
+.modal-setting-dark {
+    --bs-modal-bg: var(--darkSlateGray);
+    --bs-modal-color: white;
+}
