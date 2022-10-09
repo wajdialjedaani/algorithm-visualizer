@@ -53,6 +53,22 @@ class Graph {
 
 async function FindPath(table)
 {
+    document.querySelector("#AnimSpeed").addEventListener("click", function() {
+        speed = speeds[(speeds.indexOf(speed)+1)%speeds.length]
+        this.innerHTML = `${speed}x`
+    })
+    document.querySelector("#PlayPause").addEventListener("click", function() {
+        if(playing) {
+            playing = false
+            currentAnim.pause()
+            this.firstChild.setAttribute("src", "../Assets/play-fill.svg")
+        }
+        else {
+            playing = true
+            currentAnim.play()
+            this.firstChild.setAttribute("src", "../Assets/pause-fill.svg")
+        }
+    })
     let start = undefined
     let end = undefined
 
@@ -88,22 +104,28 @@ async function FindPath(table)
 
     const results = AStar(graph, start, end)
 
+    const speeds = [1, 2, 4]
+    let currentAnim
+    let playing = true
+    let speed = 1
     //Start each step of the animation with await to keep the thread unblocked, then continue when the step is done
     for(path of results.untakenPaths) {
-            await anime({
+            currentAnim = anime({
                 targets: path,
                 backgroundColor: [
                     {value: "#FF0000", duration: 0}, //Zap the line red instantly
-                    {value: "#A020F0", delay: 15, duration: 1} //Small wait, then zap the whole line purple
+                    {value: "#A020F0", delay: 60 / speed, duration: 1} //Small wait, then zap the whole line purple
                 ]
-            }).finished
+            })
+            await currentAnim.finished
         }
-    await anime({
-    targets: results.pathCells,
-    delay: anime.stagger(50),
-    duration: 500,
-    backgroundColor: '#FFFF00',
-    }).finished
+    currentAnim = anime({
+        targets: results.pathCells,
+        delay: anime.stagger(50),
+        duration: 500,
+        backgroundColor: '#FFFF00',
+        })
+    await currentAnim.finished
 }
 
 function AStar(graph, start, end) {

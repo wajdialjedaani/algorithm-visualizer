@@ -20,3 +20,10 @@ td {
     position: fixed;
     bottom: 0px;
 }
+
+.controls {
+    height: 40px;
+    width: auto;
+    background-color: #2c3639;
+    border: none;
+}
