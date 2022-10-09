@@ -15,3 +15,8 @@ td {
 .endnode {
     background-color: red;
 }
+
+.bar {
+    position: fixed;
+    bottom: 0px;
+}
