@@ -21,27 +21,6 @@ window.onload = () => {
     }
 }
 
-//pathAnimation = function(path) {
-//    console.log("pathing")
-//    anime({
-//    targets: path,
-//    delay: anime.stagger(100),
-//    backgroundColor: '#FFFF00'
-//})}
-//searchTimeline.add({
-//    targets: closed,
-//        delay: anime.stagger(10),
-//        backgroundColor: '#A020F0',
-//})
-//.add({
-//    targets: path,
-//    delay: anime.stagger(100),
-//    backgroundColor: '#FFFF00'
-//})
-//searchAnimation = function(closed, path) {
-//    anime({
-//})}
-
 class Vertex {
     constructor(x, y, walkable, start=false, end=false) {
         this.x = x
@@ -74,7 +53,6 @@ class Graph {
 
 async function FindPath(table)
 {
-    document.querySelector("#animate").addEventListener("click", () => {searchTimeline.play()})
     let start = undefined
     let end = undefined
 
@@ -110,27 +88,21 @@ async function FindPath(table)
 
     const results = AStar(graph, start, end)
 
-    //searchTimeline = anime.timeline({autoplay: false})
+    //Start each step of the animation with await to keep the thread unblocked, then continue when the step is done
     for(path of results.untakenPaths) {
-            //searchTimeline.add
             await anime({
                 targets: path,
-                //autoplay: false,
-                //Zap the whole line red
                 backgroundColor: [
-                    {value: "#FF0000", duration: 0},
-                    {value: "#A020F0", delay: 30, duration: 20}
+                    {value: "#FF0000", duration: 0}, //Zap the line red instantly
+                    {value: "#A020F0", delay: 15, duration: 1} //Small wait, then zap the whole line purple
                 ]
-                //Zap the whole line purple
             }).finished
         }
-    //searchTimeline.add
     await anime({
     targets: results.pathCells,
     delay: anime.stagger(50),
     duration: 500,
     backgroundColor: '#FFFF00',
-    //autoplay: false
     }).finished
 }
 
@@ -142,7 +114,6 @@ function AStar(graph, start, end) {
     start.g = 0
     
     while (open.length != 0) {
-        console.log(`outer loop ${open.length}`)
         open.sort((a, b) => {return a.f-b.f}) //Sort ascending by cost
 
         let current = open.shift()
