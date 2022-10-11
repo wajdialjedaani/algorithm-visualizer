@@ -50,11 +50,34 @@ function zoomOut() {
     }
 }
     
-
 function sortingSelected() {
-    anime({
-        targets: '#searchingCard, #pathfindingCard',
-        translateX: 1000,
-        duration: 100,
-    });
+    var fadeSearching = document.querySelector("#searchingAlgorithms");
+    var fadePathfinding = document.querySelector("#pathfindingAlgorithms");
+    var fadeOutEffect = setInterval(function () {
+        if (!fadeSearching.style.opacity) {
+            fadeSearching.style.opacity = 1;
+        }
+        if (fadeSearching.style.opacity > 0) {
+            fadeSearching.style.opacity -= 0.1;
+        } else {
+            clearInterval(fadeEffect);
+        }
+
+        if (!fadePathfinding.style.opacity) {
+            fadePathfinding.style.opacity = 1;
+        }
+        if (fadePathfinding.style.opacity > 0) {
+            fadePathfinding.style.opacity -= 0.1;
+        } else {
+            clearInterval(fadeEffect);
+        }
+
+        anime({
+            targets: '#searchingAlgorithms, #pathfindingAlgorithms',
+            translateX: 200
+        });
+        fadeSearching.style.visibility = "hidden";
+        fadePathfinding.style.visibility = "hidden";
+
+    }, 50);
 }
