@@ -68,117 +68,132 @@
 
         <!-- Menu -->
         <div class="container-fluid">
-            <div class="container-fluid position-absolute" style="z-index: 1;">
+            <div id="algorithmsMenu" class="container-fluid position-absolute" style="visibility: visible; opacity: 1;">
                 <div class="row justify-content-between">
-                    <div class="col-4 card card-algorithm-type mx-auto">
+                    <div id="sortingAlgorithmsGo" class="col-4 card card-algorithm-type mx-auto">
                         <div class="card-body">
                             <h4 class="card-title">Sorting Algorithms</h4>
-                            <p class="card-text">Sample description</p>
-                            <a href="#" class="btn btn-orangeRed justify-content-end" role="button" onclick="sortingSelected()">Go</a>
+                            <a class="btn btn-orangeRed justify-content-end " role="button" onclick="sortingGo()">Go</a>
                         </div>
                     </div>
-                    <div id="searchingAlgorithms" class="col-4 card card-algorithm-type mx-auto position-relative">
+                    <div id="searchingAlgorithmsGo" class="col-4 card card-algorithm-type mx-auto position-relative">
                         <div class="card-body">
                             <h4 class="card-title">Searching Algorithms</h4>
-                            <p class="card-text">Sample description</p>
-                            <a href="#" class="btn btn-orangeRed justify-content-end" role="button">Go</a>
+                            <a class="btn btn-orangeRed justify-content-end" role="button" onclick="searchingGo()">Go</a>
                         </div>
                     </div>
-                    <div id="pathfindingAlgorithms" class="col-4 card card-algorithm-type mx-auto">
+                    <div id="pathfindingAlgorithmsGo" class="col-4 card card-algorithm-type mx-auto">
                         <div class="card-body">
                             <h4 class="card-title">Pathfinding Algorithms</h4>
-                            <p class="card-text">Sample description</p>
-                            <a href="pathfinding/pathfind.html" class="btn btn-orangeRed justify-content-end" role="button">Go</a>
+                            <a class="btn btn-orangeRed justify-content-end" role="button" onclick="pathfindingGo()">Go</a>
                         </div>
                     </div>
                 </div>
             </div>
 
             <!-- Sorting Menu -->
-            <div class="container-fluid position-absolute" style="visibility: hidden;">
+            <div id="sortingMenu" class="container-fluid position-absolute" style="visibility: hidden; opacity: 0;">
                 <div class="row justify-content-between">
                     <div class="col-4 card card-algorithm-type mx-auto">
                         <div class="card-body">
                             <h4 class="card-title">Sorting Algorithms</h4>
-                            <p class="card-text">Sample description</p>
-                            <a href="#" class="btn btn-orangeRed justify-content-end" role="button" onclick="sortingSelected(450)">Go</a>
+                            <a class="btn btn-orangeRed justify-content-end" role="button" onclick="sortingBack()">Back</a>
                         </div>
                     </div>
-                    <div class="col-4 card mx-auto">
+                    <div class="col-4 card card-algorithm mx-auto">
                         <div class="card-body">
                             <h4 class="card-title">Insertion Sort</h4>
-                            <p class="card-text">Sample description</p>
-                            <a href="#" class="btn btn-orangeRed justify-content-end" role="button">Go</a>
+                            <a href="#" class="btn btn-navajoWhite justify-content-end" role="button">Go</a>
                         </div>
                     </div>   
-                    <div class="col-4 card mx-auto">
+                    <div class="col-4 card card-algorithm mx-auto">
                         <div class="card-body">
                             <h4 class="card-title">Selection Sort</h4>
-                            <p class="card-text">Sample description</p>
-                            <a href="#" class="btn btn-orangeRed justify-content-end" role="button">Go</a>
+                            <a href="#" class="btn btn-navajoWhite justify-content-end" role="button">Go</a>
                         </div>
                     </div>
                 </div>  
                 <div class="row justify-content-between mt-5">
-                    <div class="col-4 card mx-auto">
+                    <div class="col-4 card card-algorithm mx-auto">
                         <div class="card-body">
                             <h4 class="card-title">Merge Sort</h4>
-                            <p class="card-text">Sample description</p>
-                            <a href="#" class="btn btn-orangeRed justify-content-end" role="button">Go</a>
+                            <a href="#" class="btn btn-navajoWhite justify-content-end" role="button">Go</a>
                         </div>
                     </div>
-                    <div class="col-4 card mx-auto">
+                    <div class="col-4 card-algorithm card mx-auto">
                         <div class="card-body">
                             <h4 class="card-title">Bubble Sort</h4>
-                            <p class="card-text">Sample description</p>
-                            <a href="#" class="btn btn-orangeRed justify-content-end" role="button">Go</a>
+                            <a href="#" class="btn btn-navajoWhite justify-content-end" role="button">Go</a>
                         </div>
                     </div>
-                    <div class="col-4 card mx-auto">
+                    <div class="col-4 card card-algorithm mx-auto">
                         <div class="card-body">
                             <h4 class="card-title">Quick Sort</h4>
-                            <p class="card-text">Sample description</p>
-                            <a href="#" class="btn btn-orangeRed justify-content-end" role="button">Go</a>
+                            <a href="#" class="btn btn-navajoWhite justify-content-end" role="button">Go</a>
                         </div>
                     </div>  
                 </div>
             </div>
-            
-            <!-- <div class="container-fluid position-absolute">
-                <div class="row">
+
+            <!-- Searching Menu -->
+            <div id="searchingMenu" class="container-fluid position-absolute" style="visibility: hidden; opacity: 0;">
+                <div class="row justify-content-between">
                     <div class="col-4 card card-algorithm-type mx-auto">
                         <div class="card-body">
-                            <h4 class="card-title">Sorting Algorithms</h4>
-                            <p class="card-text">Sample description</p>
-                            <a href="#" class="btn btn-orangeRed justify-content-end" role="button">Go</a>
+                            <h4 class="card-title">Searching Algorithms</h4>
+                            <a class="btn btn-orangeRed justify-content-end" role="button" onclick="searchingBack()">Back</a>
                         </div>
                     </div>
-
-                    <div class="card mx-auto">
+                    <div class="col-4 card card-algorithm mx-auto">
                         <div class="card-body">
-                            <h4 class="card-title">Merge Sort</h4>
-                            <p class="card-text">Sample description</p>
-                            <a href="#" class="btn btn-orangeRed justify-content-end" role="button">Go</a>
+                            <h4 class="card-title">Linear Search</h4>
+                            <a href="#" class="btn btn-navajoWhite justify-content-end" role="button">Go</a>
                         </div>
-                    </div>
-
-                    <div class="card mx-auto">
+                    </div>   
+                    <div class="col-4 card card-algorithm mx-auto">
                         <div class="card-body">
-                            <h4 class="card-title">Bubble Sort</h4>
-                            <p class="card-text">Sample description</p>
-                            <a href="#" class="btn btn-orangeRed justify-content-end" role="button">Go</a>
+                            <h4 class="card-title">Binary Search</h4>
+                            <a href="#" class="btn btn-navajoWhite justify-content-end" role="button">Go</a>
                         </div>
                     </div>
-                </div> -->
+                </div>  
             </div>
 
-            
+            <!-- Pathfinding Menu -->
+            <div id="pathfindingMenu" class="container-fluid position-absolute" style="visibility: hidden; opacity: 0;">
+                <div class="row justify-content-between">
+                    <div class="col-4 card card-algorithm-type mx-auto">
+                        <div class="card-body">
+                            <h4 class="card-title">Pathfinding Algorithms</h4>
+                            <a class="btn btn-orangeRed justify-content-end" role="button" onclick="pathfindingBack()">Back</a>
+                        </div>
+                    </div>
+                    <div class="col-4 card card-algorithm mx-auto">
+                        <div class="card-body">
+                            <h4 class="card-title">A* Pathfinding</h4>
+                            <a href="pathfinding/pathfind.html" class="btn btn-navajoWhite justify-content-end" role="button">Go</a>
+                        </div>
+                    </div>
+                    <div class="col-4 card card-algorithm mx-auto" style="visibility: hidden;">
+                        <div class="card-body">
+                            <h4 class="card-title">A* Pathfinding</h4>
+                            <a href="pathfinding/pathfind.html" class="btn btn-navajoWhite justify-content-end" role="button">Go</a>
+                        </div>
+                    </div>
+                </div>  
+            </div>
+
+            <!-- Bottom Bar -->
         </div>
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.js" integrity="sha512-E378bwaeZf1nwXeJGIwTB58A5gPt5jFU3u6aTGja4ZdRFJeo/N/REKnBgNZOZlH6JdnOPO98vg2AnSGaNfCMFQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <script src="js/main.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
     </body>
     
-    
+    <div class="container-fluid">
+        <div class="row fixed-bottom bar bottom-bar align-items-center">
+        </div>
+    </div>
 </html>
