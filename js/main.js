@@ -1,3 +1,4 @@
+/// SETTINGS ----------------------------------------------------------------------------------
 function darkMode() {   // enables dark mode
     var settingModal = document.getElementById("settingModalDialog");
     var back = document.body;
@@ -41,6 +42,7 @@ function zoomIn() {
     }
 }
 
+
 function zoomOut() {
     zoom -= zoomChange;
     var elements = document.querySelectorAll('*');
@@ -49,35 +51,75 @@ function zoomOut() {
         elements[i].style.transform = "scale(" + zoom + ")";
     }
 }
+
+/// MAIN MENU ----------------------------------------------------------------------------------
+function sortingGo() {    // animation if sorting go is selected
+    $('#algorithmsMenu').fadeTo(500, 0, function() {
+        document.querySelector('#algorithmsMenu').style.visibility = 'hidden';
+    });
     
-function sortingSelected() {
-    var fadeSearching = document.querySelector("#searchingAlgorithms");
-    var fadePathfinding = document.querySelector("#pathfindingAlgorithms");
-    var fadeOutEffect = setInterval(function () {
-        if (!fadeSearching.style.opacity) {
-            fadeSearching.style.opacity = 1;
-        }
-        if (fadeSearching.style.opacity > 0) {
-            fadeSearching.style.opacity -= 0.1;
-        } else {
-            clearInterval(fadeEffect);
-        }
+    // anime.timeline({
+    //     targets: '#searchingAlgorithmsGo, #pathfindingAlgorithmsGo',
+    //     translateX: 200,
+    //     duration: 500,
+    // });
 
-        if (!fadePathfinding.style.opacity) {
-            fadePathfinding.style.opacity = 1;
-        }
-        if (fadePathfinding.style.opacity > 0) {
-            fadePathfinding.style.opacity -= 0.1;
-        } else {
-            clearInterval(fadeEffect);
-        }
+    document.querySelector('#sortingMenu').style.visibility = 'visible';
 
-        anime({
-            targets: '#searchingAlgorithms, #pathfindingAlgorithms',
-            translateX: 200
-        });
-        fadeSearching.style.visibility = "hidden";
-        fadePathfinding.style.visibility = "hidden";
+    $('#sortingMenu').fadeTo(500, 1);
+}
 
-    }, 50);
+function sortingBack() { // animation if sorting back button is selected
+    $('#sortingMenu').fadeTo(500, 0, function() {
+        document.querySelector('#sortingMenu').style.visibility = 'hidden';
+    });
+    
+    // anime({
+    //     targets: '.card-algorithm',
+    //     translateX: 200,
+    // });
+
+    document.querySelector('#algorithmsMenu').style.visibility = 'visible';
+
+    $('#algorithmsMenu').fadeTo(500, 1);
+}
+
+function searchingGo() {    // animation if sorting go is selected
+    $('#algorithmsMenu').fadeTo(500, 0, function() {
+        document.querySelector('#algorithmsMenu').style.visibility = 'hidden';
+    });
+
+    document.querySelector('#searchingMenu').style.visibility = 'visible';
+
+    $('#searchingMenu').fadeTo(500, 1);
+}
+
+function searchingBack() { // animation if sorting back button is selected
+    $('#searchingMenu').fadeTo(500, 0, function() {
+        document.querySelector('#searchingMenu').style.visibility = 'hidden';
+    });
+
+    document.querySelector('#algorithmsMenu').style.visibility = 'visible';
+
+    $('#algorithmsMenu').fadeTo(500, 1);
+}
+
+function pathfindingGo() {    // animation if sorting go is selected
+    $('#algorithmsMenu').fadeTo(500, 0, function() {
+        document.querySelector('#algorithmsMenu').style.visibility = 'hidden';
+    });
+
+    document.querySelector('#pathfindingMenu').style.visibility = 'visible';
+
+    $('#pathfindingMenu').fadeTo(500, 1);
+}
+
+function pathfindingBack() { // animation if sorting back button is selected
+    $('#pathfindingMenu').fadeTo(500, 0, function() {
+        document.querySelector('#pathfindingMenu').style.visibility = 'hidden';
+    });
+
+    document.querySelector('#algorithmsMenu').style.visibility = 'visible';
+
+    $('#algorithmsMenu').fadeTo(500, 1);
 }
