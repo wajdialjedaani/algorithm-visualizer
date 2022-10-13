@@ -38,30 +38,32 @@ function cellHandler(event) {
 
 function generateTable() {
     let table = document.querySelector("#grid-container")
+    table.innerHTML = ""
     const size = document.body.clientWidth > 800 ? 100 : 50;
   
     columns = Math.floor((document.body.clientWidth / 50));
     rows = Math.floor((document.body.clientHeight / 50));
-
+    console.log(`width: ${document.body.clientWidth}  height: ${document.body.clientHeight}`)
+    console.log(`columns: ${columns}, rows: ${rows}`)
     table.style.setProperty("--columns", columns);
     table.style.setProperty("--rows", rows);
-
+    width = document.body.clientWidth / columns
+    height = document.body.clientHeight / rows
     for(let y=0; y<rows; y++) {
-        //let row = document.createElement("tr")
         for(let x=0; x<columns; x++) {
             let cell = document.createElement("td")
             cell.id = (`${y},${x}`)
             cell.addEventListener('mousedown', cellHandler)
-            //if(x==18 && y==13) {
-            //    cell.className = "endnode"
-            //}
+            cell.style.setProperty("--width", width)
+            cell.style.setProperty("--height", height)
             table.appendChild(cell)
         }
-        //table.appendChild(row)
     }
 }
 
 window.onload = generateTable
+
+window.onresize = generateTable
 
 class Vertex {
     constructor(x, y, walkable, start=false, end=false) {
