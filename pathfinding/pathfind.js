@@ -1,5 +1,5 @@
 document.querySelector("#generate").addEventListener("click", () => {
-    FindPath(document.querySelector("tbody"))
+    FindPath(document.querySelector("#grid-container"))
 })
 
 let drag = false
@@ -36,23 +36,32 @@ function cellHandler(event) {
     })
 }
 
-window.onload = () => {
-    let table = document.createElement("tbody")
-    document.querySelector("table").appendChild(table)
-    for(let y=0; y<15; y++) {
-        let row = document.createElement("tr")
-        for(let x=0; x<20; x++) {
+function generateTable() {
+    let table = document.querySelector("#grid-container")
+    const size = document.body.clientWidth > 800 ? 100 : 50;
+  
+    columns = Math.floor((document.body.clientWidth / 50));
+    rows = Math.floor((document.body.clientHeight / 50));
+
+    table.style.setProperty("--columns", columns);
+    table.style.setProperty("--rows", rows);
+
+    for(let y=0; y<rows; y++) {
+        //let row = document.createElement("tr")
+        for(let x=0; x<columns; x++) {
             let cell = document.createElement("td")
             cell.id = (`${y},${x}`)
             cell.addEventListener('mousedown', cellHandler)
             //if(x==18 && y==13) {
             //    cell.className = "endnode"
             //}
-            row.appendChild(cell)
+            table.appendChild(cell)
         }
-        table.appendChild(row)
+        //table.appendChild(row)
     }
 }
+
+window.onload = generateTable
 
 class Vertex {
     constructor(x, y, walkable, start=false, end=false) {
@@ -106,8 +115,10 @@ async function FindPath(table)
     let end = undefined
 
     const graph = new Graph()
-    table.childNodes.forEach(row => {
-        row.childNodes.forEach((cell) => {
+    table.childNodes.forEach(cell => {
+            if(cell.nodeName !== "TD"){
+                return
+            }
             coords = cell.id.split(",")
             let vertex
             if(cell.className == "wall") {
@@ -132,8 +143,7 @@ async function FindPath(table)
                     graph.addEdge(key, vertex)
                 }
             }
-        })
-    });
+        });
 
     const results = AStar(graph, start, end)
 
