@@ -2,6 +2,40 @@ document.querySelector("#generate").addEventListener("click", () => {
     FindPath(document.querySelector("tbody"))
 })
 
+let drag = false
+
+function cellDrag() {
+    drag = true
+    this.className = "wall"
+}
+
+function cleanUp() {
+    document.querySelectorAll("td").forEach((node)=>{
+        node.removeEventListener("mousemove", cellDrag)
+        node.removeEventListener("mouseup", cleanUp)
+    })
+    if(!drag) {
+        console.log("clicking")
+        if(this.className == "startnode") {
+            this.className = "endnode"
+        }
+        else if(this.className == "endnode" || this.className == "wall") {
+            this.className = ""
+        }
+        else {
+            this.className = "startnode"
+        }
+    }
+    drag = false;
+}
+
+function cellHandler(event) {
+    document.querySelectorAll("td").forEach((node)=>{
+        node.addEventListener("mousemove", cellDrag)
+        node.addEventListener("mouseup", cleanUp)
+    })
+}
+
 window.onload = () => {
     let table = document.createElement("tbody")
     document.querySelector("table").appendChild(table)
@@ -10,11 +44,10 @@ window.onload = () => {
         for(let x=0; x<20; x++) {
             let cell = document.createElement("td")
             cell.id = (`${y},${x}`)
-            cell.addEventListener('mousedown', function(){this.className="wall"})
-            cell.addEventListener('auxclick', function(){this.className="startnode"})
-            if(x==18 && y==13) {
-                cell.className = "endnode"
-            }
+            cell.addEventListener('mousedown', cellHandler)
+            //if(x==18 && y==13) {
+            //    cell.className = "endnode"
+            //}
             row.appendChild(cell)
         }
         table.appendChild(row)
