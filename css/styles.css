@@ -33,6 +33,10 @@ img {
     background-color: var(--charcoal);
 }
 
+.bottom-bar {
+    height: 60px;
+}
+
 .card {
     width: 18rem;
     height: 11rem;
@@ -78,4 +82,25 @@ img {
 .modal-setting-dark {
     --bs-modal-bg: var(--darkSlateGray);
     --bs-modal-color: white;
+}
+
+.card-algorithm {
+    --bs-card-color: white;
+    --bs-card-bg: var(--ming);
+    transition: .5s
+}
+
+.btn-navajoWhite {
+    --bs-btn-color: black;
+    --bs-btn-bg: var(--navajoWhite);
+    --bs-btn-border-color: var(--bs-btn-bg);
+    --bs-btn-hover-color: var(--bs-btn-color);
+    --bs-btn-hover-bg: var(--bs-btn-bg);
+    --bs-btn-active-color: var(--bs-btn-color);
+    --bs-btn-active-bg: var(--bs-btn-bg);
+    --bs-btn-active-border-color: var(--bs-btn-bg);
+}
+
+.btn-navajoWhite:hover {
+    transform: scale(1.1);
 }
