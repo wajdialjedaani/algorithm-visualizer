@@ -11,3 +11,17 @@
 #arrCanvas {
     height: 75vh;
 }
+
+#pseudocodeBox {
+    background: var(--navajoWhite);
+    width: 350px;
+    height: 280px;
+    margin: 25px 0;
+}
+
+#annotationBox {
+    background: var(--navajoWhite);
+    width: 350px;
+    height: 100px;
+    margin: 25px 0;
+}

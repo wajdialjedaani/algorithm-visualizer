@@ -20,7 +20,6 @@ function insertionSort(arr) {
     for(let i = 1; i < n; i++) {
         let current = arr[i];
         let j = i - 1;
-
         while(j >= 0 && arr[j] > current) { // checks if j is outside of array and compares j position value with current
             steps.push([i, j]);
             arr[j + 1] = arr[j];
@@ -35,12 +34,8 @@ function insertionSort(arr) {
     
 }
 
-function delay(time) {
-    return new Promise(resolve => setTimeout(resolve, time));
-}
-  
-
 async function swap(steps) {
+    var t1 = anime.timeline;
     for (let i = 0; i < steps.length; i++) {
         let selected1 = '#arrBar' + steps[i][0];
         let selected2 = '#arrBar' + steps[i][1];
