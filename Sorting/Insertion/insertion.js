@@ -15,40 +15,63 @@ function generate(arr) {
 
 function insertionSort(arr) {
     let n = arr.length;
+    let swaps = [];
     let steps = [];
+
     
     for(let i = 1; i < n; i++) {
+        steps.push(1);
+
         let current = arr[i];
+        steps.push(2);
+
         let j = i - 1;
+        steps.push(3);
+
         while(j >= 0 && arr[j] > current) { // checks if j is outside of array and compares j position value with current
-            steps.push([i, j]);
+            steps.push(4);
+            swaps.push([i, j]);
+
             arr[j + 1] = arr[j];
+            steps.push(5);
+
             j--;
+            steps.push(6);
         }
         arr[j + 1] = current;   // once while is false, the last j position is current
+        steps.push(7);
     }
-    //console.log("done");
     
-    //printArr(steps);
-    swap(steps);
+    swap(swaps, steps);
+    printArr(steps);
+
     
 }
 
-async function swap(steps) {
+async function swap(swaps, steps) {
     var t1 = anime.timeline;
+    // for (let i = 0; i < swaps.length; i++) {
+    //     let selected1 = '#arrBar' + swaps[i][0];
+    //     let selected2 = '#arrBar' + swaps[i][1];
+
+    //     document.querySelector(selected1).classList.toggle('arrBarSelected');
+    //     document.querySelector(selected2).classList.toggle('arrBarSelected');
+    //     await new Promise(resolve => setTimeout(resolve, 1000));
+
+    //     document.querySelector(selected1).classList.toggle('arrBarSelected');
+    //     document.querySelector(selected2).classList.toggle('arrBarSelected');
+    //     await new Promise(resolve => setTimeout(resolve, 1000));
+    // }
+    
     for (let i = 0; i < steps.length; i++) {
-        let selected1 = '#arrBar' + steps[i][0];
-        let selected2 = '#arrBar' + steps[i][1];
-        console.log(selected1, selected2);
-        document.querySelector(selected1).classList.toggle('arrBarSelected');
-        document.querySelector(selected2).classList.toggle('arrBarSelected');
+        let step = '#step' + steps[i];
+
+        document.querySelector(step).classList.toggle('activeStep');
         await new Promise(resolve => setTimeout(resolve, 1000));
 
-        document.querySelector(selected1).classList.toggle('arrBarSelected');
-        document.querySelector(selected2).classList.toggle('arrBarSelected');
+        document.querySelector(step).classList.toggle('activeStep');
         await new Promise(resolve => setTimeout(resolve, 1000));
     }
-    
 
     // setInterval(() => {
     //     let selected1 = '#arrBar' + steps[i][0];

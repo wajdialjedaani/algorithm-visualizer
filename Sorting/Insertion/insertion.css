@@ -1,6 +1,6 @@
 .arrBar {
     background: var(--unitedNationsBlue);
-    width: 25px;
+    width: 5px;
     margin: 0 10px;
 }
 
@@ -24,4 +24,9 @@
     width: 350px;
     height: 100px;
     margin: 25px 0;
+}
+
+.activeStep {
+    background: black;
+    color: white;
 }
