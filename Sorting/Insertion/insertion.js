@@ -1,24 +1,46 @@
-let input = [32, 24, 10, 22, 18, 40, 4, 43, 2, 25];
+let input = [];
 
-window.onload = generate(input);
+window.onload = generateBars();
 
-function generate(arr) {
-    for(let i = 0; i < arr.length; i++) {
+// gets input and splits it into an array
+function getInput() {    
+    var inputString = document.getElementById('input').value;
+    input = inputString.split(", ");
+    return input;
+}
+
+// generates the bars, can be used with user inputs
+function generateBars() {    
+    removeBars();
+    input = getInput();
+    for(let i = 0; i < input.length; i++) {
         let arrBar = document.createElement('div');
         let arrBarID = 'arrBar' + i;
         arrBar.classList.add('arrBar');
         arrBar.setAttribute('id', arrBarID);
-        arrBar.style.height = (arr[i] * 10) + 'px';
+        arrBar.style.height = (input[i] * 10) + 'px';
         let container = document.querySelector('#arrCanvas').appendChild(arrBar);
     }
 }
 
+// removes existing bars
+function removeBars() { 
+    var bars = document.querySelectorAll('.arrBar');
+    bars.forEach(element => element.remove());
+}
+
+// starts the sorting algorithm
+function start() {  
+    insertionSort(input);
+    printArr(input);
+}
+
+// insertion sort algorithm
 function insertionSort(arr) {
     let n = arr.length;
-    let swaps = [];
-    let steps = [];
+    let swaps = []; // saves the pair of index that are being swapped
+    let steps = []; // saves the steps for the pseudocode highlighting
 
-    
     for(let i = 1; i < n; i++) {
         steps.push(1);
 
@@ -42,27 +64,12 @@ function insertionSort(arr) {
         steps.push(7);
     }
     
-    swap(swaps, steps);
-    printArr(steps);
-
-    
+    swap(swaps); 
+    step(steps);
 }
 
-async function swap(swaps, steps) {
-    var t1 = anime.timeline;
-    // for (let i = 0; i < swaps.length; i++) {
-    //     let selected1 = '#arrBar' + swaps[i][0];
-    //     let selected2 = '#arrBar' + swaps[i][1];
-
-    //     document.querySelector(selected1).classList.toggle('arrBarSelected');
-    //     document.querySelector(selected2).classList.toggle('arrBarSelected');
-    //     await new Promise(resolve => setTimeout(resolve, 1000));
-
-    //     document.querySelector(selected1).classList.toggle('arrBarSelected');
-    //     document.querySelector(selected2).classList.toggle('arrBarSelected');
-    //     await new Promise(resolve => setTimeout(resolve, 1000));
-    // }
-    
+// highlights the pseudocode step
+async function step(steps) {    
     for (let i = 0; i < steps.length; i++) {
         let step = '#step' + steps[i];
 
@@ -72,50 +79,30 @@ async function swap(swaps, steps) {
         document.querySelector(step).classList.toggle('activeStep');
         await new Promise(resolve => setTimeout(resolve, 1000));
     }
-
-    // setInterval(() => {
-    //     let selected1 = '#arrBar' + steps[i][0];
-    //     let selected2 = '#arrBar' + steps[i][1];
-    //     console.log(selected1, selected2);
-    //     i++
-    // }, 2000);
-
-    // steps.forEach((el, i) => {
-        
-
-    //     setInterval(function() {
-    //         let selected1 = '#arrBar' + steps[i][0];
-    //         let selected2 = '#arrBar' + steps[i][1];
-    //         console.log('selected');
-    //     }, 1000);
-
-    //     setTimeout(() => {
-            
-    //         // document.querySelector(selected1).classList.toggle('arrBarSelected');
-    //         // document.querySelector(selected2).classList.toggle('arrBarSelected');
-    //         console.log("selected")
-
-    //         setTimeout(() => {
-    //             // document.querySelector(selected1).classList.toggle('arrBarSelected');
-    //             // document.querySelector(selected2).classList.toggle('arrBarSelected');
-    //             console.log("removed")
-    //         }, 2000 * i); 
-
-    //     }, 2000 * i);
-
-        
-        
-    // });
 }
 
+// highlights and swaps bars
+async function swap(swaps, steps) { 
+    for (let i = 0; i < swaps.length; i++) {
+        let selected1 = '#arrBar' + swaps[i][0];
+        let selected2 = '#arrBar' + swaps[i][1];
+
+        document.querySelector(selected1).classList.toggle('arrBarSelected');
+        document.querySelector(selected2).classList.toggle('arrBarSelected');
+        await new Promise(resolve => setTimeout(resolve, 1000));
+
+        document.querySelector(selected1).classList.toggle('arrBarSelected');
+        document.querySelector(selected2).classList.toggle('arrBarSelected');
+        await new Promise(resolve => setTimeout(resolve, 1000));
+    }
+}
+
+// prints array to console
 function printArr(arr) { 
     for(let i = 0; i < arr.length; i++) {
         console.log(arr[i]);
     }
 }
 
-function start() {
-    insertionSort(input);
-}
-
 document.querySelector('#start').addEventListener('click', start);
+document.querySelector('#getNewInput').addEventListener('click', generateBars);

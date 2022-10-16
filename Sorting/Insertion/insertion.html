@@ -29,7 +29,15 @@
                     </svg>
                 </div>
             </div>
+            
         </div>
+
+        <div class="container-fluid">
+            <div class="row">
+                <div id="tab" class="btn" data-bs-toggle="offcanvas" href="#inputs" role="button" aria-controls="offcanvasExample"></div>
+            </div>
+        </div>
+        
 
         <!-- Setting Modal -->
         <div class="modal fade" id="settingModal" aria-labelledby="Settings" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
@@ -68,6 +76,20 @@
             </div>
         </div>
 
+        <!-- Inputs -->
+        <div class="offcanvas offcanvas-start" data-bs-backdrop="static" tabindex="-1" id="inputs" aria-labelledby="offcanvasExampleLabel">
+            <div class="offcanvas-header">
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close""></button>
+            </div>
+            <div class="offcanvas-body">
+                <div>Input</div>
+                <div class="row">
+                    <input id="input" class="col-8" type="text" value="32, 24, 10, 22, 18, 40, 4, 43, 2, 25">
+                    <div id="getNewInput" class="col btn btn-orangeRed">Go</div>
+                </div>
+            </div>
+        </div>
+
         <!-- Canvas -->
         <div class="container">
             <div class="row">
@@ -90,14 +112,9 @@
                             <p id="step7">&emsp;A[j + 1] = key</p>
                         </div> 
                     </div>
-                    
-                    
                 </div>
-                
             </div>
         </div>
-
-        
 
         <!-- Bottom Bar -->
         <div class="container-fluid">
