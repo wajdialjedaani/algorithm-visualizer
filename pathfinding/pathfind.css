@@ -1,7 +1,35 @@
-td {
-    width: 50px;
-    height: 50px;
-    border: solid;
+:root {
+    --charcoal: #2F3E46;
+    --ashGray: #CAD2C5;
+    --darkSeaGreen: #84A98C;
+    --orangeRed: #F26419;
+    --unitedNationsBlue: #6290C8;
+    --ming: #28666E;
+    --navajoWhite: #FEDC97;
+    --outerSpaceCrayola: #2C3639;
+    --darkSlateGray: #3F4E4F;
+    --graniteGray: #696464;
+}
+
+td { 
+    box-sizing: border-box;
+    position: relative;
+    border: solid 1px;
+    width: var(--width);
+    height: var(--height);
+}
+
+body {
+    height: calc(100vh - 96px);
+}
+
+#grid-container {
+    height: calc(100%);
+    width: 100%;
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(var(--columns), 1fr);
+    grid-template-rows: repeat(var(--rows), 1fr);
 }
 
 .wall {
@@ -26,4 +54,17 @@ td {
     width: auto;
     background-color: #2c3639;
     border: none;
+}
+
+.draggable {
+    position: absolute;
+    top: 50%;
+    left: 75%;
+    z-index: 9;
+    --bs-card-bg: var(--darkSeaGreen);
+  }
+
+#AnimSpeed {
+    width: 40px;
+    border-radius: 50%;
 }

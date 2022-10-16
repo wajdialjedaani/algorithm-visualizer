@@ -1,5 +1,5 @@
 document.querySelector("#generate").addEventListener("click", () => {
-    FindPath(document.querySelector("tbody"))
+    FindPath(document.querySelector("#grid-container"))
 })
 
 let drag = false
@@ -36,22 +36,70 @@ function cellHandler(event) {
     })
 }
 
-window.onload = () => {
-    let table = document.createElement("tbody")
-    document.querySelector("table").appendChild(table)
-    for(let y=0; y<15; y++) {
-        let row = document.createElement("tr")
-        for(let x=0; x<20; x++) {
+function generateTable() {
+    let table = document.querySelector("#grid-container")
+    table.innerHTML = ""
+    const size = document.body.clientWidth > 800 ? 100 : 50;
+  
+    columns = Math.floor((document.body.clientWidth / 50));
+    rows = Math.floor((document.body.clientHeight / 50));
+    console.log(`width: ${document.body.clientWidth}  height: ${document.body.clientHeight}`)
+    console.log(`columns: ${columns}, rows: ${rows}`)
+    table.style.setProperty("--columns", columns);
+    table.style.setProperty("--rows", rows);
+    width = document.body.clientWidth / columns
+    height = document.body.clientHeight / rows
+    for(let y=0; y<rows; y++) {
+        for(let x=0; x<columns; x++) {
             let cell = document.createElement("td")
             cell.id = (`${y},${x}`)
             cell.addEventListener('mousedown', cellHandler)
-            //if(x==18 && y==13) {
-            //    cell.className = "endnode"
-            //}
-            row.appendChild(cell)
+            cell.style.setProperty("--width", width)
+            cell.style.setProperty("--height", height)
+            table.appendChild(cell)
         }
-        table.appendChild(row)
     }
+}
+
+window.onload = generateTable
+
+window.onresize = generateTable
+
+dragElement(document.querySelector(".draggable"));
+
+function dragElement(elmnt) {
+  var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+    elmnt.onmousedown = dragMouseDown;
+
+  function dragMouseDown(e) {
+    e = e || window.event;
+    e.preventDefault();
+    // get the mouse cursor position at startup:
+    pos3 = e.clientX;
+    pos4 = e.clientY;
+    document.onmouseup = closeDragElement;
+    // call a function whenever the cursor moves:
+    document.onmousemove = elementDrag;
+  }
+
+  function elementDrag(e) {
+    e = e || window.event;
+    e.preventDefault();
+    // calculate the new cursor position:
+    pos1 = pos3 - e.clientX;
+    pos2 = pos4 - e.clientY;
+    pos3 = e.clientX;
+    pos4 = e.clientY;
+    // set the element's new position:
+    elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+    elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+  }
+
+  function closeDragElement() {
+    // stop moving when mouse button is released:
+    document.onmouseup = null;
+    document.onmousemove = null;
+  }
 }
 
 class Vertex {
@@ -106,8 +154,10 @@ async function FindPath(table)
     let end = undefined
 
     const graph = new Graph()
-    table.childNodes.forEach(row => {
-        row.childNodes.forEach((cell) => {
+    table.childNodes.forEach(cell => {
+            if(cell.nodeName !== "TD"){
+                return
+            }
             coords = cell.id.split(",")
             let vertex
             if(cell.className == "wall") {
@@ -132,8 +182,7 @@ async function FindPath(table)
                     graph.addEdge(key, vertex)
                 }
             }
-        })
-    });
+        });
 
     const results = AStar(graph, start, end)
 
@@ -141,6 +190,7 @@ async function FindPath(table)
     let currentAnim
     let playing = true
     let speed = 1
+    progress = document.querySelector("#Progress-Bar")
     //Start each step of the animation with await to keep the thread unblocked, then continue when the step is done
     for(path of results.untakenPaths) {
             currentAnim = anime({
@@ -151,6 +201,7 @@ async function FindPath(table)
                 ]
             })
             await currentAnim.finished
+            progress.style.width = `${(results.untakenPaths.indexOf(path) + 1) / results.untakenPaths.length * 100}%`
         }
     currentAnim = anime({
         targets: results.pathCells,
