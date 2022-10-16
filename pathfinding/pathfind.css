@@ -20,7 +20,7 @@ td {
 }
 
 body {
-    height: calc(100vh - 104px);
+    height: calc(100vh - 96px);
 }
 
 #grid-container {
@@ -63,3 +63,8 @@ body {
     z-index: 9;
     --bs-card-bg: var(--darkSeaGreen);
   }
+
+#AnimSpeed {
+    width: 40px;
+    border-radius: 50%;
+}

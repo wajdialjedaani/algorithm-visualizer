@@ -190,6 +190,7 @@ async function FindPath(table)
     let currentAnim
     let playing = true
     let speed = 1
+    progress = document.querySelector("#Progress-Bar")
     //Start each step of the animation with await to keep the thread unblocked, then continue when the step is done
     for(path of results.untakenPaths) {
             currentAnim = anime({
@@ -200,6 +201,7 @@ async function FindPath(table)
                 ]
             })
             await currentAnim.finished
+            progress.style.width = `${(results.untakenPaths.indexOf(path) + 1) / results.untakenPaths.length * 100}%`
         }
     currentAnim = anime({
         targets: results.pathCells,
