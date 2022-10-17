@@ -4,6 +4,8 @@ document.querySelector("#generate").addEventListener("click", () => {
 
 let drag = false
 
+let pseudo = document.querySelector("#pseudocode")
+
 function cellDrag() {
     drag = true
     this.className = "wall"
@@ -166,19 +168,15 @@ async function FindPath(table)
             else {
                 vertex = new Vertex(coords[1], coords[0], true, cell.className=="startnode", cell.className=='endnode')
                 if (cell.className=="startnode") {
-                    //console.log("start")
                     start = vertex
                 }
                 if(cell.className=="endnode") {
-                    //console.log("end")
                     end = vertex
                 }
             }
             graph.addVertex(vertex)
-            //console.log(`Vertex: ${vertex.x},${vertex.y}`)
             for(const key of graph.adjList.keys()) {
                 if (((key.x == vertex.x+1 || key.x == vertex.x-1) && key.y == vertex.y) || (key.x == vertex.x && (key.y == vertex.y+1 || key.y == vertex.y-1))) {
-                    //console.log(`Keymatch: ${key.x},${key.y}`)
                     graph.addEdge(key, vertex)
                 }
             }
@@ -192,17 +190,22 @@ async function FindPath(table)
     let speed = 1
     progress = document.querySelector("#Progress-Bar")
     //Start each step of the animation with await to keep the thread unblocked, then continue when the step is done
-    for(path of results.untakenPaths) {
-            currentAnim = anime({
-                targets: path,
-                backgroundColor: [
-                    {value: "#FF0000", duration: 0}, //Zap the line red instantly
-                    {value: "#A020F0", delay: 60 / speed, duration: 1} //Small wait, then zap the whole line purple
-                ]
-            })
-            await currentAnim.finished
-            progress.style.width = `${(results.untakenPaths.indexOf(path) + 1) / results.untakenPaths.length * 100}%`
-        }
+    for(let i=0; i<results.untakenPaths.length; i++) {
+        let path = results.untakenPaths[i]
+        let node = results.untakenNodes[i][0]
+        pseudo.innerHTML = `Cost to travel to current node: ${node.g} <br>
+        Estimated cost from node to the end: ${node.h} <br>
+        Estimated total cost: ${node.g + node.h}`
+        currentAnim = anime({
+            targets: path,
+            backgroundColor: [
+                {value: "#FF0000", duration: 0}, //Zap the line red instantly
+                {value: "#A020F0", delay: 60 / speed, duration: 1} //Small wait, then zap the whole line purple
+            ]
+        })
+        await currentAnim.finished
+        progress.style.width = `${(results.untakenPaths.indexOf(path) + 1) / results.untakenPaths.length * 100}%`
+    }
     currentAnim = anime({
         targets: results.pathCells,
         delay: anime.stagger(50),
@@ -220,7 +223,13 @@ function AStar(graph, start, end) {
     start.g = 0
     
     while (open.length != 0) {
-        open.sort((a, b) => {return a.f-b.f}) //Sort ascending by cost
+        open.sort((a, b) => {
+            if(a.f-b.f !== 0) {
+                return a.f-b.f
+            }
+            else {
+                return a.g >= b.g ? -1 : 1
+            }}) //Sort ascending by cost
 
         let current = open.shift()
         closed.push(current)
@@ -241,6 +250,14 @@ function AStar(graph, start, end) {
                     let path = []
                     while(element) {
                         path.push(document.getElementById(`${element.y},${element.x}`))
+                        element = element.parent
+                    }
+                    return path
+                }),
+                untakenNodes: closed.map((element) => {
+                    let path = []
+                    while(element) {
+                        path.push(element)
                         element = element.parent
                     }
                     return path
