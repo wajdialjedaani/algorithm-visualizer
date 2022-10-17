@@ -1,0 +1,58 @@
+:root {
+    --charcoal: #2F3E46;
+    --ashGray: #CAD2C5;
+    --darkSeaGreen: #84A98C;
+    --orangeRed: #F26419;
+    --unitedNationsBlue: #6290C8;
+    --ming: #28666E;
+    --navajoWhite: #FEDC97;
+    --outerSpaceCrayola: #2C3639;
+    --darkSlateGray: #3F4E4F;
+    --graniteGray: #696464;
+}
+
+.arrBar {
+    background: var(--unitedNationsBlue);
+    width: 5px;
+    margin: 0 10px;
+}
+
+.arrBarSelected {
+    background: var(--orangeRed);   
+}
+
+#arrCanvas {
+    height: 60vh;
+}
+
+#pseudocodeBox {
+    background: var(--navajoWhite);
+    width: 350px;
+    height: 280px;
+    margin: 25px 0;
+}
+
+#annotationBox {
+    background: var(--navajoWhite);
+    width: 350px;
+    height: 100px;
+    margin: 25px 0;
+}
+
+.activeStep {
+    background: black;
+    color: white;
+}
+
+#tab {
+    height: 100px;
+    width: 20px;
+    background: var(--darkSeaGreen);
+    color: black;
+    border-radius: 0 40px 40px 0;
+    margin-top: 20px;
+}
+
+.offcanvas-start {
+    --bs-offcanvas-bg: var(--darkSeaGreen);
+}
