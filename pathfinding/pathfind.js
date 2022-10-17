@@ -43,8 +43,8 @@ function generateTable() {
     table.innerHTML = ""
     const size = document.body.clientWidth > 800 ? 100 : 50;
   
-    columns = Math.floor((document.body.clientWidth / 50));
-    rows = Math.floor((document.body.clientHeight / 50));
+    columns = Math.floor((document.body.clientWidth / 30));
+    rows = Math.floor((document.body.clientHeight / 30));
     console.log(`width: ${document.body.clientWidth}  height: ${document.body.clientHeight}`)
     console.log(`columns: ${columns}, rows: ${rows}`)
     table.style.setProperty("--columns", columns);
@@ -199,8 +199,8 @@ async function FindPath(table)
         currentAnim = anime({
             targets: path,
             backgroundColor: [
-                {value: "#FF0000", duration: 0}, //Zap the line red instantly
-                {value: "#A020F0", delay: 60 / speed, duration: 1} //Small wait, then zap the whole line purple
+                {value: "#F26419", duration: 0}, //Zap the line red instantly
+                {value: "#28666E", delay: 60 / speed, duration: 1} //Small wait, then zap the whole line purple
             ]
         })
         await currentAnim.finished
@@ -210,7 +210,7 @@ async function FindPath(table)
         targets: results.pathCells,
         delay: anime.stagger(50),
         duration: 500,
-        backgroundColor: '#FFFF00',
+        backgroundColor: '#FEDC97',
         })
     await currentAnim.finished
 }
