@@ -17,6 +17,7 @@ td {
     border: solid 1px;
     width: var(--width);
     height: var(--height);
+    background-color: var(--ashGray);
 }
 
 body {
@@ -33,7 +34,7 @@ body {
 }
 
 .wall {
-    background-color: blue;
+    background-color: var(--outerSpaceCrayola);
 }
 
 .startnode {
