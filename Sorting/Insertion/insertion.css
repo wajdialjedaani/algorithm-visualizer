@@ -13,30 +13,45 @@
 
 .arrBar {
     background: var(--unitedNationsBlue);
-    width: 5px;
-    margin: 0 10px;
+    box-sizing: border-box;
+    border: 1px solid black;
 }
 
 .arrBarSelected {
-    background: var(--orangeRed);   
+    background: var(--orangeRed);
 }
 
 #arrCanvas {
-    height: 60vh;
+    position: relative;
+    min-height: calc(100% - 60px);
+    max-height: calc(60vh - 60px);
+    width: 75vw;
+    left: 5%;
+    display: grid;
+    align-items: end;
+    grid-template-columns: repeat(var(--columns), 1fr);
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
 #pseudocodeBox {
     background: var(--navajoWhite);
-    width: 350px;
+    position: relative;
+    display: inline;
+    top: 10%;
+    width: 20vw;
     height: 280px;
-    margin: 25px 0;
+    /*margin: 25px 0;*/
 }
 
 #annotationBox {
     background: var(--navajoWhite);
-    width: 350px;
+    position: relative;
+    display: inline;
+    width: 20vw;
     height: 100px;
-    margin: 25px 0;
+    /*margin: 25px 0;*/
 }
 
 .activeStep {
