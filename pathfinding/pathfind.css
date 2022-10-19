@@ -17,11 +17,12 @@ td {
     border: solid 1px;
     width: var(--width);
     height: var(--height);
-    background-color: var(--ashGray);
+    /*background-color: var(--ashGray);*/
 }
 
 body {
     height: calc(100vh - 96px);
+    background-color: var(--ashGray);
 }
 
 #grid-container {
@@ -34,7 +35,7 @@ body {
 }
 
 .wall {
-    background-color: var(--outerSpaceCrayola);
+    background-color: var(--unitedNationsBlue);
 }
 
 .startnode {
