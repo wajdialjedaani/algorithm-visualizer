@@ -79,20 +79,43 @@
 
         <!-- Bottom bar -->
         <div class="bar container-fluid" style="background-color:#2c3639;">
-            <div class="row">
+            <div class="row justify-content-center">
                 <button id="AnimSpeed" class="btn btn-orangeRed col-1">1x</button>
                 <div class="col-1">
-                    <button id="PlayPause" class="controls"><img src="../Assets/pause-fill.svg"/></button>
+                    <button id="PlayPause" class="controls" style="margin: 10px;"><img src="../Assets/pause-fill.svg"/></button>
                 </div>
-                <div class="progress col gx-0 gy-2">
+                <div class="progress col-7 align-self-center">
                     <div id="Progress-Bar" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
                 </div>
-                <div class="btn-group dropup col-2">
-                    <div class="row">
-                        <button type="button" class="btn btn-secondary dropdown-toggle col-4">Pathfinding</button>
-                        <button type="button" class="btn btn-secondary dropdown-toggle col-4">Searching</button>
-                        <button type="button" class="btn btn-secondary dropdown-toggle col-4">Sorting</button>
-                    </div>
+
+                <!-- Sorting Dropdown -->
+                <div class="btn-group dropup col-1">
+                    <button type="button" class="btn btn-lg btn-menu dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Sorting</button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="../Sorting/Insertion/insertion.html">Insertion Sort</a></li>
+                        <li><a class="dropdown-item" href="#">Selection Sort</a></li>
+                        <li><a class="dropdown-item" href="#">Merge Sort</a></li>
+                        <li><a class="dropdown-item" href="#">Bubble Sort</a></li>
+                        <li><a class="dropdown-item" href="#">Quick Sort</a></li>
+                    </ul>
+                </div>
+
+                <!-- Searching dropdown -->
+                <div class="btn-group dropup col-1">
+                    <button type="button" class="btn btn-lg btn-menu dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Searching</button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#">Linear Search</a></li>
+                        <li><a class="dropdown-item" href="#">Binary Search</a></li>
+                    </ul>
+                </div>
+
+                <!-- Pathfinding Dropdown -->
+                <div class="btn-group dropup col-1">
+                    <button type="button" class="btn btn-lg btn-menu dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Pathfinding</button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item active" href="#">A* Pathfinding</a></li>
+
+                    </ul>
                 </div>
             </div>
         </div>
