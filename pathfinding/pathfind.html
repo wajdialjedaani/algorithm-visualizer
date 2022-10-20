@@ -72,8 +72,8 @@
         <!-- Draggable DIV -->
         <div class="card draggable">
             <div class="card-body">
-                <h4 class="card-title">Pseudocode</h4>
-                <p id="pseudocode" class="card-text"></p>
+                <h4 class="card-title">Details</h4>
+                <p id="pseudocode"></p>
             </div>
         </div>
 
@@ -113,8 +113,9 @@
                 <div class="btn-group dropup col-1">
                     <button type="button" class="btn btn-lg btn-menu dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Pathfinding</button>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item active" href="#">A* Pathfinding</a></li>
-
+                        <li><a class="dropdown-item active" onclick="changeAlgo('a*')">A* Pathfinding</a></li>
+                        <li><a class="dropdown-item active" onclick="changeAlgo('djikstra')">Djikstra's</a></li>
+                        <li><a class="dropdown-item active" onclick="changeAlgo('bfs')">BFS</a></li>
                     </ul>
                 </div>
             </div>
