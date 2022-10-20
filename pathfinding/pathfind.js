@@ -2,6 +2,26 @@ document.querySelector("#generate").addEventListener("click", () => {
     FindPath(document.querySelector("#grid-container"))
 })
 
+let selectedFunction = (new URLSearchParams(window.location.search)).get("func")
+
+if(selectedFunction == "a*") {
+
+    selectedFunction = AStar
+}
+else if(selectedFunction == "djikstra") {
+    selectedFunction = Djikstra
+}
+
+function changeAlgo(func) {
+    console.log("fire")
+    if(func == "a*") {
+        selectedFunction = AStar
+    }
+    else if(func == "djikstra") {
+        selectedFunction = Djikstra
+    }
+}
+
 let drag = false
 
 let pseudo = document.querySelector("#pseudocode")
@@ -182,7 +202,7 @@ async function FindPath(table)
             }
         });
 
-    const results = AStar(graph, start, end)
+    const results = selectedFunction(graph, start, end)
 
     const speeds = [1, 2, 4]
     let currentAnim
@@ -293,6 +313,93 @@ function AStar(graph, start, end) {
             child.g = g
             child.h = h
             child.f = f
+            child.parent = current
+            
+            //If node isn't already in seearch list, add it
+            if(!open.some((element) => {return element === child})) {
+                open.push(child)
+            }
+        }
+    }
+    //Only executed upon failure to find end
+    return []
+}
+
+function Djikstra(graph, start, end) {
+    const open = []
+    const closed = []
+    const backtrace = 
+    open.push(start)
+    start.g = 0
+    
+    while (open.length != 0) {
+        console.log("outer loop")
+        open.sort((a, b) => {return a.g - b.g}) //Sort ascending by cost
+
+        let current = open.shift()
+        closed.push(current)
+
+        if (current === end) {//If the current node is the end node
+            const pathArr = []
+            const pathCells = []
+            while(current) {
+                console.log(`${current.y},${current.x}`)
+                pathArr.push(current)
+                pathCells.push(document.getElementById(`${current.y},${current.x}`))
+                current = current.parent
+            }
+            console.log("found end")
+            return {
+                path: pathArr.reverse(),
+                pathCells: pathCells.reverse(),
+                searched: closed.map((element) => document.getElementById(`${element.y},${element.x}`)),
+                untakenPaths: closed.map((element) => {
+                    let path = []
+                    while(element) {
+                        path.push(document.getElementById(`${element.y},${element.x}`))
+                        element = element.parent
+                    }
+                    return path
+                }),
+                untakenNodes: closed.map((element) => {
+                    let path = []
+                    while(element) {
+                        path.push(element)
+                        element = element.parent
+                    }
+                    return path
+                })
+            }
+        }
+
+        let children = []
+        //get list of neighbors
+        for (neighbor of graph.adjList.get(current)) {
+            children.push(neighbor)
+        }
+
+        //for each child
+        for (child of children) { //Continue if child has already been searched
+            //if(closed.some((element) => {return element === child})) {
+            //    continue
+            //}
+
+            let g = current.g+1
+            //let h = Math.abs(child.x - end.x) + Math.abs(child.y - end.y)
+            //let f = g + h
+
+            //Continue if better path has already been found
+            if(child.g < g) {
+                continue
+            }
+            //Dont add child to search list if its a wall
+            if(!child.walkable) {
+                continue
+            }
+
+            child.g = g
+            //child.h = h
+            //child.f = f
             child.parent = current
             
             //If node isn't already in seearch list, add it
