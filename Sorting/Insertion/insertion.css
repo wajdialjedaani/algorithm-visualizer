@@ -1,0 +1,73 @@
+:root {
+    --charcoal: #2F3E46;
+    --ashGray: #CAD2C5;
+    --darkSeaGreen: #84A98C;
+    --orangeRed: #F26419;
+    --unitedNationsBlue: #6290C8;
+    --ming: #28666E;
+    --navajoWhite: #FEDC97;
+    --outerSpaceCrayola: #2C3639;
+    --darkSlateGray: #3F4E4F;
+    --graniteGray: #696464;
+}
+
+.arrBar {
+    background: var(--unitedNationsBlue);
+    box-sizing: border-box;
+    border: 1px solid black;
+}
+
+.arrBarSelected {
+    background: var(--orangeRed);
+}
+
+#arrCanvas {
+    position: relative;
+    min-height: calc(100% - 60px);
+    max-height: calc(60vh - 60px);
+    width: 75vw;
+    left: 5%;
+    display: grid;
+    align-items: end;
+    grid-template-columns: repeat(var(--columns), 1fr);
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+#pseudocodeBox {
+    background: var(--navajoWhite);
+    position: relative;
+    display: inline;
+    top: 10%;
+    width: 20vw;
+    height: 280px;
+    /*margin: 25px 0;*/
+}
+
+#annotationBox {
+    background: var(--navajoWhite);
+    position: relative;
+    display: inline;
+    width: 20vw;
+    height: 100px;
+    /*margin: 25px 0;*/
+}
+
+.activeStep {
+    background: black;
+    color: white;
+}
+
+#tab {
+    height: 100px;
+    width: 20px;
+    background: var(--darkSeaGreen);
+    color: black;
+    border-radius: 0 40px 40px 0;
+    margin-top: 20px;
+}
+
+.offcanvas-start {
+    --bs-offcanvas-bg: var(--darkSeaGreen);
+}
