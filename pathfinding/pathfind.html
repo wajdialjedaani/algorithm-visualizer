@@ -12,9 +12,9 @@
     <body>
         <!-- top bar -->
         <div class="container-fluid">
-            <div class="row align-items-center" style="background-color:#2c3639;">
+            <div class="row align-items-center top-bar">
                 <div class="col text-start"><a href="../index.html"><img class="" src="../Assets/icon.png" width="50"></a></div>
-                <h1 class="col-sm-9 d-none d-sm-inline" id="Header">Algorithm Visualizer</h1>
+                <h1 class="col-sm-9 d-none d-sm-inline" id="Header">A* Pathfinding</h1>
                 <button id="generate" class="btn btn-orangeRed col">Go</button>
                 <button class="btn btn-orangeRed col" onclick="generateTable()">Reset</button>
                 <div class="col text-end">
@@ -78,7 +78,7 @@
         </div>
 
         <!-- Bottom bar -->
-        <div class="bar container-fluid" style="background-color:#2c3639;">
+        <div class="bottom-bar container-fluid">
             <div class="row justify-content-center">
                 <button id="AnimSpeed" class="btn btn-orangeRed col-1">1x</button>
                 <div class="col-1">
@@ -90,7 +90,7 @@
 
                 <!-- Sorting Dropdown -->
                 <div class="btn-group dropup col-1">
-                    <button type="button" class="btn btn-lg btn-menu dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Sorting</button>
+                    <button type="button" class="btn btn-menu dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Sorting</button>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="../Sorting/Insertion/insertion.html">Insertion Sort</a></li>
                         <li><a class="dropdown-item" href="#">Selection Sort</a></li>
@@ -102,7 +102,7 @@
 
                 <!-- Searching dropdown -->
                 <div class="btn-group dropup col-1">
-                    <button type="button" class="btn btn-lg btn-menu dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Searching</button>
+                    <button type="button" class="btn btn-menu dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Searching</button>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="#">Linear Search</a></li>
                         <li><a class="dropdown-item" href="#">Binary Search</a></li>
@@ -111,7 +111,7 @@
 
                 <!-- Pathfinding Dropdown -->
                 <div class="btn-group dropup col-1">
-                    <button type="button" class="btn btn-lg btn-menu dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Pathfinding</button>
+                    <button type="button" class="btn btn-menu dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Pathfinding</button>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item active" href="#">A* Pathfinding</a></li>
 

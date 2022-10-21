@@ -104,3 +104,21 @@ img {
 .btn-navajoWhite:hover {
     transform: scale(1.1);
 }
+
+.grid-dark {
+    height: calc(100%);
+    width: 100%;
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(var(--columns), 1fr);
+    grid-template-rows: repeat(var(--rows), 1fr);
+    color: white;
+}
+
+/* #algorithmsMenu {
+    margin
+} */
+
+.container-fluid {
+    margin: 0;
+}

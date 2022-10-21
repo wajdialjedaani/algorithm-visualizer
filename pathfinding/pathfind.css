@@ -21,7 +21,7 @@ td {
 }
 
 body {
-    height: calc(100vh - 96px);
+    height: calc(100vh - 116px);
     background-color: var(--ashGray);
 }
 
@@ -46,9 +46,14 @@ body {
     background-color: red;
 }
 
-.bar {
+.top-bar {
+    background-color: var(--charcoal);
+}
+
+.bottom-bar {
     position: fixed;
     bottom: 0px;
+    background-color: var(--charcoal);
 }
 
 .controls {
@@ -79,7 +84,7 @@ body {
 }
 
 button.btn-menu {
-    --bs-btn-bg: var(--outerSpaceCrayola);
+    --bs-btn-bg: var(--charcoal);
     --bs-btn-hover-bg: var(--darkSeaGreen);
     --bs-btn-active-bg: var(--darkSeaGreen);
     --bs-btn-color: white;
@@ -94,7 +99,7 @@ button.btn-menu {
     --bs-dropdown-link-color: black;
     --bs-dropdown-link-active-bg: var(--orangeRed);
     --bs-dropdown-link-active-color: black;
-    --bs-dropdown-link-hover-bg: var(--outerSpaceCrayola);
+    --bs-dropdown-link-hover-bg: var(--charcoal);
     --bs-dropdown-link-hover-color: white;
     --bs-dropdown-border-radius: 0;
     --bs-dropdown-spacer: 0;
