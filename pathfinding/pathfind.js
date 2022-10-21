@@ -24,8 +24,6 @@ function changeAlgo(func) {
 
 let drag = false
 
-let pseudo = document.querySelector("#pseudocode")
-
 function cellDrag() {
     drag = true
     this.className = "wall"
@@ -87,7 +85,8 @@ window.onload = generateTable
 
 window.onresize = generateTable
 
-dragElement(document.querySelector(".draggable"));
+//dragElement(document.querySelector(".draggable"));
+document.querySelectorAll(".draggable").forEach((element) => {dragElement(element)})
 
 function dragElement(elmnt) {
   var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
@@ -213,9 +212,14 @@ async function FindPath(table)
     for(let i=0; i<results.untakenPaths.length; i++) {
         let path = results.untakenPaths[i]
         let node = results.untakenNodes[i][0]
-        pseudo.innerHTML = `Cost to travel to current node: ${node.g} <br>
+        DisplayAnnotation(`Cost to travel to current node: ${node.g} <br>
         Estimated cost from node to the end: ${node.h} <br>
-        Estimated total cost: ${node.g + node.h}`
+        Estimated total cost: ${node.g + node.h}`, document.querySelector("#pseudocode>.card-body>p"))
+
+        DisplayAnnotation(`The algorithm is choosing the nodes that it thinks will lead us to the end the fastest.
+        We know the distance to get to the searched nodes (g), and we can calculate the approximate distance from a node to the end (h).
+        We can add these up to decide on the best node to search next.`, document.querySelector("#annotation>.card-body>p"))
+
         currentAnim = anime({
             targets: path,
             backgroundColor: [
@@ -410,4 +414,8 @@ function Djikstra(graph, start, end) {
     }
     //Only executed upon failure to find end
     return []
+}
+
+function DisplayAnnotation(msg, element) {
+    element.innerHTML = msg
 }

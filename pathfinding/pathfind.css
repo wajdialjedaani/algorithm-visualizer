@@ -60,11 +60,23 @@ body {
 
 .draggable {
     position: absolute;
-    top: 50%;
-    left: 75%;
     z-index: 9;
     --bs-card-bg: var(--darkSeaGreen);
-  }
+}
+
+#pseudocode {
+    top: 25%;
+    right: 1%;
+}
+
+#annotation {
+    top: 50%;
+    right: 1%;
+}
+
+.card-body {
+    overflow-y: scroll;
+}
 
 #AnimSpeed {
     width: 40px;
