@@ -60,11 +60,10 @@
 }
 
 #tab {
-    height: 100px;
-    width: 20px;
+    width: 100px;
     background: var(--darkSeaGreen);
     color: black;
-    border-radius: 0 40px 40px 0;
+    border-radius: 0 10px 10px 0;
     margin-top: 20px;
 }
 
