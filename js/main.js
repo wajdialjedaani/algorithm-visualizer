@@ -3,12 +3,14 @@ function darkMode() {   // enables dark mode
     var settingModal = document.getElementById("settingModalDialog");
     var back = document.body;
     var algoCard = document.querySelectorAll(".card-algorithm-type");
+    var grid = document.querySelector("#grid-container");
 
     settingModal.classList.toggle("modal-setting-dark");    // settings
     back.classList.toggle("back-dark");                     // background
     for(var i = 0; i < algoCard.length; i++) {              // algorithm type cards
         algoCard[i].classList.toggle("card-algorithm-type-dark");
     }
+    grid.classList.toggle("grid-dark"); // grid
 }
 
 function increaseFontSize() {
