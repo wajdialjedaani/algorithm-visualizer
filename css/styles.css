@@ -29,11 +29,14 @@ img {
     background-color: var(--outerSpaceCrayola);
 }
 
-.bar {
+.top-bar {
     background-color: var(--charcoal);
 }
 
 .bottom-bar {
+    position: fixed;
+    bottom: 0px;
+    background-color: var(--charcoal);
     height: 60px;
 }
 
@@ -115,10 +118,53 @@ img {
     color: var(--graniteGray);
 }
 
-/* #algorithmsMenu {
-    margin
-} */
-
 .container-fluid {
     margin: 0;
+}
+
+button.btn-menu {
+    --bs-btn-bg: var(--charcoal);
+    --bs-btn-hover-bg: var(--darkSeaGreen);
+    --bs-btn-active-bg: var(--darkSeaGreen);
+    --bs-btn-color: white;
+    --bs-btn-hover-color: black;
+    --bs-btn-active-color: black;
+    --bs-btn-active-border-color: var(--darkSeaGreen);
+    --bs-btn-border-radius: 0;
+}
+
+.dropdown-menu {
+    --bs-dropdown-bg: var(--darkSeaGreen);
+    --bs-dropdown-link-color: black;
+    --bs-dropdown-link-active-bg: var(--orangeRed);
+    --bs-dropdown-link-active-color: black;
+    --bs-dropdown-link-hover-bg: var(--charcoal);
+    --bs-dropdown-link-hover-color: white;
+    --bs-dropdown-border-radius: 0;
+    --bs-dropdown-spacer: 0;
+}
+
+#tab {
+    width: 100px;
+    background: var(--darkSeaGreen);
+    color: black;
+    border-radius: 0 10px 10px 0;
+    margin-top: 20px;
+}
+
+.offcanvas-start {
+    --bs-offcanvas-bg: var(--darkSeaGreen);
+}
+
+.controls {
+    height: 40px;
+    width: auto;
+    background-color: var(--charcoal);
+    border: none;
+}
+
+#AnimSpeed {
+    width: 40px;
+    border-radius: 50%;
+    margin: 10px;
 }
