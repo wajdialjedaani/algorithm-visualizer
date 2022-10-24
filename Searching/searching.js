@@ -29,31 +29,31 @@ function binarySearchInterative(arr, x) {
     }
 }
 
-// Binary Search recursive approach
-function binarySearchRecursive(arr, left, right, x) {
-    if(right >= 1) {    
-        let mid = left + Math.floor((right - 1) / 2)
+// // Binary Search recursive approach
+// function binarySearchRecursive(arr, left, right, x) {
+//     if(right >= 1) {    
+//         let mid = left + Math.floor((right - 1) / 2)
 
-        // if element is at the middle; itself
-        if(arr[mid] == x) {
-            console.log("x was found");
-            return mid
-        }
+//         // if element is at the middle; itself
+//         if(arr[mid] == x) {
+//             console.log("x was found");
+//             return mid
+//         }
 
-        // if element is smaller than the mid value
-        // can only be in left subarray
-        if(arr[mid] > x) {
-            return binarySearchRecursive(arr, left, mid - 1, x)
-        }
+//         // if element is smaller than the mid value
+//         // can only be in left subarray
+//         if(arr[mid] > x) {
+//             return binarySearchRecursive(arr, left, mid - 1, x)
+//         }
 
-        // if element is larger than the mid value
-        // can only be in right subarray
-        return binarySearchRecursive(arr, mid + 1, r, x)
-    }
+//         // if element is larger than the mid value
+//         // can only be in right subarray
+//         return binarySearchRecursive(arr, mid + 1, r, x)
+//     }
 
-    console.log("Element does not exist in the array")
-    return -1
-}
+//     console.log("Element does not exist in the array")
+//     return -1
+// }
 
 // ----------------------------------------------------------------
 
