@@ -44,6 +44,7 @@ img {
     width: 18rem;
     height: 11rem;
     top: 1rem;
+    position: relative;
 }
 
 .card-body>a {
@@ -70,6 +71,12 @@ img {
      --bs-btn-active-bg: var(--bs-btn-bg);
      --bs-btn-active-border-color: var(--bs-btn-bg);
      transition: .5s;
+}
+
+.menu-button {
+    position:absolute;
+    bottom: 25px;
+    right: 25px;
 }
 
 .btn-orangeRed:hover {
