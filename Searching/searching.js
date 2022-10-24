@@ -100,4 +100,9 @@ function start() {
 }
 
 document.querySelector('#start').addEventListener('click', start)
-document.querySelector('#getNewInput').addEventListener('click', generateBars)
+document.querySelector('#numberToFind').addEventListener('keypress', function(e) {
+    if(e.key === 'Enter') {
+        e.preventDefault()
+        document.querySelector('#start').click()
+    }
+})

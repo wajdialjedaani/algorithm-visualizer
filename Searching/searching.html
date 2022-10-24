@@ -39,7 +39,14 @@
         <div class="container-fluid">
             <div class="row align-items-center">
                 <div id="tab" class="btn" data-bs-toggle="offcanvas" href="#inputs" role="button" aria-controls="offcanvasExample">Inputs ></div>
+
+                <!-- User toFind input -->
+                <div class="form-floating col-auto">
+                    <input type="number" class="form-control" id="numberToFind" placeholder="36">
+                    <label for="numberToFind">Number</label>
+                </div>
             </div>
+            
         </div>
 
         <!-- Setting Modal -->
@@ -80,7 +87,7 @@
         </div>
 
         <!-- Inputs -->
-        <div class="offcanvas offcanvas-start" data-bs-backdrop="static" tabindex="-1" id="inputs" aria-labelledby="offcanvasExampleLabel">
+        <div class="offcanvas offcanvas-start" tabindex="-1" id="inputs" aria-labelledby="offcanvasExampleLabel">
             <div class="offcanvas-header">
                 <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
             </div>
@@ -88,7 +95,7 @@
                 <div>Input</div>
                 <div class="row">
                     <input id="input" class="col-8" type="text" value="7, 15, 26, 33, 36, 48, 60, 79, 85, 86">
-                    <div id="getNewInput" class="col btn btn-orangeRed">Go</div>
+                    <div id="getNewInput" class="col btn btn-orangeRed" data-bs-dismiss="offcanvas" onclick="generateBox()">Go</div>
                 </div>
             </div>
         </div>
