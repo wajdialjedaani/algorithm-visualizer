@@ -1,4 +1,5 @@
 let input = []
+let x = 36
 
 window.onload = generateBox
 window.onresize = generateBox
@@ -8,25 +9,19 @@ function binarySearchInterative(arr, x) {
     let left = 0
     let right = arr.length - 1
     let mid
-     
-    while (right - left > 1) {
-        let mid = (right + left) / 2
-        if (arr[mid] < x) {
-            left = mid + 1
+    while (right >= left) {
+        mid = Math.floor((left + right) / 2)
+        if(x == arr[mid].value) {
+            console.log("Found at " + mid);
+            return mid
+        } else if(x > arr[mid].value) {   // x is on the right side
+            low = mid + 1
+        } else { // x is on the left side
+            right = mid - 1
         }
-        else {
-            right = mid
-        }
     }
-    if (arr[left] == x) {
-        console.log( "Found At Index " + left)
-    }
-    else if (arr[right] == x) {
-        console.log("Found At Index " + right)
-    }
-    else {
-        console.log("Not Found")
-    }
+    console.log("Could not find " + x);
+    return -1
 }
 
 // // Binary Search recursive approach
@@ -65,7 +60,7 @@ function getInput() {
         value: Number(val),
         id: `#arrBox${i}`   // id="arrBoxi"
     }})
-    printArr(input)
+    //printArr(input)
     return input
 }
 
@@ -99,3 +94,10 @@ function printArr(arr) {
         console.log(arr[i])
     }
 }
+
+function start() {
+    binarySearchInterative(input, x)
+}
+
+document.querySelector('#start').addEventListener('click', start)
+document.querySelector('#getNewInput').addEventListener('click', generateBars)
