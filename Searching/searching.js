@@ -9,13 +9,13 @@ function binarySearchInterative(arr, x) {
     let left = 0
     let right = arr.length - 1
     let mid
-    while (right >= left) {
-        mid = Math.floor((left + right) / 2)
+    while (left <= right) {
+        mid = Math.floor(left + (right - left) / 2)
         if(x == arr[mid].value) {
             console.log("Found at " + mid);
             return mid
         } else if(x > arr[mid].value) {   // x is on the right side
-            low = mid + 1
+            left = mid + 1
         } else { // x is on the left side
             right = mid - 1
         }
@@ -102,6 +102,7 @@ function printArr(arr) {
 
 function start() {
     getFindValue()
+    console.log(x)
     binarySearchInterative(input, x)
 }
 
