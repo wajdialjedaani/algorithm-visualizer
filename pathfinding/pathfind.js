@@ -83,7 +83,17 @@ function generateTable() {
 
 window.onload = generateTable
 
-window.onresize = generateTable
+window.onresize = function() {
+    let screenWidth = screen.width
+    let innerWidth = window.innerWidth
+    let offset = screenWidth - innerWidth
+    document.querySelectorAll(".draggable").forEach((element) => {
+        console.log(element.outerHTML)
+        let right = parseFloat(window.getComputedStyle(element, null).getPropertyValue("right"))
+        element.style.right = right
+    })
+    generateTable()
+}
 
 //dragElement(document.querySelector(".draggable"));
 document.querySelectorAll(".draggable").forEach((element) => {dragElement(element)})
@@ -112,8 +122,9 @@ function dragElement(elmnt) {
     pos3 = e.clientX;
     pos4 = e.clientY;
     // set the element's new position:
-    elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
-    elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+    elmnt.style.top = ((elmnt.offsetTop - pos2) / window.innerHeight * 100) + "%";
+    //console.log(`${}`)
+    elmnt.style.right = ((window.innerWidth - parseFloat(window.getComputedStyle(elmnt, null).getPropertyValue("width")) - elmnt.offsetLeft + pos1) / window.innerWidth * 100) + "%";
   }
 
   function closeDragElement() {
