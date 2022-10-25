@@ -1,5 +1,5 @@
 let input = []
-let x = 36
+let x
 
 window.onload = generateBox
 window.onresize = generateBox
@@ -64,6 +64,11 @@ function getInput() {
     return input
 }
 
+function getFindValue() {
+    x = document.getElementById('FindValue').value
+    return x
+}
+
 // removes existing array
 function removeBox() {
     var box = document.querySelectorAll('.arrBox')
@@ -96,11 +101,12 @@ function printArr(arr) {
 }
 
 function start() {
+    getFindValue()
     binarySearchInterative(input, x)
 }
 
 document.querySelector('#start').addEventListener('click', start)
-document.querySelector('#numberToFind').addEventListener('keypress', function(e) {
+document.querySelector('#FindValue').addEventListener('keypress', function(e) {
     if(e.key === 'Enter') {
         e.preventDefault()
         document.querySelector('#start').click()
