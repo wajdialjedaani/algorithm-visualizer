@@ -21,7 +21,7 @@ td {
 }
 
 body {
-    height: calc(100vh - 96px);
+    height: calc(100vh - 116px);
     background-color: var(--ashGray);
 }
 
@@ -46,16 +46,14 @@ body {
     background-color: red;
 }
 
-.bar {
-    position: fixed;
-    bottom: 0px;
+.top-bar {
+    background-color: var(--charcoal);
 }
 
-.controls {
-    height: 40px;
-    width: auto;
-    background-color: #2c3639;
-    border: none;
+.bottom-bar {
+    position: fixed;
+    bottom: 0px;
+    background-color: var(--charcoal);
 }
 
 .draggable {
@@ -88,26 +86,4 @@ body {
     .draggable {
         display: none;
     }
-}
-
-button.btn-menu {
-    --bs-btn-bg: var(--outerSpaceCrayola);
-    --bs-btn-hover-bg: var(--darkSeaGreen);
-    --bs-btn-active-bg: var(--darkSeaGreen);
-    --bs-btn-color: white;
-    --bs-btn-hover-color: black;
-    --bs-btn-active-color: black;
-    --bs-btn-active-border-color: var(--darkSeaGreen);
-    --bs-btn-border-radius: 0;
-}
-
-.dropdown-menu {
-    --bs-dropdown-bg: var(--darkSeaGreen);
-    --bs-dropdown-link-color: black;
-    --bs-dropdown-link-active-bg: var(--orangeRed);
-    --bs-dropdown-link-active-color: black;
-    --bs-dropdown-link-hover-bg: var(--outerSpaceCrayola);
-    --bs-dropdown-link-hover-color: white;
-    --bs-dropdown-border-radius: 0;
-    --bs-dropdown-spacer: 0;
 }

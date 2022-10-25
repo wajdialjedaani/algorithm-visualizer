@@ -1,23 +1,23 @@
-let input = [];
+let input = []
 
-window.onload = generateBars();
+window.onload = generateBars
 window.onresize = generateBars
 
 // gets input and splits it into an array
 function getInput() {    
-    var inputString = document.getElementById('input').value;
-    input = inputString.split(", ");
+    var inputString = document.getElementById('input').value
+    input = inputString.split(", ")
     input.forEach((val, i, arr) => {arr[i] = {
         value: Number(val),
         id: `#arrBar${i}`
     }})
-    return input;
+    return input
 }
 
 // generates the bars, can be used with user inputs
 function generateBars() {
-    removeBars();
-    input = getInput();
+    removeBars()
+    input = getInput()
     let container = document.querySelector('#arrCanvas')
     container.style.setProperty("--columns", input.length)
     container.style.setProperty("--width", document.querySelector('#arrCanvas').clientWidth / input.length)
@@ -25,75 +25,69 @@ function generateBars() {
     let maxHeight = container.getBoundingClientRect().height
     console.log(maxHeight)
     for(let i = 0; i < input.length; i++) {
-        let arrBar = document.createElement('div');
-        let arrBarID = 'arrBar' + i;
-        arrBar.classList.add('arrBar');
-        arrBar.setAttribute('id', arrBarID);
+        let arrBar = document.createElement('div')
+        let arrBarID = 'arrBar' + i
+        arrBar.classList.add('arrBar')
+        arrBar.setAttribute('id', arrBarID)
         arrBar.style.setProperty('--position', `${i * document.querySelector('#arrCanvas').clientWidth / input.length}`)
         arrBar.style.setProperty('--translation', 0)
-        arrBar.style.height = (maxHeight * (input[i].value / max)) + 'px';
-        container.appendChild(arrBar);
+        arrBar.style.height = (maxHeight * (input[i].value / max)) + 'px'
+        container.appendChild(arrBar)
     }
 }
 
 // removes existing bars
 function removeBars() { 
-    var bars = document.querySelectorAll('.arrBar');
-    bars.forEach(element => element.remove());
-}
-
-// starts the sorting algorithm
-function start() {  
-    insertionSort(input);
-    printArr(input);
+    var bars = document.querySelectorAll('.arrBar')
+    bars.forEach(element => element.remove())
 }
 
 // insertion sort algorithm
 function insertionSort(arr) {
-    let swaps = []; // saves the pair of index that are being swapped
-    let steps = []; // saves the steps for the pseudocode highlighting
+    let swaps = [] // saves the pair of index that are being swapped
+    let steps = [] // saves the steps for the pseudocode highlighting
     let j, current, i
     for(i = 1; i < arr.length; i++) {
-        //steps.push(1);
+        //steps.push(1)
 
-        current = arr[i];
-        //steps.push(2);
+        current = arr[i]
+        //steps.push(2)
 
-        j = i - 1;
-        //steps.push(3);
+        j = i - 1
+        //steps.push(3)
 
         while(j >= 0 && arr[j].value > current.value) { // checks if j is outside of array and compares j position value with current
             //console.log(`left: ${arr[j].value} right: ${arr[j+1].value}`)
             //console.log(`${j} , ${j+1}`)
-            //steps.push(4);
-            swaps.push([current, arr[j]]);
-            arr[j + 1] = arr[j];
+            //steps.push(4)
+            swaps.push([current, arr[j]])
+            arr[j + 1] = arr[j]
             //console.log(arr)
-            //steps.push(5);
+            //steps.push(5)
 
-            j--;
-            //steps.push(6);
+            j--
+            //steps.push(6)
         }
         //swaps.push([arr[j+1], current])
-        arr[j + 1] = current;   // once while is false, the last j position is current
+        arr[j + 1] = current   // once while is false, the last j position is current
         //console.log(arr)
-        //steps.push(7);
+        //steps.push(7)
     }
     console.log(swaps)
-    swap(swaps); 
-    //step(steps);
+    swap(swaps)
+    printArr(input)
 }
 
 // highlights the pseudocode step
 async function step(steps) {    
     for (let i = 0; i < steps.length; i++) {
-        let step = '#step' + steps[i];
+        let step = '#step' + steps[i]
 
-        document.querySelector(step).classList.toggle('activeStep');
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        document.querySelector(step).classList.toggle('activeStep')
+        await new Promise(resolve => setTimeout(resolve, 1000))
 
-        document.querySelector(step).classList.toggle('activeStep');
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        document.querySelector(step).classList.toggle('activeStep')
+        await new Promise(resolve => setTimeout(resolve, 1000))
     }
 }
 
@@ -104,8 +98,8 @@ async function swap(swaps, steps) {
         const bars = swaps.map((element) => {
             return [document.querySelector(element[0].id), document.querySelector(element[1].id)]
         })
-        let selected1 = bars[i][0];
-        let selected2 = bars[i][1];
+        let selected1 = bars[i][0]
+        let selected2 = bars[i][1]
         let currentPos1 = Number(selected1.style.getPropertyValue('--position')) + Number(selected1.style.getPropertyValue('--translation'))
         let currentPos2 = Number(selected2.style.getPropertyValue('--position')) + Number(selected2.style.getPropertyValue('--translation'))
         swapAnim = anime.timeline({autoplay: false})
@@ -133,26 +127,30 @@ async function swap(swaps, steps) {
         swapAnim.play()
         await swapAnim.finished
 
-        //document.querySelector(selected1).classList.toggle('arrBarSelected');
+        //document.querySelector(selected1).classList.toggle('arrBarSelected')
         //selected1.classList.toggle('arrBarSelected')
-        //document.querySelector(selected2).classList.toggle('arrBarSelected');
+        //document.querySelector(selected2).classList.toggle('arrBarSelected')
         //selected2.classList.toggle('arrBarSelected')
-        //await new Promise(resolve => setTimeout(resolve, 1000));
+        //await new Promise(resolve => setTimeout(resolve, 1000))
 
-        //document.querySelector(selected1).classList.toggle('arrBarSelected');
+        //document.querySelector(selected1).classList.toggle('arrBarSelected')
         //selected1.classList.toggle('arrBarSelected')
-        //document.querySelector(selected2).classList.toggle('arrBarSelected');
+        //document.querySelector(selected2).classList.toggle('arrBarSelected')
         //selected2.classList.toggle('arrBarSelected')
-        //await new Promise(resolve => setTimeout(resolve, 1000));
+        //await new Promise(resolve => setTimeout(resolve, 1000))
     }
 }
 
 // prints array to console
 function printArr(arr) { 
     for(let i = 0; i < arr.length; i++) {
-        console.log(arr[i]);
+        console.log(arr[i])
     }
 }
 
-document.querySelector('#start').addEventListener('click', start);
-document.querySelector('#getNewInput').addEventListener('click', generateBars);
+function start() {
+    insertionSort(input);
+}
+
+document.querySelector('#start').addEventListener('click', start)
+document.querySelector('#getNewInput').addEventListener('click', generateBars)
