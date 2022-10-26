@@ -114,22 +114,21 @@
             </div>
         </div>
 
-        <!-- Bottom Bar -->
-        <div class="bottom-bar container-fluid">
-            <div class="row justify-content-center">
-                <div class="col-2 align-self-center">
-                    <button id="AnimSpeed" class="btn btn-orangeRed">1x</button>
-                    <button id="PlayPause" class="controls"><img src="../Assets/pause-fill.svg"/></button>
+        <!-- Bottom bar -->
+        <div class="bottom-bar container-fluid px-1">
+            <div class="row justify-content-center" style="margin: 0;">
+                <div class="d-flex col-auto gx-1 justify-content-end align-items-center">
                     <button id="start" class="btn btn-orangeRed">Go</button>
-                    <button class="btn btn-orangeRed" onclick="generateTable()">Reset</button>
+                    <button id="reset" class="btn btn-orangeRed" style="display: none;">Reset</button>
+                    <button id="AnimSpeed" class="btn btn-orangeRed">1x</button>
+                    <button id="PlayPause" class="controls gx-0"><img height=40 src="../Assets/pause-fill.svg"/></button>
                 </div>
-                
-                <div class="progress col-7 align-self-center gx-0">
+                <div class="progress col align-self-center gx-0">
                     <div id="Progress-Bar" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
                 </div>
 
                 <!-- Sorting Dropdown -->
-                <div class="btn-group dropup col-1">
+                <div class="btn-group dropup col-auto gx-0">
                     <button type="button" class="btn btn-menu dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Sorting</button>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="../Sorting/sorting.html">Insertion Sort</a></li>
@@ -141,7 +140,7 @@
                 </div>
 
                 <!-- Searching dropdown -->
-                <div class="btn-group dropup col-1">
+                <div class="btn-group dropup col-auto gx-0">
                     <button type="button" class="btn btn-menu dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Searching</button>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="#">Linear Search</a></li>
@@ -150,7 +149,7 @@
                 </div>
 
                 <!-- Pathfinding Dropdown -->
-                <div class="btn-group dropup col-1">
+                <div class="btn-group dropup col-auto gx-0">
                     <button type="button" class="btn btn-menu dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Pathfinding</button>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" onclick="changeAlgo('a*')">A* Pathfinding</a></li>
