@@ -9,18 +9,30 @@ function binarySearchInterative(arr, x) {
     let left = 0
     let right = arr.length - 1
     let mid
+    let current = []
+    let ruleOutRange = []
     while (left <= right) {
         mid = Math.floor(left + (right - left) / 2)
+        current.push("#arrBox" + mid)
         if(x == arr[mid].value) {
+            ruleOutRange.push([-1, -1])
             console.log("Found at " + mid);
+            // printArr(current)
+            printArr(ruleOutRange)
+            animation(current, ruleOutRange, mid)
             return mid
         } else if(x > arr[mid].value) {   // x is on the right side
+            ruleOutRange.push([left, mid])
             left = mid + 1
         } else { // x is on the left side
+            ruleOutRange.push([mid, right])
             right = mid - 1
         }
     }
     console.log("Could not find " + x);
+    // printArr(current)
+    printArr(ruleOutRange)
+    animation(current, ruleOutRange)
     return -1
 }
 
@@ -60,7 +72,6 @@ function getInput() {
         value: Number(val),
         id: `#arrBox${i}`   // id="arrBoxi"
     }})
-    //printArr(input)
     return input
 }
 
@@ -91,6 +102,43 @@ function generateBox() {
         arrBox.style.setProperty('--translation', 0)
         container.appendChild(arrBox)
     }
+}
+
+async function animation(current, ruleOutRange, mid) {
+    for (let i = 0; i < current.length; i++) {
+        var searchAnim = anime.timeline({autoplay: false})
+
+        searchAnim
+        .add({
+            targets: current[i],
+            backgroundColor: {value: "#84A98C", duration: 500},
+            easing: 'easeOutCubic',
+        })
+        .add({
+            targets: ruleOut(ruleOutRange[i]),
+            backgroundColor: {value: "#696464"},
+            easing: 'easeOutCubic', 
+        })
+
+        searchAnim.play()
+        await searchAnim.finished
+
+        
+    }
+    anime({
+        targets: "#arrBox" + mid,
+        backgroundColor: "#F26419",
+    })
+}
+
+function ruleOut(givenRange) {
+    let rangeID = []
+    console.log(givenRange);
+    for (let i = givenRange[0]; i <= givenRange[1]; i++) {
+        rangeID.push("#arrBox" + i)
+    }
+
+    return rangeID
 }
 
 // prints array to console
