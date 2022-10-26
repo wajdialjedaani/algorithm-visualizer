@@ -1,7 +1,3 @@
-document.querySelector("#generate").addEventListener("click", () => {
-    FindPath(document.querySelector("#grid-container"))
-})
-
 let selectedFunction = (new URLSearchParams(window.location.search)).get("func")
 let columns = Math.floor((document.body.clientWidth / 30));
 let rows = Math.floor((document.body.clientHeight / 30));
@@ -444,3 +440,16 @@ function Djikstra(graph, start, end) {
 function DisplayAnnotation(msg, element) {
     element.innerHTML = msg
 }
+
+document.querySelector("#generate").addEventListener("click", () => {
+    FindPath(document.querySelector("#grid-container"))
+    document.querySelector("#generate").style.display = "none"
+    document.querySelector("#reset").style.display = "inline"
+})
+
+document.querySelector("#reset").addEventListener("click", () => {
+    generateTable
+    document.querySelector("#reset").style.display = "none"
+    document.querySelector("#generate").style.display = "inline"
+    
+})

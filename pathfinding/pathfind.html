@@ -102,20 +102,20 @@
 
         <!-- Bottom bar -->
         <div class="bottom-bar container-fluid px-1">
-            <div class="row justify-content-center no-gutters">
-                <div class="container col-2 gx-1 align-self-center">
-                    <button id="AnimSpeed" class="btn btn-orangeRed col-1">1x</button>
-                    <button id="PlayPause" class="controls col-1 gx-0"><img height=40 src="../Assets/pause-fill.svg"/></button>
-                    <button id="generate" class="btn btn-orangeRed col gx-0">Go</button>
-                    <button class="btn btn-orangeRed col gx-0" onclick="generateTable()">Reset</button>
+            <div class="row justify-content-center" style="margin: 0;">
+                <div class="d-flex col-auto gx-1 justify-content-end align-items-center">
+                    <button id="generate" class="btn btn-orangeRed">Go</button>
+                    <button id="reset" class="btn btn-orangeRed" style="display: none;">Reset</button>
+                    <button id="AnimSpeed" class="btn btn-orangeRed">1x</button>
+                    <button id="PlayPause" class="controls gx-0"><img height=40 src="../Assets/pause-fill.svg"/></button>
                 </div>
                 
                 <div class="progress col align-self-center gx-0">
                     <div id="Progress-Bar" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
                 </div>
-                <div class="container col-3 mx-0 px-0">
-                    <!-- Sorting Dropdown -->
-                    <div class="btn-group dropup col-3 gx-0">
+
+                <!-- Sorting Dropdown -->
+                <div class="btn-group dropup col-auto gx-0">
                     <button type="button" class="btn btn-menu dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Sorting</button>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="../Sorting/sorting.html">Insertion Sort</a></li>
@@ -124,26 +124,25 @@
                         <li><a class="dropdown-item" href="#">Bubble Sort</a></li>
                         <li><a class="dropdown-item" href="#">Quick Sort</a></li>
                     </ul>
-                    </div>
+                </div>
 
-                    <!-- Searching dropdown -->
-                    <div class="btn-group dropup col-4 gx-0">
+                <!-- Searching dropdown -->
+                <div class="btn-group dropup col-auto gx-0">
                     <button type="button" class="btn btn-menu dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Searching</button>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="#">Linear Search</a></li>
                         <li><a class="dropdown-item" href="#">Binary Search</a></li>
                     </ul>
-                    </div>
+                </div>
 
-                    <!-- Pathfinding Dropdown -->
-                    <div class="btn-group dropup col-3 gx-0">
+                <!-- Pathfinding Dropdown -->
+                <div class="btn-group dropup col-auto gx-0">
                     <button type="button" class="btn btn-menu dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Pathfinding</button>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" onclick="changeAlgo('a*')">A* Pathfinding</a></li>
                         <li><a class="dropdown-item" onclick="changeAlgo('djikstra')">Djikstra's</a></li>
                         <li><a class="dropdown-item" onclick="changeAlgo('bfs')">BFS</a></li>
                     </ul>
-                    </div>
                 </div>
             </div>
         </div>
