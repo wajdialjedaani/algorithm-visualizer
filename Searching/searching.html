@@ -100,20 +100,32 @@
             </div>
         </div>
 
+        <!-- Draggable DIV -->
+        <div class="card draggable" id="pseudocode">
+            <div class="card-body">
+                <h4 class="card-title">Pseudocode</h4>
+                <p>binarySearch(arr, x, low, high) <br>
+                repeat till low = high <br>
+                mid = (low + high)/2 <br>
+                if (x == arr[mid]) <br>
+                return mid <br>
+                else if (x > arr[mid]) // x is on the right side <br>
+                low = mid + 1 <br>
+                else                  // x is on the left side <br>
+                high = mid - 1 <br></p>
+            </div>
+        </div>
+        <div class="card draggable" id="annotation">
+            <div class="card-body">
+                <h4 class="card-title">Details</h4>
+                <p></p>
+            </div>
+        </div>
+
         <!-- Canvas -->
         <div class="container-fluid">
             <div class="row">
-                <div id="arrCanvas">
-                </div>
-                <div class="col align-self-end">
-                    <div class="row justify-content-end">
-                        <div id="annotationBox"></div>
-                    </div>
-                    <div class="row justify-content-end">
-                        <div id="pseudocodeBox">
-                            <p id="step1">pseudocode</p>
-                        </div> 
-                    </div>
+                <div id="arrCanvas"></div>
                 </div>
             </div>
         </div>

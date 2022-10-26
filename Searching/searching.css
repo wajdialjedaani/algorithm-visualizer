@@ -25,21 +25,14 @@
     padding: 0;
 }
 
-#pseudocodeBox {
-    background: var(--navajoWhite);
-    position: relative;
-    display: inline;
-    top: 10%;
-    width: 20vw;
-    height: 280px;
+#pseudocode {
+    top: 25%;
+    right: 1%;
 }
 
-#annotationBox {
-    background: var(--navajoWhite);
-    position: relative;
-    display: inline;
-    width: 20vw;
-    height: 100px;
+#annotation {
+    top: 50%;
+    right: 1%;
 }
 
 .arrBox {
@@ -50,4 +43,19 @@
     height: 100px;
     text-align: center;
     line-height: 100px;
+}
+
+.draggable {
+    position: absolute;
+    z-index: 9;
+    --bs-card-bg: var(--navajoWhite);
+}
+
+@media (max-width: 767.98px) {
+    .draggable {
+        display: none;
+    }
+}
+.card-body {
+    overflow-y: scroll;
 }
