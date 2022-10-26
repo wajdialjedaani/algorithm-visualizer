@@ -3,30 +3,27 @@ document.querySelector("#generate").addEventListener("click", () => {
 })
 
 let selectedFunction = (new URLSearchParams(window.location.search)).get("func")
+let columns = Math.floor((document.body.clientWidth / 30));
+let rows = Math.floor((document.body.clientHeight / 30));
+
 
 if(!Cookies.get('pathVisited')) {
     $('#introModal').modal('show')
     Cookies.set('pathVisited', '1', {expires: 999})
 }
 
-
-if(selectedFunction == "a*") {
-
-    selectedFunction = AStar
-}
-else if(selectedFunction == "djikstra") {
-    selectedFunction = Djikstra
-}
-
 function changeAlgo(func) {
-    console.log("fire")
     if(func == "a*") {
         selectedFunction = AStar
+        document.querySelector("#Header").textContent = "A* Pathfinding"
     }
     else if(func == "djikstra") {
         selectedFunction = Djikstra
+        document.querySelector("#Header").textContent = "Djikstra's Pathfinding"
     }
 }
+
+changeAlgo(selectedFunction)
 
 let drag = false
 
@@ -65,16 +62,19 @@ function cellHandler(event) {
 function generateTable() {
     let table = document.querySelector("#grid-container")
     table.innerHTML = ""
-    const size = document.body.clientWidth > 800 ? 100 : 50;
   
     columns = Math.floor((document.body.clientWidth / 30));
     rows = Math.floor((document.body.clientHeight / 30));
-    console.log(`width: ${document.body.clientWidth}  height: ${document.body.clientHeight}`)
-    console.log(`columns: ${columns}, rows: ${rows}`)
+
+    //console.log(`width: ${document.body.clientWidth}  height: ${document.body.clientHeight}`)
+    //console.log(`columns: ${columns}, rows: ${rows}`)
+
     table.style.setProperty("--columns", columns);
     table.style.setProperty("--rows", rows);
+
     width = document.body.clientWidth / columns
     height = document.body.clientHeight / rows
+
     for(let y=0; y<rows; y++) {
         for(let x=0; x<columns; x++) {
             let cell = document.createElement("td")
@@ -90,13 +90,23 @@ function generateTable() {
 window.onload = generateTable
 
 window.onresize = function() {
-    let screenWidth = screen.width
-    let innerWidth = window.innerWidth
-    let offset = screenWidth - innerWidth
-    //document.querySelectorAll(".draggable").forEach((element) => {
-    //    let right = parseFloat(window.getComputedStyle(element, null).getPropertyValue("right"))
-    //    element.style.right = right
-    //})
+    //let table = document.querySelector("#grid-container")
+//
+    //let newColumns = Math.floor((document.body.clientWidth / 30));
+    //let newRows = Math.floor((document.body.clientHeight / 30));
+    //table.style.setProperty("--columns", newColumns)
+    //table.style.setProperty("--rows", newRows)
+//
+    //for(let y=0; y<rows; y++) {
+    //    for(let x=0; x<columns; x++) {
+    //        let cell = document.createElement("td")
+    //        cell.id = (`${y},${x}`)
+    //        cell.addEventListener('mousedown', cellHandler)
+    //        cell.style.setProperty("--width", width)
+    //        cell.style.setProperty("--height", height)
+    //        newTable.appendChild(cell)
+    //    }
+    //}
     generateTable()
 }
 

@@ -14,7 +14,7 @@
         <div class="container-fluid">
             <div class="row align-items-center justify-content-between top-bar">
                 <div class="col-1 text-start"><a href="../index.html"><img class="" src="../Assets/icon.png" width="50"></a></div>
-                <h1 class="col d-none d-sm-inline" id="Header">A* Pathfinding</h1>
+                <h1 class="col d-none d-sm-inline" id="Header">Pathfinding</h1>
                 <img src="../Assets/info-circle.svg" height=30 width=30 class="col-1 gx-0 navbar-image" data-bs-toggle="modal" data-bs-target="#introModal"/>
                 <img src="../Assets/gear.svg" height=50 width=50 class="col-1 gx-0 navbar-image" data-bs-toggle="modal" data-bs-target="#settingModal"/>
                 
@@ -101,21 +101,21 @@
         </div>
 
         <!-- Bottom bar -->
-        <div class="bottom-bar container-fluid">
-            <div class="row justify-content-center">
-                <div class="col-2 align-self-center">
-                    <button id="AnimSpeed" class="btn btn-orangeRed">1x</button>
-                    <button id="PlayPause" class="controls"><img src="../Assets/pause-fill.svg"/></button>
-                    <button id="generate" class="btn btn-orangeRed">Go</button>
-                    <button class="btn btn-orangeRed" onclick="generateTable()">Reset</button>
+        <div class="bottom-bar container-fluid px-1">
+            <div class="row justify-content-center no-gutters">
+                <div class="container col-2 gx-1 align-self-center">
+                    <button id="AnimSpeed" class="btn btn-orangeRed col-1">1x</button>
+                    <button id="PlayPause" class="controls col-1 gx-0"><img height=40 src="../Assets/pause-fill.svg"/></button>
+                    <button id="generate" class="btn btn-orangeRed col gx-0">Go</button>
+                    <button class="btn btn-orangeRed col gx-0" onclick="generateTable()">Reset</button>
                 </div>
                 
-                <div class="progress col-7 align-self-center gx-0">
+                <div class="progress col align-self-center gx-0">
                     <div id="Progress-Bar" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
                 </div>
-
-                <!-- Sorting Dropdown -->
-                <div class="btn-group dropup col-1">
+                <div class="container col-3 mx-0 px-0">
+                    <!-- Sorting Dropdown -->
+                    <div class="btn-group dropup col-3 gx-0">
                     <button type="button" class="btn btn-menu dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Sorting</button>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="../Sorting/sorting.html">Insertion Sort</a></li>
@@ -124,25 +124,26 @@
                         <li><a class="dropdown-item" href="#">Bubble Sort</a></li>
                         <li><a class="dropdown-item" href="#">Quick Sort</a></li>
                     </ul>
-                </div>
+                    </div>
 
-                <!-- Searching dropdown -->
-                <div class="btn-group dropup col-1">
+                    <!-- Searching dropdown -->
+                    <div class="btn-group dropup col-4 gx-0">
                     <button type="button" class="btn btn-menu dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Searching</button>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="#">Linear Search</a></li>
                         <li><a class="dropdown-item" href="#">Binary Search</a></li>
                     </ul>
-                </div>
+                    </div>
 
-                <!-- Pathfinding Dropdown -->
-                <div class="btn-group dropup col-1">
+                    <!-- Pathfinding Dropdown -->
+                    <div class="btn-group dropup col-3 gx-0">
                     <button type="button" class="btn btn-menu dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Pathfinding</button>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" onclick="changeAlgo('a*')">A* Pathfinding</a></li>
                         <li><a class="dropdown-item" onclick="changeAlgo('djikstra')">Djikstra's</a></li>
                         <li><a class="dropdown-item" onclick="changeAlgo('bfs')">BFS</a></li>
                     </ul>
+                    </div>
                 </div>
             </div>
         </div>
