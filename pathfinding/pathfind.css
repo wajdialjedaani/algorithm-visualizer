@@ -11,6 +11,10 @@
     --graniteGray: #696464;
 }
 
+.navbar-image:hover {
+    cursor: pointer;
+}
+
 td { 
     box-sizing: border-box;
     position: relative;

@@ -4,6 +4,12 @@ document.querySelector("#generate").addEventListener("click", () => {
 
 let selectedFunction = (new URLSearchParams(window.location.search)).get("func")
 
+if(!Cookies.get('pathVisited')) {
+    $('#introModal').modal('show')
+    Cookies.set('pathVisited', '1', {expires: 999})
+}
+
+
 if(selectedFunction == "a*") {
 
     selectedFunction = AStar
@@ -87,11 +93,10 @@ window.onresize = function() {
     let screenWidth = screen.width
     let innerWidth = window.innerWidth
     let offset = screenWidth - innerWidth
-    document.querySelectorAll(".draggable").forEach((element) => {
-        console.log(element.outerHTML)
-        let right = parseFloat(window.getComputedStyle(element, null).getPropertyValue("right"))
-        element.style.right = right
-    })
+    //document.querySelectorAll(".draggable").forEach((element) => {
+    //    let right = parseFloat(window.getComputedStyle(element, null).getPropertyValue("right"))
+    //    element.style.right = right
+    //})
     generateTable()
 }
 
@@ -123,7 +128,6 @@ function dragElement(elmnt) {
     pos4 = e.clientY;
     // set the element's new position:
     elmnt.style.top = ((elmnt.offsetTop - pos2) / window.innerHeight * 100) + "%";
-    //console.log(`${}`)
     elmnt.style.right = ((window.innerWidth - parseFloat(window.getComputedStyle(elmnt, null).getPropertyValue("width")) - elmnt.offsetLeft + pos1) / window.innerWidth * 100) + "%";
   }
 
