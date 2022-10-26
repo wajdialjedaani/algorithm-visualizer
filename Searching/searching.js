@@ -1,5 +1,5 @@
 let input = []
-let x = 36
+let x
 
 window.onload = generateBox
 window.onresize = generateBox
@@ -9,13 +9,13 @@ function binarySearchInterative(arr, x) {
     let left = 0
     let right = arr.length - 1
     let mid
-    while (right >= left) {
-        mid = Math.floor((left + right) / 2)
+    while (left <= right) {
+        mid = Math.floor(left + (right - left) / 2)
         if(x == arr[mid].value) {
             console.log("Found at " + mid);
             return mid
         } else if(x > arr[mid].value) {   // x is on the right side
-            low = mid + 1
+            left = mid + 1
         } else { // x is on the left side
             right = mid - 1
         }
@@ -64,6 +64,11 @@ function getInput() {
     return input
 }
 
+function getFindValue() {
+    x = document.getElementById('FindValue').value
+    return x
+}
+
 // removes existing array
 function removeBox() {
     var box = document.querySelectorAll('.arrBox')
@@ -96,11 +101,13 @@ function printArr(arr) {
 }
 
 function start() {
+    getFindValue()
+    console.log(x)
     binarySearchInterative(input, x)
 }
 
 document.querySelector('#start').addEventListener('click', start)
-document.querySelector('#numberToFind').addEventListener('keypress', function(e) {
+document.querySelector('#FindValue').addEventListener('keypress', function(e) {
     if(e.key === 'Enter') {
         e.preventDefault()
         document.querySelector('#start').click()
