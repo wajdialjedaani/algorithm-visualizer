@@ -17,14 +17,21 @@ document.querySelector("#AnimSpeed").addEventListener("click", function() {
 })
 
 function changeAlgo(func) {
+    let text
     if(func == "a*") {
+        text = `A* knows where the end is, but it <b>doesn't know about the walls in between.</b> <br>
+        For every tile that it searches, it will track how long it took to get there (g) and how much longer it will take to reach the end if there's no walls in the way (h).<br>
+        This is how A* decides where to search next - it adds (g) and (h) to calculate a 'cost', and searches the <b>'cheapest' tile.</b>`
         selectedFunction = AStar
         document.querySelector("#Header").textContent = "A* Pathfinding"
     }
     else if(func == "djikstra") {
+        text = `Djikstra's is a <b>blind algorithm</b> - it doesn't know where the end is until it reaches it.<br>
+        It loops, each time choosing the closest tile to the start that <b>hasn't already been searched</b> and adding all the tiles around it to the queue.`
         selectedFunction = Djikstra
         document.querySelector("#Header").textContent = "Djikstra's Pathfinding"
     }
+    DisplayAnnotation(text, document.querySelector("#annotation>.card-body>p"))
 }
 
 changeAlgo(selectedFunction)
@@ -249,9 +256,9 @@ async function FindPath(table)
         Estimated cost from node to the end: ${node.h} <br>
         Estimated total cost: ${node.g + node.h}`, document.querySelector("#pseudocode>.card-body>p"))
 
-        DisplayAnnotation(`The algorithm is choosing the nodes that it thinks will lead us to the end the fastest.
-        We know the distance to get to the searched nodes (g), and we can calculate the approximate distance from a node to the end (h).
-        We can add these up to decide on the best node to search next.`, document.querySelector("#annotation>.card-body>p"))
+        DisplayAnnotation(`A* is choosing the tiles that it thinks will lead us to the end fastest.<br>
+        The current tile is the cheapest we have, costing <b>${node.f}.</b> A* will continue towards the end until it hits a wall - then it'll search for another tile that costs <b>${node.f}</b>`
+        , document.querySelector("#annotation>.card-body>p"))
 
         currentAnim = anime({
             targets: path,
