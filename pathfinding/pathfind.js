@@ -1,12 +1,20 @@
+const speeds = [1, 2, 4]
 let selectedFunction = (new URLSearchParams(window.location.search)).get("func")
 let columns = Math.floor((document.body.clientWidth / 30));
 let rows = Math.floor((document.body.clientHeight / 30));
-
+let speed = 1
+let playing = false
+let inProgress = false
 
 if(!Cookies.get('pathVisited')) {
     $('#introModal').modal('show')
     Cookies.set('pathVisited', '1', {expires: 999})
 }
+
+document.querySelector("#AnimSpeed").addEventListener("click", function() {
+    speed = speeds[(speeds.indexOf(speed)+1)%speeds.length]
+    this.innerHTML = `${speed}x`
+})
 
 function changeAlgo(func) {
     if(func == "a*") {
@@ -176,24 +184,28 @@ class Graph {
 
 async function FindPath(table)
 {
-    document.querySelector("#AnimSpeed").addEventListener("click", function() {
-        speed = speeds[(speeds.indexOf(speed)+1)%speeds.length]
-        this.innerHTML = `${speed}x`
-    })
-    document.querySelector("#PlayPause").addEventListener("click", function() {
+    let start = undefined
+    let end = undefined
+    let currentAnim = undefined
+
+    document.querySelector("#PlayPause").onclick = function() {
+        if(typeof currentAnim === "undefined" || !inProgress) {
+            console.log("No animation playing")
+            return
+        }
         if(playing) {
+            console.log("first")
             playing = false
             currentAnim.pause()
             this.firstChild.setAttribute("src", "../Assets/play-fill.svg")
         }
         else {
+            console.log("second")
             playing = true
             currentAnim.play()
             this.firstChild.setAttribute("src", "../Assets/pause-fill.svg")
         }
-    })
-    let start = undefined
-    let end = undefined
+    }
 
     const graph = new Graph()
     table.childNodes.forEach(cell => {
@@ -223,11 +235,11 @@ async function FindPath(table)
         });
 
     const results = selectedFunction(graph, start, end)
-
-    const speeds = [1, 2, 4]
-    let currentAnim
-    let playing = true
-    let speed = 1
+    if(typeof results === "undefined") {
+        window.alert("No path can be found, please remove some walls.")
+        throw new Error("No path")
+    }
+    playing = true
     progress = document.querySelector("#Progress-Bar")
     //Start each step of the animation with await to keep the thread unblocked, then continue when the step is done
     for(let i=0; i<results.untakenPaths.length; i++) {
@@ -258,6 +270,7 @@ async function FindPath(table)
         backgroundColor: '#FEDC97',
         })
     await currentAnim.finished
+    playing = false
 }
 
 function AStar(graph, start, end) {
@@ -347,7 +360,7 @@ function AStar(graph, start, end) {
         }
     }
     //Only executed upon failure to find end
-    return []
+    return undefined
 }
 
 function Djikstra(graph, start, end) {
@@ -434,7 +447,7 @@ function Djikstra(graph, start, end) {
         }
     }
     //Only executed upon failure to find end
-    return []
+    return undefined
 }
 
 function DisplayAnnotation(msg, element) {
@@ -442,14 +455,33 @@ function DisplayAnnotation(msg, element) {
 }
 
 document.querySelector("#generate").addEventListener("click", () => {
+    if(inProgress) {
+        console.log("Animation in progress, can't play")
+        return
+    }
+    inProgress = true
     FindPath(document.querySelector("#grid-container"))
-    document.querySelector("#generate").style.display = "none"
-    document.querySelector("#reset").style.display = "inline"
+    .then(
+        function(value) {
+            document.querySelector("#generate").style.display = "none"
+            document.querySelector("#reset").style.display = "inline"
+    })
+    .catch(
+        function(error) {
+            console.log("Path promise rejected")
+    })
+    .finally(
+        () => {
+            console.log("finally")
+            inProgress = false
+        }
+    )
 })
 
 document.querySelector("#reset").addEventListener("click", () => {
-    generateTable
+    generateTable()
+    document.querySelector("#Progress-Bar").style.width = "0%"
     document.querySelector("#reset").style.display = "none"
     document.querySelector("#generate").style.display = "inline"
-    
+    inProgress = false;
 })
