@@ -187,3 +187,7 @@ button.btn-menu {
     --bs-btn-border-color: white;
     --bs-btn-color: white;
 }
+
+.navbar-image:hover {
+    cursor: pointer;
+}
