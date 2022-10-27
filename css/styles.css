@@ -29,18 +29,22 @@ img {
     background-color: var(--outerSpaceCrayola);
 }
 
-.bar {
+.top-bar {
     background-color: var(--charcoal);
 }
 
 .bottom-bar {
+    position: fixed;
+    bottom: 0px;
+    background-color: var(--charcoal);
     height: 60px;
 }
 
 .card {
-    width: 18rem;
-    height: 11rem;
+    width: 20rem;
+    height: 15rem;
     top: 1rem;
+    position: relative;
 }
 
 .card-body>a {
@@ -67,6 +71,12 @@ img {
      --bs-btn-active-bg: var(--bs-btn-bg);
      --bs-btn-active-border-color: var(--bs-btn-bg);
      transition: .5s;
+}
+
+.menu-button {
+    position:absolute;
+    bottom: 25px;
+    right: 25px;
 }
 
 .btn-orangeRed:hover {
@@ -103,4 +113,77 @@ img {
 
 .btn-navajoWhite:hover {
     transform: scale(1.1);
+}
+
+.grid-dark {
+    height: calc(100%);
+    width: 100%;
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(var(--columns), 1fr);
+    grid-template-rows: repeat(var(--rows), 1fr);
+    color: var(--graniteGray);
+}
+
+.container-fluid {
+    margin: 0;
+}
+
+button.btn-menu {
+    --bs-btn-bg: var(--charcoal);
+    --bs-btn-hover-bg: var(--darkSeaGreen);
+    --bs-btn-active-bg: var(--darkSeaGreen);
+    --bs-btn-color: white;
+    --bs-btn-hover-color: black;
+    --bs-btn-active-color: black;
+    --bs-btn-active-border-color: var(--darkSeaGreen);
+    --bs-btn-border-radius: 0;
+}
+
+.dropdown-menu {
+    --bs-dropdown-bg: var(--darkSeaGreen);
+    --bs-dropdown-link-color: black;
+    --bs-dropdown-link-active-bg: var(--orangeRed);
+    --bs-dropdown-link-active-color: black;
+    --bs-dropdown-link-hover-bg: var(--charcoal);
+    --bs-dropdown-link-hover-color: white;
+    --bs-dropdown-border-radius: 0;
+    --bs-dropdown-spacer: 0;
+}
+
+#tab {
+    width: 100px;
+    background: var(--darkSeaGreen);
+    color: black;
+    border-radius: 0 10px 10px 0;
+    margin-top: 20px;
+}
+
+.offcanvas-start {
+    --bs-offcanvas-bg: var(--darkSeaGreen);
+}
+
+.controls {
+    height: 40px;
+    width: auto;
+    background-color: var(--charcoal);
+    border: none;
+}
+
+#AnimSpeed {
+    width: 40px;
+    border-radius: 50%;
+    margin: 10px;
+}
+
+.back-btn {
+    position: absolute;
+    margin: 0 -12px;
+    border-radius: 0 10px 10px 0;
+    top: 15px;
+}
+
+.light-outline {
+    --bs-btn-border-color: white;
+    --bs-btn-color: white;
 }

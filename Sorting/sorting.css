@@ -15,6 +15,7 @@
     background: var(--unitedNationsBlue);
     box-sizing: border-box;
     border: 1px solid black;
+    margin: 0 5px;
 }
 
 .arrBarSelected {
@@ -51,23 +52,9 @@
     display: inline;
     width: 20vw;
     height: 100px;
-    /*margin: 25px 0;*/
 }
 
 .activeStep {
     background: black;
     color: white;
-}
-
-#tab {
-    height: 100px;
-    width: 20px;
-    background: var(--darkSeaGreen);
-    color: black;
-    border-radius: 0 40px 40px 0;
-    margin-top: 20px;
-}
-
-.offcanvas-start {
-    --bs-offcanvas-bg: var(--darkSeaGreen);
 }

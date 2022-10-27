@@ -6,41 +6,47 @@
         <title>Algorithm Visualizer</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
         <link rel="stylesheet" href="../css/styles.css">
-        <link rel="stylesheet" href="pathfind.css">
+        <link rel="stylesheet" href="searching.css">
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.js" integrity="sha512-E378bwaeZf1nwXeJGIwTB58A5gPt5jFU3u6aTGja4ZdRFJeo/N/REKnBgNZOZlH6JdnOPO98vg2AnSGaNfCMFQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script src="../js/main.js" async></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+        <script src="searching.js" defer></script>
     </head>
 
-    <body>
-        <!-- top bar -->
+    <body class="back">
+        <!-- Top Bar -->
         <div class="container-fluid">
-            <div class="row align-items-center justify-content-between top-bar">
-                <div class="col-1 text-start"><a href="../index.html"><img class="" src="../Assets/icon.png" width="50"></a></div>
-                <h1 class="col d-none d-sm-inline" id="Header">Pathfinding</h1>
-                <img src="../Assets/info-circle.svg" height=30 width=30 class="col-1 gx-0 navbar-image" data-bs-toggle="modal" data-bs-target="#introModal"/>
-                <img src="../Assets/gear.svg" height=50 width=50 class="col-1 gx-0 navbar-image" data-bs-toggle="modal" data-bs-target="#settingModal"/>
-            </div>
-        </div>
-        
-        <!-- Introduction Modal -->
-        <div class="modal fade" id="introModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Pathfinding Tutorial</h5>
-                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                      <p>Pathfinding Algorithms are used to help find a path between two locations - whether pixels on a screen, addresses in Google Maps, or positions in a video game.<br>
-                        <br>To get started, choose the two spots you want to travel between. Click once on a tile to create starting point,
-                        and click twice somewhere else to create your target. Then click "Go" in the bottom left to start.<br>
-                        <br>If you want to make it a little more interesting, click and drag to make walls around the map. The computer will have to find its way around the walls.<br>
-                        <br>Remember not to completely block off the start and end from each other - the computer can't find a path that doesn't exist!
-                      </p>
-                    </div>
-                    </div>
+            <div class="row top-bar align-items-center">
+                <!-- Logo -->
+                <div class="col text-start"><a href="../index.html"><img class="" src="../Assets/icon.png" width="50" aria-label="Logo"></a></div>
+
+                <!-- Title -->
+                <h1 class="col-sm-8 d-none d-sm-inline" id="Header">Algorithm Visualizer</h1>
+
+                <!-- Settings Button -->
+                <div class="col text-end">
+                    <svg xmlns="http://www.w3.org/2000/svg" height = 50 fill="white" class="justify-content-end btn" viewBox="0 0 16 16" type="button" data-bs-toggle="modal" data-bs-target="#settingModal">
+                        <path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492zM5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0z"/>
+                        <path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52l-.094-.319zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115l.094-.319z"/>
+                    </svg>
                 </div>
             </div>
+        </div>
+
+        <!-- Inputs button -->
+        <div class="container-fluid">
+            <div class="row align-items-center">
+                <div id="tab" class="btn" data-bs-toggle="offcanvas" href="#inputs" role="button" aria-controls="offcanvasExample">Inputs ></div>
+
+                <!-- User toFind input -->
+                <div class="form-floating col-auto">
+                    <input type="number" class="form-control" id="FindValue" placeholder="36">
+                    <label for="FindValue">Number</label>
+                </div>
+            </div>
+            
         </div>
 
         <!-- Setting Modal -->
@@ -80,16 +86,33 @@
             </div>
         </div>
 
-        <!-- Grid, dynamically filled in -->
-        <div id="grid-container">
-                            
+        <!-- Inputs -->
+        <div class="offcanvas offcanvas-start" tabindex="-1" id="inputs" aria-labelledby="offcanvasExampleLabel">
+            <div class="offcanvas-header">
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+                <div>Input</div>
+                <div class="row">
+                    <input id="input" class="col-8" type="text" value="7, 15, 26, 33, 36, 48, 60, 79, 85, 86">
+                    <div id="getNewInput" class="col btn btn-orangeRed" data-bs-dismiss="offcanvas" onclick="generateBox()">Go</div>
+                </div>
+            </div>
         </div>
 
         <!-- Draggable DIV -->
         <div class="card draggable" id="pseudocode">
             <div class="card-body">
                 <h4 class="card-title">Pseudocode</h4>
-                <p></p>
+                <p>binarySearch(arr, x, low, high) <br>
+                repeat till low = high <br>
+                mid = (low + high)/2 <br>
+                if (x == arr[mid]) <br>
+                return mid <br>
+                else if (x > arr[mid]) // x is on the right side <br>
+                low = mid + 1 <br>
+                else                  // x is on the left side <br>
+                high = mid - 1 <br></p>
             </div>
         </div>
         <div class="card draggable" id="annotation">
@@ -99,11 +122,19 @@
             </div>
         </div>
 
+        <!-- Canvas -->
+        <div class="container-fluid">
+            <div class="row">
+                <div id="arrCanvas"></div>
+                </div>
+            </div>
+        </div>
+
         <!-- Bottom bar -->
         <div class="bottom-bar container-fluid px-1">
             <div class="row justify-content-center" style="margin: 0;">
                 <div class="d-flex col-auto gx-1 justify-content-end align-items-center">
-                    <button id="generate" class="btn btn-orangeRed">Go</button>
+                    <button id="start" class="btn btn-orangeRed">Go</button>
                     <button id="reset" class="btn btn-orangeRed" style="display: none;">Reset</button>
                     <button id="AnimSpeed" class="btn btn-orangeRed">1x</button>
                     <button id="PlayPause" class="controls gx-0"><img height=40 src="../Assets/pause-fill.svg"/></button>
@@ -128,8 +159,8 @@
                 <div class="btn-group dropup col-auto gx-0">
                     <button type="button" class="btn btn-menu dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Searching</button>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">Linear Search</a></li>
-                        <li><a class="dropdown-item" href="#">Binary Search</a></li>
+                        <li><a class="dropdown-item" onclick="changeAlgo('linearsearch')">Linear Search</a></li>
+                        <li><a class="dropdown-item" onclick="changeAlgo('binarysearch')">Binary Search</a></li>
                     </ul>
                 </div>
 
@@ -137,19 +168,15 @@
                 <div class="btn-group dropup col-auto gx-0">
                     <button type="button" class="btn btn-menu dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Pathfinding</button>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" onclick="changeAlgo('a*')">A* Pathfinding</a></li>
-                        <li><a class="dropdown-item" onclick="changeAlgo('djikstra')">Djikstra's</a></li>
+                        <li><a class="dropdown-item" href="../pathfinding/pathfind.html?func=a*">A* Pathfinding</a></li>
+                        <li><a class="dropdown-item" href="../pathfinding/pathfind.html?func=djikstra">Djikstra's</a></li>
+
+<!-- FIXME: add query string for bfs -->
                         <li><a class="dropdown-item" onclick="changeAlgo('bfs')">BFS</a></li>
                     </ul>
                 </div>
             </div>
         </div>
 
-        <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js" integrity="sha256-0H3Nuz3aug3afVbUlsu12Puxva3CP4EhJtPExqs54Vg=" crossorigin="anonymous"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous" defer></script>
-        <script src="../anime.min.js" module defer></script>
-        <script src="../js/main.js" defer></script>
-        <script src="pathfind.js" defer></script>
     </body>
 </html>
