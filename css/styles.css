@@ -41,14 +41,15 @@ img {
 }
 
 .card {
+    width: 18rem;
+    height: 11rem;
+}
+
+.menu-card {
     width: 20rem;
     height: 15rem;
     top: 1rem;
     position: relative;
-}
-
-.card-body>a {
-    float: right;
 }
 
 .card-algorithm-type {
