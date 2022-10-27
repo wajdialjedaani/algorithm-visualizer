@@ -41,9 +41,10 @@ img {
 }
 
 .card {
-    width: 18rem;
-    height: 11rem;
+    width: 20rem;
+    height: 15rem;
     top: 1rem;
+    position: relative;
 }
 
 .card-body>a {
@@ -70,6 +71,12 @@ img {
      --bs-btn-active-bg: var(--bs-btn-bg);
      --bs-btn-active-border-color: var(--bs-btn-bg);
      transition: .5s;
+}
+
+.menu-button {
+    position:absolute;
+    bottom: 25px;
+    right: 25px;
 }
 
 .btn-orangeRed:hover {
@@ -167,4 +174,16 @@ button.btn-menu {
     width: 40px;
     border-radius: 50%;
     margin: 10px;
+}
+
+.back-btn {
+    position: absolute;
+    margin: 0 -12px;
+    border-radius: 0 10px 10px 0;
+    top: 15px;
+}
+
+.light-outline {
+    --bs-btn-border-color: white;
+    --bs-btn-color: white;
 }

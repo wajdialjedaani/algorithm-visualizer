@@ -1,30 +1,27 @@
-document.querySelector("#generate").addEventListener("click", () => {
-    FindPath(document.querySelector("#grid-container"))
-})
-
 let selectedFunction = (new URLSearchParams(window.location.search)).get("func")
+let columns = Math.floor((document.body.clientWidth / 30));
+let rows = Math.floor((document.body.clientHeight / 30));
 
-if(selectedFunction == "a*") {
 
-    selectedFunction = AStar
-}
-else if(selectedFunction == "djikstra") {
-    selectedFunction = Djikstra
+if(!Cookies.get('pathVisited')) {
+    $('#introModal').modal('show')
+    Cookies.set('pathVisited', '1', {expires: 999})
 }
 
 function changeAlgo(func) {
-    console.log("fire")
     if(func == "a*") {
         selectedFunction = AStar
+        document.querySelector("#Header").textContent = "A* Pathfinding"
     }
     else if(func == "djikstra") {
         selectedFunction = Djikstra
+        document.querySelector("#Header").textContent = "Djikstra's Pathfinding"
     }
 }
 
-let drag = false
+changeAlgo(selectedFunction)
 
-let pseudo = document.querySelector("#pseudocode")
+let drag = false
 
 function cellDrag() {
     drag = true
@@ -61,16 +58,19 @@ function cellHandler(event) {
 function generateTable() {
     let table = document.querySelector("#grid-container")
     table.innerHTML = ""
-    const size = document.body.clientWidth > 800 ? 100 : 50;
   
     columns = Math.floor((document.body.clientWidth / 30));
     rows = Math.floor((document.body.clientHeight / 30));
-    console.log(`width: ${document.body.clientWidth}  height: ${document.body.clientHeight}`)
-    console.log(`columns: ${columns}, rows: ${rows}`)
+
+    //console.log(`width: ${document.body.clientWidth}  height: ${document.body.clientHeight}`)
+    //console.log(`columns: ${columns}, rows: ${rows}`)
+
     table.style.setProperty("--columns", columns);
     table.style.setProperty("--rows", rows);
+
     width = document.body.clientWidth / columns
     height = document.body.clientHeight / rows
+
     for(let y=0; y<rows; y++) {
         for(let x=0; x<columns; x++) {
             let cell = document.createElement("td")
@@ -85,9 +85,29 @@ function generateTable() {
 
 window.onload = generateTable
 
-window.onresize = generateTable
+window.onresize = function() {
+    //let table = document.querySelector("#grid-container")
+//
+    //let newColumns = Math.floor((document.body.clientWidth / 30));
+    //let newRows = Math.floor((document.body.clientHeight / 30));
+    //table.style.setProperty("--columns", newColumns)
+    //table.style.setProperty("--rows", newRows)
+//
+    //for(let y=0; y<rows; y++) {
+    //    for(let x=0; x<columns; x++) {
+    //        let cell = document.createElement("td")
+    //        cell.id = (`${y},${x}`)
+    //        cell.addEventListener('mousedown', cellHandler)
+    //        cell.style.setProperty("--width", width)
+    //        cell.style.setProperty("--height", height)
+    //        newTable.appendChild(cell)
+    //    }
+    //}
+    generateTable()
+}
 
-dragElement(document.querySelector(".draggable"));
+//dragElement(document.querySelector(".draggable"));
+document.querySelectorAll(".draggable").forEach((element) => {dragElement(element)})
 
 function dragElement(elmnt) {
   var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
@@ -113,8 +133,8 @@ function dragElement(elmnt) {
     pos3 = e.clientX;
     pos4 = e.clientY;
     // set the element's new position:
-    elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
-    elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+    elmnt.style.top = ((elmnt.offsetTop - pos2) / window.innerHeight * 100) + "%";
+    elmnt.style.right = ((window.innerWidth - parseFloat(window.getComputedStyle(elmnt, null).getPropertyValue("width")) - elmnt.offsetLeft + pos1) / window.innerWidth * 100) + "%";
   }
 
   function closeDragElement() {
@@ -213,9 +233,14 @@ async function FindPath(table)
     for(let i=0; i<results.untakenPaths.length; i++) {
         let path = results.untakenPaths[i]
         let node = results.untakenNodes[i][0]
-        pseudo.innerHTML = `Cost to travel to current node: ${node.g} <br>
+        DisplayAnnotation(`Cost to travel to current node: ${node.g} <br>
         Estimated cost from node to the end: ${node.h} <br>
-        Estimated total cost: ${node.g + node.h}`
+        Estimated total cost: ${node.g + node.h}`, document.querySelector("#pseudocode>.card-body>p"))
+
+        DisplayAnnotation(`The algorithm is choosing the nodes that it thinks will lead us to the end the fastest.
+        We know the distance to get to the searched nodes (g), and we can calculate the approximate distance from a node to the end (h).
+        We can add these up to decide on the best node to search next.`, document.querySelector("#annotation>.card-body>p"))
+
         currentAnim = anime({
             targets: path,
             backgroundColor: [
@@ -411,3 +436,20 @@ function Djikstra(graph, start, end) {
     //Only executed upon failure to find end
     return []
 }
+
+function DisplayAnnotation(msg, element) {
+    element.innerHTML = msg
+}
+
+document.querySelector("#generate").addEventListener("click", () => {
+    FindPath(document.querySelector("#grid-container"))
+    document.querySelector("#generate").style.display = "none"
+    document.querySelector("#reset").style.display = "inline"
+})
+
+document.querySelector("#reset").addEventListener("click", () => {
+    generateTable
+    document.querySelector("#reset").style.display = "none"
+    document.querySelector("#generate").style.display = "inline"
+    
+})
