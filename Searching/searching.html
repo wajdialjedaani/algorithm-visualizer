@@ -159,8 +159,8 @@
                 <div class="btn-group dropup col-auto gx-0">
                     <button type="button" class="btn btn-menu dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Searching</button>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">Linear Search</a></li>
-                        <li><a class="dropdown-item" href="#">Binary Search</a></li>
+                        <li><a class="dropdown-item" onclick="changeAlgo('linearsearch')">Linear Search</a></li>
+                        <li><a class="dropdown-item" onclick="changeAlgo('binarysearch')">Binary Search</a></li>
                     </ul>
                 </div>
 
@@ -168,8 +168,10 @@
                 <div class="btn-group dropup col-auto gx-0">
                     <button type="button" class="btn btn-menu dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Pathfinding</button>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" onclick="changeAlgo('a*')">A* Pathfinding</a></li>
-                        <li><a class="dropdown-item" onclick="changeAlgo('djikstra')">Djikstra's</a></li>
+                        <li><a class="dropdown-item" href="../pathfinding/pathfind.html?func=a*">A* Pathfinding</a></li>
+                        <li><a class="dropdown-item" href="../pathfinding/pathfind.html?func=djikstra">Djikstra's</a></li>
+
+<!-- FIXME: add query string for bfs -->
                         <li><a class="dropdown-item" onclick="changeAlgo('bfs')">BFS</a></li>
                     </ul>
                 </div>
