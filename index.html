@@ -168,7 +168,7 @@
 
             <!-- Pathfinding Menu -->
             <div id="pathfindingMenu" class="container-fluid position-absolute" style="visibility: hidden; opacity: 0;">
-                <a class="btn btn-orangeRed back-btn" role="button" onclick="pathfindingBack()">< Back</a>
+                <a class="btn btn-orangeRed back-btn" role="button" onclick="pathfindingBack()"> Back</a>
                 <div class="row justify-content-between">
                     <div class="col-4 card card-algorithm-type mx-auto">
                         <div class="card-body">
@@ -179,12 +179,14 @@
                     <div class="col-4 card card-algorithm mx-auto">
                         <div class="card-body">
                             <h4 class="card-title">A* Pathfinding</h4>
+                            <p>A* is <b>more efficient</b> than Djikstra's and guarantees the shortest path between two points.</p>
                             <a href="pathfinding/pathfind.html?func=a*" class="btn menu-button btn-navajoWhite justify-content-end" role="button">Go</a>
                         </div>
                     </div>
                     <div class="col-4 card card-algorithm mx-auto">
                         <div class="card-body">
                             <h4 class="card-title">Djikstra's Algorithm</h4>
+                            <p>Djikstra's is <b>unweighted</b> and finds the shortest path between one point and the <b>rest of the map.</b></p>
                             <a href="pathfinding/pathfind.html?func=djikstra" class="btn menu-button btn-navajoWhite justify-content-end" role="button">Go</a>
                         </div>
                     </div>

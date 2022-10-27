@@ -1,7 +1,32 @@
 let input = []
+let selectedFunction = (new URLSearchParams(window.location.search)).get("func") || insertionSort
+const speeds = [1, 2, 4]
+let speed = 1
+let inProgress = false
+let playing = false
 
 window.onload = generateBars
 window.onresize = generateBars
+
+if(!Cookies.get('sortVisited')) {
+    $('#introModal').modal('show')
+    Cookies.set('sortVisited', '1', {expires: 999})
+}
+
+function changeAlgo(func) {
+    let text
+    if(func == "insertion") {
+        text = ``
+        selectedFunction = insertionSort
+        document.querySelector("#Header").textContent = "Insertion Sort"
+    }
+    //else if(func == "djikstra") {
+    //    text = ``
+    //    selectedFunction = Djikstra
+    //    //document.querySelector("#Header").textContent = "Djikstra's Pathfinding"
+    //}
+    //DisplayAnnotation(text, document.querySelector("#annotation>.card-body>p"))
+}
 
 // gets input and splits it into an array
 function getInput() {    
@@ -73,9 +98,10 @@ function insertionSort(arr) {
         //console.log(arr)
         //steps.push(7)
     }
-    console.log(swaps)
-    swap(swaps)
-    printArr(input)
+    return swaps
+    //console.log(swaps)
+    //swap(swaps)
+    //printArr(input)
 }
 
 // highlights the pseudocode step
@@ -93,8 +119,28 @@ async function step(steps) {
 
 // highlights and swaps bars
 async function swap(swaps, steps) {
+
+    document.querySelector("#PlayPause").onclick = function() {
+        if(typeof swapAnim === "undefined" || !inProgress) {
+            console.log("No animation playing")
+            return
+        }
+        if(playing) {
+            console.log("first")
+            playing = false
+            swapAnim.pause()
+            this.firstChild.setAttribute("src", "../Assets/play-fill.svg")
+        }
+        else {
+            console.log("second")
+            playing = true
+            swapAnim.play()
+            this.firstChild.setAttribute("src", "../Assets/pause-fill.svg")
+        }
+    }
+    playing = true
     for (let i = 0; i < swaps.length; i++) {
-        let duration = 500
+        let duration = 500/speed
         const bars = swaps.map((element) => {
             return [document.querySelector(element[0].id), document.querySelector(element[1].id)]
         })
@@ -126,6 +172,7 @@ async function swap(swaps, steps) {
         }, `-=${duration}`)
         swapAnim.play()
         await swapAnim.finished
+        document.querySelector("#Progress-Bar").style.width = ((i+1) / swaps.length * 100) + "%"
 
         //document.querySelector(selected1).classList.toggle('arrBarSelected')
         //selected1.classList.toggle('arrBarSelected')
@@ -139,6 +186,7 @@ async function swap(swaps, steps) {
         //selected2.classList.toggle('arrBarSelected')
         //await new Promise(resolve => setTimeout(resolve, 1000))
     }
+    playing = false
 }
 
 // prints array to console
@@ -149,8 +197,33 @@ function printArr(arr) {
 }
 
 function start() {
-    insertionSort(input);
+    if(inProgress) {
+        console.log("Animation in progress, can't play")
+        return
+    }
+    inProgress = true
+    let swaps = selectedFunction(input);
+    swap(swaps)
+    .then( function(value) {
+        document.querySelector("#start").style.display = "none"
+        document.querySelector("#reset").style.display = "inline"
+    })
+    .catch((error) => {console.log("Error in start()")})
+    .finally( function() {
+        inProgress = false
+    })
 }
 
 document.querySelector('#start').addEventListener('click', start)
 document.querySelector('#getNewInput').addEventListener('click', generateBars)
+document.querySelector("#AnimSpeed").addEventListener("click", function() {
+    speed = speeds[(speeds.indexOf(speed)+1)%speeds.length]
+    this.innerHTML = `${speed}x`
+})
+document.querySelector("#reset").addEventListener("click", function() {
+    generateBars()
+    document.querySelector("#Progress-Bar").style.width = "0%"
+    document.querySelector("#reset").style.display = "none"
+    document.querySelector("#start").style.display = "inline"
+    inProgress = false;
+})
