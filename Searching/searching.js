@@ -11,7 +11,6 @@ window.onresize = generateBox
 
 // Binary Search iterative approach
 function binarySearchInterative(arr, x) {
-    console.log("binary", x);
     let left = 0
     let right = arr.length - 1
     let mid
@@ -22,9 +21,6 @@ function binarySearchInterative(arr, x) {
         current.push("#arrBox" + mid)
         if(x == arr[mid].value) {
             ruleOutRange.push([-1, -1])
-            console.log("Found at " + mid);
-            // printArr(current)
-            printArr(ruleOutRange)
             binaryAnimation(current, ruleOutRange, mid)
             return mid
         } else if(x > arr[mid].value) {   // x is on the right side
@@ -35,9 +31,6 @@ function binarySearchInterative(arr, x) {
             right = mid - 1
         }
     }
-    console.log("Could not find " + x);
-    // printArr(current)
-    printArr(ruleOutRange)
     binaryAnimation(current, ruleOutRange)
     return -1
 }
