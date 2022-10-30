@@ -25,6 +25,9 @@
                 <!-- Title -->
                 <h1 class="col-sm-8 d-none d-sm-inline" id="Header">Algorithm Visualizer</h1>
 
+                <!-- intro button -->
+                <img src="../Assets/info-circle.svg" height=30 width=30 class="col-1 gx-0 navbar-image" data-bs-toggle="modal" data-bs-target="#introModal"/>
+
                 <!-- Settings Button -->
                 <div class="col text-end">
                     <svg xmlns="http://www.w3.org/2000/svg" height = 50 fill="white" class="justify-content-end btn" viewBox="0 0 16 16" type="button" data-bs-toggle="modal" data-bs-target="#settingModal">
@@ -49,6 +52,26 @@
             
         </div>
 
+        <!-- Introduction Modal -->
+        <div class="modal fade" id="introModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Searching Tutorial</h5>
+                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                      <p>Sorting Algorithms take lists and sorts them in ascending or descending order.<br><br>
+                        To get started, just type in a number you want to find in the white bar and press 'Go' - a list of numbers is pre-filled for you.<br><br>
+                        You can make your own list by clicking the "Inputs" button and typing a comma-separated list.<br><br>
+                      </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
         <!-- Setting Modal -->
         <div class="modal fade" id="settingModal" aria-labelledby="Settings" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
             <div id="settingModalDialog" class="modal-dialog modal-sm modal-setting">

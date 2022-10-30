@@ -9,6 +9,11 @@ let playing = false
 window.onload = generateBox
 window.onresize = generateBox
 
+if(!Cookies.get('searchVisited')) {
+    $('#introModal').modal('show')
+    Cookies.set('searchVisited', '1', {expires: 999})
+}
+
 // Binary Search iterative approach
 function binarySearchInterative(arr, x) {
     let left = 0
