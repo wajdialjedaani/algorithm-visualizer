@@ -174,47 +174,10 @@ async function swap(actions) {
     }
 
     playing = true
-<<<<<<< HEAD
     for (action of actions) {
         tl = anime.timeline()
         action.AddToTimeline(tl)
         await tl.finished
-=======
-    for (let i = 0; i < swaps.length; i++) {
-        let duration = 500/speed
-        const bars = swaps.map((element) => {
-            return [document.querySelector(element[0].id), document.querySelector(element[1].id)]
-        })
-        let selected1 = bars[i][0]
-        let selected2 = bars[i][1]
-        let currentPos1 = Number(selected1.style.getPropertyValue('--position')) + Number(selected1.style.getPropertyValue('--translation'))
-        let currentPos2 = Number(selected2.style.getPropertyValue('--position')) + Number(selected2.style.getPropertyValue('--translation'))
-        swapAnim = anime.timeline({autoplay: false})
-        swapAnim.add({
-            targets: selected1,
-            translateX: Number(selected1.style.getPropertyValue('--translation')) + currentPos2 - currentPos1,
-            backgroundColor: [
-                {value: "#FFFFFF", duration: duration-1},
-                {value: "#6290C8", duration: 1}
-            ],
-            easing: 'easeOutCubic',
-            duration: duration,
-            complete: function(anim) {selected1.style.setProperty('--translation', currentPos2 - selected1.style.getPropertyValue('--position'))}
-        }).add({
-            targets: selected2,
-            translateX: Number(selected2.style.getPropertyValue('--translation')) + currentPos1 - currentPos2,
-            backgroundColor: [
-                {value: "#000000", duration: duration-1},
-                {value: "#6290C8", duration: 1}
-            ],
-            easing: 'easeOutCubic',
-            duration: duration,
-            complete: function(anim) {selected2.style.setProperty('--translation', currentPos1 - selected2.style.getPropertyValue('--position'))}
-        }, `-=${duration}`)
-        swapAnim.play()
-        await swapAnim.finished
-        document.querySelector("#Progress-Bar").style.width = ((i+1) / swaps.length * 100) + "%"
->>>>>>> 2c7a048d9701d8cd78f3ff6a5ee94bd953f426fa
     }
     playing = false
     //playing = true
