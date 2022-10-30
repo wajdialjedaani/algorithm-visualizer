@@ -13,14 +13,26 @@ if(!Cookies.get('sortVisited')) {
     Cookies.set('sortVisited', '1', {expires: 999})
 }
 
+// TODO: implement pseudocode change; refer pathfind.js
 function changeAlgo(func) {
-    let text
-    if(func == "insertion") {
-        text = ``
+    if(func == "insertionsort") {
         selectedFunction = insertionSort
         document.querySelector("#Header").textContent = "Insertion Sort"
     }
+    else if (func == "selectionsort") {
+        selectedFunction = selectionSort
+        document.querySelector("#Header").textContent = "Selection Sort"
+    }
+    else if (func == "bubblesort") {
+        selectedFunction = bubbleSort
+        document.querySelector("#Header").textContent = "Bubble Sort"
+    }
+    else if (func == "quicksort") {
+        selectedFunction = quickSort
+        document.querySelector("#Header").textContent = "Quick Sort"
+    }
 }
+changeAlgo(selectedFunction)
 
 // gets input and splits it into an array
 function getInput() {    
@@ -42,7 +54,7 @@ function generateBars() {
     container.style.setProperty("--width", document.querySelector('#arrCanvas').clientWidth / input.length)
     let max = Math.max(...input.map(o => o.value))
     let maxHeight = container.getBoundingClientRect().height
-    console.log(maxHeight)
+
     for(let i = 0; i < input.length; i++) {
         let arrBar = document.createElement('div')
         let arrBarID = 'arrBar' + i
@@ -60,6 +72,8 @@ function removeBars() {
     var bars = document.querySelectorAll('.arrBar')
     bars.forEach(element => element.remove())
 }
+
+// SORTING ALGORITHMS------------------------------------------------------------------------------------------------------------------------------------
 
 // insertion sort algorithm
 function insertionSort(arr) {
@@ -84,21 +98,62 @@ function insertionSort(arr) {
     return actions
 }
 
-// highlights the pseudocode step
-async function step(steps) {    
-    for (let i = 0; i < steps.length; i++) {
-        let step = '#step' + steps[i]
+// BUG: swaps are not correct
+// selection sort algorithm
+function selectionSort(arr) {
+    let swaps = [] // saves the pair of index that are being swapped
+    let min_ind, temp
 
-        document.querySelector(step).classList.toggle('activeStep')
-        await new Promise(resolve => setTimeout(resolve, 1000))
+    for(let i = 0; i < (arr.length - 1); i++) {
+        min_ind = i
+        
+        for(let j = i + 1; j < arr.length; j++) {
+            if(arr[j].value < arr[min_ind].value) {
+                min_ind = j
+            }
+        }
 
-        document.querySelector(step).classList.toggle('activeStep')
-        await new Promise(resolve => setTimeout(resolve, 1000))
+        // swap
+        swaps.push([arr[i], arr[min_ind]])
+        temp = arr[min_ind].value
+        arr[min_ind].value = arr[i].value
+        arr[i].value = temp
     }
+
+    printArrValue(arr)
+    printArr(swaps)
+    return swaps
 }
 
+// bubble sort algorithm
+function bubbleSort(arr) {
+    let swaps = [] // saves the pair of index
+    var temp
+    for(let i = 0; i < arr.length - 1; i++) {
+        for(let j = 0; j < arr.length - i - 1; j++) {
+            if(arr[j].value > arr[j + 1].value) {
+                // swap
+                swaps.push([arr[j], arr[j + 1]])
+                temp = arr[j].value
+                arr[j].value = arr[j + 1].value
+                arr[j + 1].value = temp
+            }
+        }
+    }
+    printArrValue(arr)
+    printArr(swaps)
+    return swaps
+}
+
+// quick sort algorithm
+function quickSort(arr) {
+
+}
+
+// -----------------------------------------------------------------------------------------------------------------------------------------------------
+
 // highlights and swaps bars
-async function swap(actions, steps) {
+async function swap(actions) {
     document.querySelector("#PlayPause").onclick = function() {
         if(typeof tl === "undefined" || !inProgress) {
             console.log("No animation playing")
@@ -119,10 +174,47 @@ async function swap(actions, steps) {
     }
 
     playing = true
+<<<<<<< HEAD
     for (action of actions) {
         tl = anime.timeline()
         action.AddToTimeline(tl)
         await tl.finished
+=======
+    for (let i = 0; i < swaps.length; i++) {
+        let duration = 500/speed
+        const bars = swaps.map((element) => {
+            return [document.querySelector(element[0].id), document.querySelector(element[1].id)]
+        })
+        let selected1 = bars[i][0]
+        let selected2 = bars[i][1]
+        let currentPos1 = Number(selected1.style.getPropertyValue('--position')) + Number(selected1.style.getPropertyValue('--translation'))
+        let currentPos2 = Number(selected2.style.getPropertyValue('--position')) + Number(selected2.style.getPropertyValue('--translation'))
+        swapAnim = anime.timeline({autoplay: false})
+        swapAnim.add({
+            targets: selected1,
+            translateX: Number(selected1.style.getPropertyValue('--translation')) + currentPos2 - currentPos1,
+            backgroundColor: [
+                {value: "#FFFFFF", duration: duration-1},
+                {value: "#6290C8", duration: 1}
+            ],
+            easing: 'easeOutCubic',
+            duration: duration,
+            complete: function(anim) {selected1.style.setProperty('--translation', currentPos2 - selected1.style.getPropertyValue('--position'))}
+        }).add({
+            targets: selected2,
+            translateX: Number(selected2.style.getPropertyValue('--translation')) + currentPos1 - currentPos2,
+            backgroundColor: [
+                {value: "#000000", duration: duration-1},
+                {value: "#6290C8", duration: 1}
+            ],
+            easing: 'easeOutCubic',
+            duration: duration,
+            complete: function(anim) {selected2.style.setProperty('--translation', currentPos1 - selected2.style.getPropertyValue('--position'))}
+        }, `-=${duration}`)
+        swapAnim.play()
+        await swapAnim.finished
+        document.querySelector("#Progress-Bar").style.width = ((i+1) / swaps.length * 100) + "%"
+>>>>>>> 2c7a048d9701d8cd78f3ff6a5ee94bd953f426fa
     }
     playing = false
     //playing = true
@@ -165,7 +257,13 @@ async function swap(actions, steps) {
 }
 
 // prints array to console
-function printArr(arr) { 
+function printArrValue(arr) { 
+    for(let i = 0; i < arr.length; i++) {
+        console.log(arr[i].value)
+    }
+}
+
+function printArr(arr) {
     for(let i = 0; i < arr.length; i++) {
         console.log(arr[i])
     }
@@ -179,7 +277,7 @@ function start() {
     inProgress = true
     let swaps = selectedFunction(input);
     swap(swaps)
-    .then( function(value) {
+    .then(function(value) {
         document.querySelector("#start").style.display = "none"
         document.querySelector("#reset").style.display = "inline"
     })
