@@ -7,7 +7,13 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
         <link rel="stylesheet" href="../css/styles.css">
         <link rel="stylesheet" href="sorting.css">
-
+ 
+        <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js" integrity="sha256-0H3Nuz3aug3afVbUlsu12Puxva3CP4EhJtPExqs54Vg=" crossorigin="anonymous"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous" defer></script>
+        <script src="../anime.min.js" defer></script>
+        <script src="sorting.js" defer></script>
+        <script src="../js/main.js"defer></script>
     </head>
 
     <body class="back">
@@ -141,11 +147,11 @@
                 <div class="btn-group dropup col-auto gx-0">
                     <button type="button" class="btn btn-menu dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Sorting</button>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" onclick="changeAlgo('insertion')">Insertion Sort</a></li>
-                        <li><a class="dropdown-item" href="#">Selection Sort</a></li>
-                        <li><a class="dropdown-item" href="#">Merge Sort</a></li>
-                        <li><a class="dropdown-item" href="#">Bubble Sort</a></li>
-                        <li><a class="dropdown-item" href="#">Quick Sort</a></li>
+                        <li><a class="dropdown-item" onclick="changeAlgo('insertionsort')">Insertion Sort</a></li>
+                        <li><a class="dropdown-item" onclick="changeAlgo('selectionsort')">Selection Sort</a></li>
+                        <!-- <li><a class="dropdown-item" onclick="">Merge Sort</a></li> -->
+                        <li><a class="dropdown-item" onclick="changeAlgo('bubblesort')">Bubble Sort</a></li>
+                        <li><a class="dropdown-item" onclick="changeAlgo('quicksort')">Quick Sort</a></li>
                     </ul>
                 </div>
 
@@ -153,8 +159,8 @@
                 <div class="btn-group dropup col-auto gx-0">
                     <button type="button" class="btn btn-menu dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Searching</button>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">Linear Search</a></li>
-                        <li><a class="dropdown-item" href="#">Binary Search</a></li>
+                        <li><a class="dropdown-item" href="../Searching/searching.html?func=linearsearch">Linear Search</a></li>
+                        <li><a class="dropdown-item" href="../Searching/searching.html?func=binarysearch">Binary Search</a></li>
                     </ul>
                 </div>
 
@@ -169,15 +175,6 @@
                 </div>
             </div>
         </div>
-        
-
-        <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js" integrity="sha256-0H3Nuz3aug3afVbUlsu12Puxva3CP4EhJtPExqs54Vg=" crossorigin="anonymous"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous" defer></script>
-        <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.js" integrity="sha512-E378bwaeZf1nwXeJGIwTB58A5gPt5jFU3u6aTGja4ZdRFJeo/N/REKnBgNZOZlH6JdnOPO98vg2AnSGaNfCMFQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>-->
-        <script src="../anime.min.js" defer></script>
-        <script src="sorting.js" defer></script>
-        <script src="../js/main.js"defer></script>
     </body>
     
     
