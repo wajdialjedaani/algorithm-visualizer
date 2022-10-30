@@ -47,7 +47,7 @@ img {
 
 .menu-card {
     width: 20rem;
-    height: 15rem;
+    height: 17rem;
     top: 1rem;
     position: relative;
 }
@@ -75,9 +75,10 @@ img {
 }
 
 .menu-button {
-    position:absolute;
+    /* position:absolute;
     bottom: 25px;
-    right: 25px;
+    right: 25px; */
+    float: right;
 }
 
 .btn-orangeRed:hover {

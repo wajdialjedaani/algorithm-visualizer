@@ -13,20 +13,26 @@ if(!Cookies.get('sortVisited')) {
     Cookies.set('sortVisited', '1', {expires: 999})
 }
 
+// TODO: implement pseudocode change; refer pathfind.js
 function changeAlgo(func) {
-    let text
-    if(func == "insertion") {
-        text = ``
+    if(func == "insertionsort") {
         selectedFunction = insertionSort
         document.querySelector("#Header").textContent = "Insertion Sort"
     }
-    //else if(func == "djikstra") {
-    //    text = ``
-    //    selectedFunction = Djikstra
-    //    //document.querySelector("#Header").textContent = "Djikstra's Pathfinding"
-    //}
-    //DisplayAnnotation(text, document.querySelector("#annotation>.card-body>p"))
+    else if (func == "selectionsort") {
+        selectedFunction = selectionSort
+        document.querySelector("#Header").textContent = "Selection Sort"
+    }
+    else if (func == "bubblesort") {
+        selectedFunction = bubbleSort
+        document.querySelector("#Header").textContent = "Bubble Sort"
+    }
+    else if (func == "quicksort") {
+        selectedFunction = quickSort
+        document.querySelector("#Header").textContent = "Quick Sort"
+    }
 }
+changeAlgo(selectedFunction)
 
 // gets input and splits it into an array
 function getInput() {    
@@ -48,7 +54,7 @@ function generateBars() {
     container.style.setProperty("--width", document.querySelector('#arrCanvas').clientWidth / input.length)
     let max = Math.max(...input.map(o => o.value))
     let maxHeight = container.getBoundingClientRect().height
-    console.log(maxHeight)
+
     for(let i = 0; i < input.length; i++) {
         let arrBar = document.createElement('div')
         let arrBarID = 'arrBar' + i
@@ -67,59 +73,84 @@ function removeBars() {
     bars.forEach(element => element.remove())
 }
 
+// SORTING ALGORITHMS------------------------------------------------------------------------------------------------------------------------------------
+
 // insertion sort algorithm
 function insertionSort(arr) {
     let swaps = [] // saves the pair of index that are being swapped
-    let steps = [] // saves the steps for the pseudocode highlighting
     let j, current, i
     for(i = 1; i < arr.length; i++) {
-        //steps.push(1)
-
         current = arr[i]
-        //steps.push(2)
-
         j = i - 1
-        //steps.push(3)
 
         while(j >= 0 && arr[j].value > current.value) { // checks if j is outside of array and compares j position value with current
-            //console.log(`left: ${arr[j].value} right: ${arr[j+1].value}`)
-            //console.log(`${j} , ${j+1}`)
-            //steps.push(4)
             swaps.push([current, arr[j]])
             arr[j + 1] = arr[j]
-            //console.log(arr)
-            //steps.push(5)
-
             j--
-            //steps.push(6)
         }
-        //swaps.push([arr[j+1], current])
         arr[j + 1] = current   // once while is false, the last j position is current
-        //console.log(arr)
-        //steps.push(7)
     }
+    printArrValue(arr)
+    printArr(swaps)
     return swaps
-    //console.log(swaps)
-    //swap(swaps)
-    //printArr(input)
 }
 
-// highlights the pseudocode step
-async function step(steps) {    
-    for (let i = 0; i < steps.length; i++) {
-        let step = '#step' + steps[i]
+// BUG: swaps are not correct
+// selection sort algorithm
+function selectionSort(arr) {
+    let swaps = [] // saves the pair of index that are being swapped
+    let min_ind, temp
 
-        document.querySelector(step).classList.toggle('activeStep')
-        await new Promise(resolve => setTimeout(resolve, 1000))
+    for(let i = 0; i < (arr.length - 1); i++) {
+        min_ind = i
+        
+        for(let j = i + 1; j < arr.length; j++) {
+            if(arr[j].value < arr[min_ind].value) {
+                min_ind = j
+            }
+        }
 
-        document.querySelector(step).classList.toggle('activeStep')
-        await new Promise(resolve => setTimeout(resolve, 1000))
+        // swap
+        swaps.push([arr[i], arr[min_ind]])
+        temp = arr[min_ind].value
+        arr[min_ind].value = arr[i].value
+        arr[i].value = temp
     }
+
+    printArrValue(arr)
+    printArr(swaps)
+    return swaps
 }
+
+// bubble sort algorithm
+function bubbleSort(arr) {
+    let swaps = [] // saves the pair of index
+    var temp
+    for(let i = 0; i < arr.length - 1; i++) {
+        for(let j = 0; j < arr.length - i - 1; j++) {
+            if(arr[j].value > arr[j + 1].value) {
+                // swap
+                swaps.push([arr[j], arr[j + 1]])
+                temp = arr[j].value
+                arr[j].value = arr[j + 1].value
+                arr[j + 1].value = temp
+            }
+        }
+    }
+    printArrValue(arr)
+    printArr(swaps)
+    return swaps
+}
+
+// quick sort algorithm
+function quickSort(arr) {
+
+}
+
+// -----------------------------------------------------------------------------------------------------------------------------------------------------
 
 // highlights and swaps bars
-async function swap(swaps, steps) {
-
+async function swap(swaps) {
     document.querySelector("#PlayPause").onclick = function() {
         if(typeof swapAnim === "undefined" || !inProgress) {
             console.log("No animation playing")
@@ -173,24 +204,18 @@ async function swap(swaps, steps) {
         swapAnim.play()
         await swapAnim.finished
         document.querySelector("#Progress-Bar").style.width = ((i+1) / swaps.length * 100) + "%"
-
-        //document.querySelector(selected1).classList.toggle('arrBarSelected')
-        //selected1.classList.toggle('arrBarSelected')
-        //document.querySelector(selected2).classList.toggle('arrBarSelected')
-        //selected2.classList.toggle('arrBarSelected')
-        //await new Promise(resolve => setTimeout(resolve, 1000))
-
-        //document.querySelector(selected1).classList.toggle('arrBarSelected')
-        //selected1.classList.toggle('arrBarSelected')
-        //document.querySelector(selected2).classList.toggle('arrBarSelected')
-        //selected2.classList.toggle('arrBarSelected')
-        //await new Promise(resolve => setTimeout(resolve, 1000))
     }
     playing = false
 }
 
 // prints array to console
-function printArr(arr) { 
+function printArrValue(arr) { 
+    for(let i = 0; i < arr.length; i++) {
+        console.log(arr[i].value)
+    }
+}
+
+function printArr(arr) {
     for(let i = 0; i < arr.length; i++) {
         console.log(arr[i])
     }
@@ -204,7 +229,7 @@ function start() {
     inProgress = true
     let swaps = selectedFunction(input);
     swap(swaps)
-    .then( function(value) {
+    .then(function(value) {
         document.querySelector("#start").style.display = "none"
         document.querySelector("#reset").style.display = "inline"
     })
