@@ -9,6 +9,7 @@ let playing = false
 window.onload = generateBox
 window.onresize = generateBox
 
+// instruction modal cookies
 if(!Cookies.get('searchVisited')) {
     $('#introModal').modal('show')
     Cookies.set('searchVisited', '1', {expires: 999})
