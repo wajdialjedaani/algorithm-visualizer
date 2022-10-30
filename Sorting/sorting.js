@@ -20,12 +20,6 @@ function changeAlgo(func) {
         selectedFunction = insertionSort
         document.querySelector("#Header").textContent = "Insertion Sort"
     }
-    //else if(func == "djikstra") {
-    //    text = ``
-    //    selectedFunction = Djikstra
-    //    //document.querySelector("#Header").textContent = "Djikstra's Pathfinding"
-    //}
-    //DisplayAnnotation(text, document.querySelector("#annotation>.card-body>p"))
 }
 
 // gets input and splits it into an array
@@ -69,39 +63,25 @@ function removeBars() {
 
 // insertion sort algorithm
 function insertionSort(arr) {
-    let swaps = [] // saves the pair of index that are being swapped
+    let actions = [] // saves the pair of index that are being swapped
     let steps = [] // saves the steps for the pseudocode highlighting
     let j, current, i
     for(i = 1; i < arr.length; i++) {
-        //steps.push(1)
-
         current = arr[i]
-        //steps.push(2)
-
         j = i - 1
-        //steps.push(3)
 
+        actions.push(new Comparison([arr[j], current]))
         while(j >= 0 && arr[j].value > current.value) { // checks if j is outside of array and compares j position value with current
-            //console.log(`left: ${arr[j].value} right: ${arr[j+1].value}`)
-            //console.log(`${j} , ${j+1}`)
-            //steps.push(4)
-            swaps.push([current, arr[j]])
-            arr[j + 1] = arr[j]
-            //console.log(arr)
-            //steps.push(5)
+            actions.push(new Swap([current, arr[j]]))
 
+            arr[j + 1] = arr[j]
             j--
-            //steps.push(6)
+
+            actions.push(new Comparison([arr[j], current]))
         }
-        //swaps.push([arr[j+1], current])
         arr[j + 1] = current   // once while is false, the last j position is current
-        //console.log(arr)
-        //steps.push(7)
     }
-    return swaps
-    //console.log(swaps)
-    //swap(swaps)
-    //printArr(input)
+    return actions
 }
 
 // highlights the pseudocode step
@@ -118,75 +98,70 @@ async function step(steps) {
 }
 
 // highlights and swaps bars
-async function swap(swaps, steps) {
-
+async function swap(actions, steps) {
     document.querySelector("#PlayPause").onclick = function() {
-        if(typeof swapAnim === "undefined" || !inProgress) {
+        if(typeof tl === "undefined" || !inProgress) {
             console.log("No animation playing")
             return
         }
         if(playing) {
             console.log("first")
             playing = false
-            swapAnim.pause()
+            tl.pause()
             this.firstChild.setAttribute("src", "../Assets/play-fill.svg")
         }
         else {
             console.log("second")
             playing = true
-            swapAnim.play()
+            tl.play()
             this.firstChild.setAttribute("src", "../Assets/pause-fill.svg")
         }
     }
+
     playing = true
-    for (let i = 0; i < swaps.length; i++) {
-        let duration = 500/speed
-        const bars = swaps.map((element) => {
-            return [document.querySelector(element[0].id), document.querySelector(element[1].id)]
-        })
-        let selected1 = bars[i][0]
-        let selected2 = bars[i][1]
-        let currentPos1 = Number(selected1.style.getPropertyValue('--position')) + Number(selected1.style.getPropertyValue('--translation'))
-        let currentPos2 = Number(selected2.style.getPropertyValue('--position')) + Number(selected2.style.getPropertyValue('--translation'))
-        swapAnim = anime.timeline({autoplay: false})
-        swapAnim.add({
-            targets: selected1,
-            translateX: Number(selected1.style.getPropertyValue('--translation')) + currentPos2 - currentPos1,
-            backgroundColor: [
-                {value: "#FFFFFF", duration: duration-1},
-                {value: "#6290C8", duration: 1}
-            ],
-            easing: 'easeOutCubic',
-            duration: duration,
-            complete: function(anim) {selected1.style.setProperty('--translation', currentPos2 - selected1.style.getPropertyValue('--position'))}
-        }).add({
-            targets: selected2,
-            translateX: Number(selected2.style.getPropertyValue('--translation')) + currentPos1 - currentPos2,
-            backgroundColor: [
-                {value: "#000000", duration: duration-1},
-                {value: "#6290C8", duration: 1}
-            ],
-            easing: 'easeOutCubic',
-            duration: duration,
-            complete: function(anim) {selected2.style.setProperty('--translation', currentPos1 - selected2.style.getPropertyValue('--position'))}
-        }, `-=${duration}`)
-        swapAnim.play()
-        await swapAnim.finished
-        document.querySelector("#Progress-Bar").style.width = ((i+1) / swaps.length * 100) + "%"
-
-        //document.querySelector(selected1).classList.toggle('arrBarSelected')
-        //selected1.classList.toggle('arrBarSelected')
-        //document.querySelector(selected2).classList.toggle('arrBarSelected')
-        //selected2.classList.toggle('arrBarSelected')
-        //await new Promise(resolve => setTimeout(resolve, 1000))
-
-        //document.querySelector(selected1).classList.toggle('arrBarSelected')
-        //selected1.classList.toggle('arrBarSelected')
-        //document.querySelector(selected2).classList.toggle('arrBarSelected')
-        //selected2.classList.toggle('arrBarSelected')
-        //await new Promise(resolve => setTimeout(resolve, 1000))
+    for (action of actions) {
+        tl = anime.timeline()
+        action.AddToTimeline(tl)
+        await tl.finished
     }
     playing = false
+    //playing = true
+    //for (let i = 0; i < swaps.length; i++) {
+    //    let duration = 500/speed
+    //    const bars = swaps.map((element) => {
+    //        return [document.querySelector(element[0].id), document.querySelector(element[1].id)]
+    //    })
+    //    let selected1 = bars[i][0]
+    //    let selected2 = bars[i][1]
+    //    let currentPos1 = Number(selected1.style.getPropertyValue('--position')) + Number(selected1.style.getPropertyValue('--translation'))
+    //    let currentPos2 = Number(selected2.style.getPropertyValue('--position')) + Number(selected2.style.getPropertyValue('--translation'))
+    //    swapAnim = anime.timeline({autoplay: false})
+    //    swapAnim.add({
+    //        targets: selected1,
+    //        translateX: Number(selected1.style.getPropertyValue('--translation')) + currentPos2 - currentPos1,
+    //        backgroundColor: [
+    //            {value: "#FFFFFF", duration: duration-1},
+    //            {value: "#6290C8", duration: 1}
+    //        ],
+    //        easing: 'easeOutCubic',
+    //        duration: duration,
+    //        complete: function(anim) {selected1.style.setProperty('--translation', currentPos2 - selected1.style.getPropertyValue('--position'))}
+    //    }).add({
+    //        targets: selected2,
+    //        translateX: Number(selected2.style.getPropertyValue('--translation')) + currentPos1 - currentPos2,
+    //        backgroundColor: [
+    //            {value: "#000000", duration: duration-1},
+    //            {value: "#6290C8", duration: 1}
+    //        ],
+    //        easing: 'easeOutCubic',
+    //        duration: duration,
+    //        complete: function(anim) {selected2.style.setProperty('--translation', currentPos1 - selected2.style.getPropertyValue('--position'))}
+    //    }, `-=${duration}`)
+    //    swapAnim.play()
+    //    await swapAnim.finished
+    //    document.querySelector("#Progress-Bar").style.width = ((i+1) / swaps.length * 100) + "%"
+    //}
+    //playing = false
 }
 
 // prints array to console
@@ -227,3 +202,98 @@ document.querySelector("#reset").addEventListener("click", function() {
     document.querySelector("#start").style.display = "inline"
     inProgress = false;
 })
+
+class Action {
+    constructor(targets) {
+        this.targets = targets
+    }
+
+    get duration() {
+        return 1000
+    }
+}
+
+class Swap extends Action {
+    constructor(targets) {
+        super(targets)
+        Swap.duration = 500
+    }
+
+    get duration() {
+        return Swap.duration / speed
+    }
+
+    get Animation() {
+        let selected1 = document.querySelector(`${this.targets[0].id}`)
+        let selected2 = document.querySelector(`${this.targets[1].id}`)
+        let currentPos1 = Number(selected1.style.getPropertyValue('--position')) + Number(selected1.style.getPropertyValue('--translation'))
+        let currentPos2 = Number(selected2.style.getPropertyValue('--position')) + Number(selected2.style.getPropertyValue('--translation'))
+        let duration = this.duration
+        return [{
+            targets: selected1,
+            translateX: Number(selected1.style.getPropertyValue('--translation')) + currentPos2 - currentPos1,
+            backgroundColor: [
+                {value: "#FFFFFF", duration: duration-1},
+                {value: "#6290C8", duration: 1}
+            ],
+            easing: 'easeOutCubic',
+            duration: duration,
+            complete: function() {selected1.style.setProperty('--translation', currentPos2 - selected1.style.getPropertyValue('--position'))}
+        },
+        {
+            targets: selected2,
+            translateX: Number(selected2.style.getPropertyValue('--translation')) + currentPos1 - currentPos2,
+            backgroundColor: [
+                {value: "#000000", duration: duration-1},
+                {value: "#6290C8", duration: 1}
+            ],
+            easing: 'easeOutCubic',
+            duration: duration,
+            complete: function() {selected2.style.setProperty('--translation', currentPos1 - selected2.style.getPropertyValue('--position'))}
+        }]
+    }
+
+    async Animate() {
+        let animations = this.Animation
+        for(let i=0; i<animations.length; i++) {
+            console.log("animating")
+            await anime(animations[i]).finished
+        }
+    }
+
+    AddToTimeline(tl) {
+        let animations = this.Animation
+        console.log("timeline")
+        tl.add(animations[0])
+        .add(animations[1], `-=${this.duration}`)
+    }
+
+}
+
+class Comparison extends Action {
+    constructor (targets) {
+        super(targets.filter(obj => typeof obj !== "undefined"))
+        Comparison.duration = 500
+    }
+
+    get duration() {
+        return Comparison.duration / speed
+    }
+
+    get Animation() {
+        return {
+            targets: this.targets.map((element) => {return document.querySelector(`${element.id}`)}),
+            backgroundColor: [{value: "#228C22", duration: this.duration-1},
+                {value: "#6290C8", duration: 1}],
+            duration: this.duration,
+        }
+    }
+
+    async Animate() {
+
+    }
+
+    AddToTimeline(tl) {
+        tl.add(this.Animation)
+    }
+}
