@@ -1,3 +1,6 @@
+let fontIncrease = 0    // positive means there is a change; negative is an offset if there is a combo of increase and decrease
+let fontDecrease = 0
+
 /// SETTINGS ----------------------------------------------------------------------------------
 function darkMode() {   // enables dark mode
     var settingModal = document.getElementById("settingModalDialog");
@@ -25,16 +28,20 @@ function increaseFontSize() {
         var currentSize = parseFloat(style);
         text[i].style.fontSize = (currentSize + 1) + 'px';  // current size + 1 px
     }
+    fontIncrease++
+    fontDecrease--
 }
 
 function decreaseFontSize() {
-    var text = document.querySelectorAll('*');
-    
+    var text = document.querySelectorAll('*'); 
     for(var i = 0; i < text.length; i++) {
         var style = window.getComputedStyle(text[i]).getPropertyValue('font-size');
         var currentSize = parseFloat(style);
         text[i].style.fontSize = (currentSize - 1) + 'px';  // current size + 1 px
+        
     }
+    fontDecrease++
+    fontIncrease--
 }
 
 var zoom = 1;   // original size
@@ -56,6 +63,28 @@ function zoomOut() {
     for(var i = 0; i < elements.length; i++) {
         elements[i].style.transform = "scale(" + zoom + ")";
     }
+}
+
+function resetSettings() {
+    var text = document.querySelectorAll('*');
+    console.log("Font increased by: " + fontIncrease);
+    console.log("Font decreased by: " + fontDecrease);
+    if (fontIncrease > 0) {
+        for (let i = 0; i < text.length; i++) {
+            var style = window.getComputedStyle(text[i]).getPropertyValue('font-size');
+            var currentSize = parseFloat(style);
+            text[i].style.fontSize = (currentSize - fontIncrease) + 'px';   // subtracts px by how many times it increased
+        }
+        
+    } else if(fontDecrease > 0) {
+        for (let i = 0; i < text.length; i++) {
+            var style = window.getComputedStyle(text[i]).getPropertyValue('font-size');
+            var currentSize = parseFloat(style);
+            text[i].style.fontSize = (currentSize + fontDecrease) + 'px';   // subtracts px by how many times it increased
+        }
+    }
+    fontDecrease = 0
+    fontIncrease = 0
 }
 
 /// MAIN MENU ----------------------------------------------------------------------------------
