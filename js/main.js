@@ -1,5 +1,6 @@
 let fontIncrease = 0    // positive means there is a change; negative is an offset if there is a combo of increase and decrease
 let fontDecrease = 0
+let dark = false
 
 /// SETTINGS ----------------------------------------------------------------------------------
 function darkMode() {   // enables dark mode
@@ -17,7 +18,10 @@ function darkMode() {   // enables dark mode
     btnOutline.forEach(element => {
         element.classList.toggle("light-outline")
     });
-    grid.classList.toggle("grid-dark"); // grid
+    //grid.classList.toggle("grid-dark"); // grid
+
+    dark = !dark
+    console.log(dark);
 }
 
 function increaseFontSize() {
@@ -85,6 +89,10 @@ function resetSettings() {
     }
     fontDecrease = 0
     fontIncrease = 0
+
+    if(dark) {
+        document.querySelector("#darkModeSwitch").click()
+    }
 }
 
 /// MAIN MENU ----------------------------------------------------------------------------------
