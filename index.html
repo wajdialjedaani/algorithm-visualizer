@@ -31,7 +31,7 @@
 
         <!-- Setting Modal -->
         <div class="modal fade" id="settingModal" aria-labelledby="Settings" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
-            <div id="settingModalDialog" class="modal-dialog modal-sm modal-setting">
+            <div id="settingModalDialog" class="modal-dialog modal-setting">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="Settings">Settings</h5>
@@ -47,8 +47,11 @@
                         <div class="row mt-1">
                             <div class="col">Text Size</div>
                             <div class="col-4 btn-group btn-group-sm" role="group" aria-label="Increase or decrease text size">
-                                <button type="button" class="btn btn-outline-dark btnResize" onclick="increaseFontSize(1)">+</button>
-                                <button type="button" class="btn btn-outline-dark btnResize" onclick="decreaseFontSize(1)">-</button>
+                                <!-- <button type="button" class="btn btn-outline-dark btnResize active" onclick="changeFontSize(1)">A</button>
+                                <button type="button" class="btn btn-outline-dark btnResize" onclick="changeFontSize(1.25)">A</button>
+                                <button type="button" class="btn btn-outline-dark btnResize" onclick="changeFontSize(1.5)">A</button> -->
+                                <button type="button" class="btn btn-outline-dark btnResize" onclick="increaseFontSize()">+</button>
+                                <button type="button" class="btn btn-outline-dark btnResize" onclick="decreaseFontSize()">-</button>
                             </div>
                         </div>
                         <div class="row mt-1">
@@ -60,8 +63,9 @@
                         </div>
                     </div>
                     <div class="modal-footer">
+                        <!-- <a href="index.html" type="button" class="btn btn-orangeRed" aria-label="Reset">Reset</a> very rudementary reset -->
+                        <button type="button" class="btn btn-orangeRed" aria-label="Save changes" onclick="resetSettings()">Reset</button>
                         <button type="button" class="btn btn-orangeRed" data-bs-dismiss="modal" aria-label="Save changes">Save changes</button>
-                        <a href="index.html" type="button" class="btn btn-orangeRed" aria-label="Reset">Reset</a> <!-- very rudementary reset -->
                     </div>
                 </div>
             </div>
