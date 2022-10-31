@@ -10,8 +10,7 @@ function darkMode() {   // enables dark mode
     var btnOutline = document.querySelectorAll(".btnResize");
     var introModal = document.querySelector("#introModal");
     var grid = document.querySelector("#grid-container");
-
-    
+    var draggable = document.querySelectorAll(".draggable");
 
     settingModal.classList.toggle("modal-setting-dark");    // settings
     back.classList.toggle("back-dark");                     // background
@@ -28,6 +27,12 @@ function darkMode() {   // enables dark mode
     
     if(grid) {
         grid.classList.toggle("grid-dark"); // grid
+    }
+
+    if(draggable) {
+        draggable.forEach(element => {
+            element.classList.toggle("draggable-dark")
+        });
     }
     
     dark = !dark
