@@ -5,6 +5,8 @@ let rows = Math.floor((document.body.clientHeight / 30));
 let speed = 1
 let playing = false
 let inProgress = false
+let currentAnim = undefined
+
 
 if(!Cookies.get('pathVisited')) {
     $('#introModal').modal('show')
@@ -74,8 +76,10 @@ function generateTable() {
     let table = document.querySelector("#grid-container")
     table.innerHTML = ""
   
-    columns = Math.floor((document.body.clientWidth / 30));
-    rows = Math.floor((document.body.clientHeight / 30));
+    let cellSize = 30
+
+    columns = Math.floor((document.body.clientWidth / cellSize));
+    rows = Math.floor((document.body.clientHeight / cellSize));
 
     //console.log(`width: ${document.body.clientWidth}  height: ${document.body.clientHeight}`)
     //console.log(`columns: ${columns}, rows: ${rows}`)
@@ -100,26 +104,7 @@ function generateTable() {
 
 window.onload = generateTable
 
-window.onresize = function() {
-    //let table = document.querySelector("#grid-container")
-//
-    //let newColumns = Math.floor((document.body.clientWidth / 30));
-    //let newRows = Math.floor((document.body.clientHeight / 30));
-    //table.style.setProperty("--columns", newColumns)
-    //table.style.setProperty("--rows", newRows)
-//
-    //for(let y=0; y<rows; y++) {
-    //    for(let x=0; x<columns; x++) {
-    //        let cell = document.createElement("td")
-    //        cell.id = (`${y},${x}`)
-    //        cell.addEventListener('mousedown', cellHandler)
-    //        cell.style.setProperty("--width", width)
-    //        cell.style.setProperty("--height", height)
-    //        newTable.appendChild(cell)
-    //    }
-    //}
-    generateTable()
-}
+window.onresize = generateTable
 
 //dragElement(document.querySelector(".draggable"));
 document.querySelectorAll(".draggable").forEach((element) => {dragElement(element)})
@@ -193,26 +178,6 @@ async function FindPath(table)
 {
     let start = undefined
     let end = undefined
-    let currentAnim = undefined
-
-    document.querySelector("#PlayPause").onclick = function() {
-        if(typeof currentAnim === "undefined" || !inProgress) {
-            console.log("No animation playing")
-            return
-        }
-        if(playing) {
-            console.log("first")
-            playing = false
-            currentAnim.pause()
-            this.firstChild.setAttribute("src", "../Assets/play-fill.svg")
-        }
-        else {
-            console.log("second")
-            playing = true
-            currentAnim.play()
-            this.firstChild.setAttribute("src", "../Assets/pause-fill.svg")
-        }
-    }
 
     const graph = new Graph()
     table.childNodes.forEach(cell => {
@@ -247,37 +212,42 @@ async function FindPath(table)
         throw new Error("No path")
     }
     playing = true
-    progress = document.querySelector("#Progress-Bar")
+    await animateResults(results);
+    playing = false
+}
+
+async function animateResults(results) {
+    progress = document.querySelector("#Progress-Bar");
     //Start each step of the animation with await to keep the thread unblocked, then continue when the step is done
-    for(let i=0; i<results.untakenPaths.length; i++) {
-        let path = results.untakenPaths[i]
-        let node = results.untakenNodes[i][0]
+    for (let i = 0; i < results.untakenPaths.length; i++) {
+        let path = results.untakenPaths[i];
+        let node = results.untakenNodes[i][0];
         DisplayAnnotation(`Cost to travel to current node: ${node.g} <br>
         Estimated cost from node to the end: ${node.h} <br>
-        Estimated total cost: ${node.g + node.h}`, document.querySelector("#pseudocode>.card-body>p"))
+        Estimated total cost: ${node.g + node.h}`, document.querySelector("#pseudocode>.card-body>p"));
 
         DisplayAnnotation(`A* is choosing the tiles that it thinks will lead us to the end fastest.<br>
-        The current tile is the cheapest we have, costing <b>${node.f}.</b> A* will continue towards the end until it hits a wall - then it'll search for another tile that costs <b>${node.f}</b>`
-        , document.querySelector("#annotation>.card-body>p"))
+        The current tile is the cheapest we have, costing <b>${node.f}.</b> A* will continue towards the end until it hits a wall - then it'll search for another tile that costs <b>${node.f}</b>`,
+            document.querySelector("#annotation>.card-body>p"));
 
         currentAnim = anime({
             targets: path,
             backgroundColor: [
-                {value: "#F26419", duration: 0}, //Zap the line red instantly
-                {value: "#28666E", delay: 60 / speed, duration: 1} //Small wait, then zap the whole line purple
+                { value: "#F26419", duration: 0 },
+                { value: "#28666E", delay: 60 / speed, duration: 1 } //Small wait, then zap the whole line purple
             ]
-        })
-        await currentAnim.finished
-        progress.style.width = `${(results.untakenPaths.indexOf(path) + 1) / results.untakenPaths.length * 100}%`
+        });
+        await currentAnim.finished;
+        progress.style.width = `${(results.untakenPaths.indexOf(path) + 1) / results.untakenPaths.length * 100}%`;
     }
     currentAnim = anime({
         targets: results.pathCells,
         delay: anime.stagger(50),
         duration: 500,
         backgroundColor: '#FEDC97',
-        })
-    await currentAnim.finished
-    playing = false
+    });
+    await currentAnim.finished;
+    
 }
 
 function AStar(graph, start, end) {
@@ -476,6 +446,7 @@ document.querySelector("#generate").addEventListener("click", () => {
     .catch(
         function(error) {
             console.log("Path promise rejected")
+            console.log(error)
     })
     .finally(
         () => {
@@ -492,3 +463,22 @@ document.querySelector("#reset").addEventListener("click", () => {
     document.querySelector("#generate").style.display = "inline"
     inProgress = false;
 })
+
+document.querySelector("#PlayPause").onclick = function() {
+    if(typeof currentAnim === "undefined" || !inProgress) {
+        console.log("No animation playing")
+        return
+    }
+    if(playing) {
+        console.log("first")
+        playing = false
+        currentAnim.pause()
+        this.firstChild.setAttribute("src", "../Assets/play-fill.svg")
+    }
+    else {
+        console.log("second")
+        playing = true
+        currentAnim.play()
+        this.firstChild.setAttribute("src", "../Assets/pause-fill.svg")
+    }
+}

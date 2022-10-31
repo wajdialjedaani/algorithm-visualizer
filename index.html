@@ -47,8 +47,8 @@
                         <div class="row mt-1">
                             <div class="col">Text Size</div>
                             <div class="col-4 btn-group btn-group-sm" role="group" aria-label="Increase or decrease text size">
-                                <button type="button" class="btn btn-outline-dark btnResize" onclick="increaseFontSize(1)">+</button>
-                                <button type="button" class="btn btn-outline-dark btnResize" onclick="decreaseFontSize(1)">-</button>
+                                <button type="button" class="btn btn-outline-dark btnResize" onclick="increaseFontSize()">+</button>
+                                <button type="button" class="btn btn-outline-dark btnResize" onclick="decreaseFontSize()">-</button>
                             </div>
                         </div>
                         <div class="row mt-1">
@@ -60,8 +60,8 @@
                         </div>
                     </div>
                     <div class="modal-footer">
+                        <button type="button" class="btn btn-orangeRed" aria-label="Save changes" onclick="resetSettings()">Reset</button>
                         <button type="button" class="btn btn-orangeRed" data-bs-dismiss="modal" aria-label="Save changes">Save changes</button>
-                        <a href="index.html" type="button" class="btn btn-orangeRed" aria-label="Reset">Reset</a> <!-- very rudementary reset -->
                     </div>
                 </div>
             </div>
@@ -71,26 +71,38 @@
         <div class="container-fluid" style="padding: 0;">
             <!-- Main menu -->
             <div id="algorithmsMenu" class="container-fluid position-absolute" style="visibility: visible; opacity: 1;">
-                <div class="row justify-content-between">
-                    <div id="sortingAlgorithmsGo" class="col-4 card card-algorithm-type mx-auto">
-                        <div class="card-body">
-                            <h4 class="card-title">Sorting Algorithms</h4>
-                            <p>A sorting algorithm is an algorithm that puts elements of a list into an order.</p>
-                            <a class="btn menu-button btn-orangeRed justify-content-end " role="button" onclick="sortingGo()">Go</a>
+                <div class="row row-cols-1 row-cols-md-3 g-4">
+                    <div class="col">
+                        <div id="sortingAlgorithmsGo" class="card menu-card card-algorithm-type mx-auto">
+                            <div class="card-body">
+                                <h4 class="card-title">Sorting Algorithms</h4>
+                                <p>A sorting algorithm is an algorithm that puts elements of a list into an order.</p>
+                            </div>
+                            <div class="card-footer">
+                                <a class="btn menu-button btn-orangeRed" role="button" onclick="sortingGo()">Go</a>
+                            </div>
                         </div>
                     </div>
-                    <div id="searchingAlgorithmsGo" class="col-4 card card-algorithm-type mx-auto">
-                        <div class="card-body">
-                            <h4 class="card-title">Searching Algorithms</h4>
-                            <p>Searching Algorithms are designed to check for an element or retrieve an element from any data structure where it is stored.</p>
-                            <a class="btn menu-button btn-orangeRed justify-content-end" role="button" onclick="searchingGo()">Go</a>
+                    <div class="col">
+                        <div id="searchingAlgorithmsGo" class="card menu-card card-algorithm-type mx-auto">
+                            <div class="card-body">
+                                <h4 class="card-title">Searching Algorithms</h4>
+                                <p>Searching Algorithms are designed to check for an element or retrieve an element from any data structure where it is stored.</p>
+                            </div>
+                            <div class="card-footer">
+                                <a class="btn menu-button btn-orangeRed justify-content-end" role="button" onclick="searchingGo()">Go</a>
+                            </div>
                         </div>
                     </div>
-                    <div id="pathfindingAlgorithmsGo" class="col-4 card card-algorithm-type mx-auto">
-                        <div class="card-body">
-                            <h4 class="card-title">Pathfinding Algorithms</h4>
-                            <p>Pathfinding is the plotting of the shortest route between two points.</p>
-                            <a class="btn menu-button btn-orangeRed justify-content-end" role="button" onclick="pathfindingGo()">Go</a>
+                    <div class="col">
+                        <div id="pathfindingAlgorithmsGo" class="col menu-card card card-algorithm-type mx-auto">
+                            <div class="card-body">
+                                <h4 class="card-title">Pathfinding Algorithms</h4>
+                                <p>Pathfinding is the plotting of the shortest route between two points.</p>
+                            </div>
+                            <div class="card-footer">
+                                <a class="btn menu-button btn-orangeRed justify-content-end" role="button" onclick="pathfindingGo()">Go</a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -99,101 +111,143 @@
             <!-- Sorting Menu -->
             <div id="sortingMenu" class="container-fluid position-absolute" style="visibility: hidden; opacity: 0;">
                 <a class="btn btn-orangeRed back-btn" role="button" onclick="sortingBack()">< Back</a>
-                <div class="row justify-content-between">
-                    <div class="col-4 card card-algorithm-type mx-auto">
-                        <div class="card-body">
-                            <h4 class="card-title">Sorting Algorithms</h4>
-                            <p>A sorting algorithm is an algorithm that puts elements of a list into an order.</p>
+                <div class="row row-cols-1 row-cols-md-3 g-4">
+                    <div class="col">
+                        <div class="card menu-card card-algorithm-type mx-auto">
+                            <div class="card-body">
+                                <h4 class="card-title">Sorting Algorithms</h4>
+                                <p>A sorting algorithm is an algorithm that puts elements of a list into an order.</p>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-4 card card-algorithm mx-auto">
-                        <div class="card-body">
-                            <h4 class="card-title">Insertion Sort</h4>
-                            <a href="Sorting/sorting.html" class="btn menu-button btn-navajoWhite justify-content-end" role="button">Go</a>
-                        </div>
-                    </div>   
-                    <div class="col-4 card card-algorithm mx-auto">
-                        <div class="card-body">
-                            <h4 class="card-title">Selection Sort</h4>
-                            <a href="#" class="btn menu-button btn-navajoWhite justify-content-end" role="button">Go</a>
+                    <div class="col">
+                        <div class="card menu-card card-algorithm mx-auto">
+                            <div class="card-body">
+                                <h4 class="card-title">Insertion Sort</h4>
+                                <p>Insertion sort is a sorting algorithm that places an <b>unsorted element</b> at its suitable place in each iteration.</p>
+                            </div>
+                            <div class="card-footer">
+                                <a href="Sorting/sorting.html?func=insertionsort" class="btn menu-button btn-navajoWhite justify-content-end" role="button">Go</a>                               
+                            </div>
+                        </div> 
+                    </div>
+                    <div class="col">
+                        <div class="card menu-card card-algorithm mx-auto">
+                            <div class="card-body">
+                                <h4 class="card-title">Selection Sort</h4>
+                                <p>The selection sort algorithm sorts an array by <b>repeatedly finding the minimum element</b> (considering ascending order) from the unsorted part and putting it at the beginning.</p>
+                            </div>
+                            <div class="card-footer">
+                                <a href="Sorting/sorting.html?func=selectionsort" class="btn menu-button btn-navajoWhite justify-content-end" role="button">Go</a>
+                            </div>
                         </div>
                     </div>
-                </div>  
-                <div class="row justify-content-between mt-5">
-                    <div class="col-4 card card-algorithm mx-auto">
-                        <div class="card-body">
-                            <h4 class="card-title">Merge Sort</h4>
-                            <a href="#" class="btn menu-button btn-navajoWhite justify-content-end" role="button">Go</a>
+                    <!-- <div class="col">
+                        <div class="card menu-card card-algorithm mx-auto">
+                            <div class="card-body">
+                                <h4 class="card-title">Merge Sort</h4>
+                            </div>
+                            <div class="card-footer">
+                                <a href="#" class="btn menu-button btn-navajoWhite justify-content-end" role="button">Go</a>
+                            </div>
+                        </div>
+                    </div> -->
+                    <div class="col">
+                        <div class="card menu-card card-algorithm mx-auto">
+                            <div class="card-body">
+                                <h4 class="card-title">Bubble Sort</h4>
+                                <p>Bubble Sort is the <b>simplest</b> sorting algorithm that works by repeatedly swapping the adjacent elements if they are in the wrong order.</p>
+                            </div>
+                            <div class="card-footer">
+                                <a href="Sorting/sorting.html?func=bubblesort" class="btn menu-button btn-navajoWhite justify-content-end" role="button">Go</a>                               
+                            </div>
                         </div>
                     </div>
-                    <div class="col-4 card-algorithm card mx-auto">
-                        <div class="card-body">
-                            <h4 class="card-title">Bubble Sort</h4>
-                            <a href="#" class="btn menu-button btn-navajoWhite justify-content-end" role="button">Go</a>
-                        </div>
+                    <div class="col">
+                        <div class="card menu-card card-algorithm mx-auto">
+                            <div class="card-body">
+                                <h4 class="card-title">Quick Sort</h4>
+                                <p>QuickSort is a <b>Divide and Conquer algorithm</b>. It picks an element as a pivot and partitions the given array around the picked pivot.</p>
+                            </div>
+                            <div class="card-footer">
+                                <a href="Sorting/sorting.html?func=quicksort" class="btn menu-button btn-navajoWhite justify-content-end" role="button">Go</a>
+                            </div>
+                        </div> 
                     </div>
-                    <div class="col-4 card card-algorithm mx-auto">
-                        <div class="card-body">
-                            <h4 class="card-title">Quick Sort</h4>
-                            <a href="#" class="btn menu-button btn-navajoWhite justify-content-end" role="button">Go</a>
-                        </div>
-                    </div>  
                 </div>
             </div>
 
             <!-- Searching Menu -->
             <div id="searchingMenu" class="container-fluid position-absolute" style="visibility: hidden; opacity: 0;">
                 <a class="btn btn-orangeRed back-btn" role="button" onclick="searchingBack()">< Back</a>
-                <div class="row justify-content-between">
-                    <div class="col-4 card card-algorithm-type mx-auto">
-                        <div class="card-body">
-                            <h4 class="card-title">Searching Algorithms</h4>
-                            <p>Searching Algorithms are designed to check for an element or retrieve an element from any data structure where it is stored.</p>
+                <div class="row row-cols-1 row-cols-md-3 g-4">
+                    <div class="col">
+                        <div class="card menu-card card-algorithm-type mx-auto">
+                            <div class="card-body">
+                                <h4 class="card-title">Searching Algorithms</h4>
+                                <p>Searching Algorithms are designed to check for an element or retrieve an element from any data structure where it is stored.</p>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-4 card card-algorithm mx-auto">
-                        <div class="card-body">
-                            <h4 class="card-title">Linear Search</h4>
-                            <a href="Searching/searching.html?func=linearsearch" class="btn menu-button btn-navajoWhite justify-content-end" role="button">Go</a>
-                        </div>
-                    </div>   
-                    <div class="col-4 card card-algorithm mx-auto">
+                    <div class="col">
+                        <div class="card menu-card card-algorithm mx-auto">
+                            <div class="card-body">
+                                <h4 class="card-title">Linear Search</h4>
+                                <p>Linear Search is a <b>sequential</b> search algorithm that starts at one end and goes through each element of a list until the desired element is found.</p>
+                            </div>
+                            <div class="card-footer">
+                                <a href="Searching/searching.html?func=linearsearch" class="btn menu-button btn-navajoWhite justify-content-end" role="button">Go</a>
+                            </div>
+                        </div>  
+                    </div>
+                    <div class="card menu-card card-algorithm mx-auto">
                         <div class="card-body">
                             <h4 class="card-title">Binary Search</h4>
+                            <p>Binary Search is a searching algorithm used in a sorted array by <b>repeatedly dividing the search interval in half</b>. The idea of binary search is to use the information that the array is sorted and reduce the number of steps.</p>
+                        </div>
+                        <div class="card-footer">
                             <a href="Searching/searching.html?func=binarysearch" class="btn menu-button btn-navajoWhite justify-content-end" role="button">Go</a>
                         </div>
                     </div>
-                </div>  
+                </div>
             </div>
 
             <!-- Pathfinding Menu -->
             <div id="pathfindingMenu" class="container-fluid position-absolute" style="visibility: hidden; opacity: 0;">
-                <a class="btn btn-orangeRed back-btn" role="button" onclick="pathfindingBack()"> Back</a>
-                <div class="row justify-content-between">
-                    <div class="col-4 card card-algorithm-type mx-auto">
-                        <div class="card-body">
-                            <h4 class="card-title">Pathfinding Algorithms</h4>
-                            <p>Pathfinding is the plotting of the shortest route between two points.</p>
+                <a class="btn btn-orangeRed back-btn" role="button" onclick="pathfindingBack()">< Back</a>
+                <div class="row row-cols-1 row-cols-md-3 g-4">
+                    <div class="col">
+                        <div class="card menu-card card-algorithm-type mx-auto">
+                            <div class="card-body">
+                                <h4 class="card-title">Pathfinding Algorithms</h4>
+                                <p>Pathfinding is the plotting of the shortest route between two points.</p>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-4 card card-algorithm mx-auto">
-                        <div class="card-body">
-                            <h4 class="card-title">A* Pathfinding</h4>
-                            <p>A* is <b>more efficient</b> than Djikstra's and guarantees the shortest path between two points.</p>
-                            <a href="pathfinding/pathfind.html?func=a*" class="btn menu-button btn-navajoWhite justify-content-end" role="button">Go</a>
+                    <div class="col">
+                        <div class="card menu-card card-algorithm mx-auto">
+                            <div class="card-body">
+                                <h4 class="card-title">A* Pathfinding</h4>
+                                <p>A* is <b>more efficient</b> than Djikstra's and guarantees the shortest path between two points.</p>
+                            </div>
+                            <div class="card-footer">
+                                <a href="pathfinding/pathfind.html?func=a*" class="btn menu-button btn-navajoWhite justify-content-end" role="button">Go</a>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-4 card card-algorithm mx-auto">
-                        <div class="card-body">
-                            <h4 class="card-title">Djikstra's Algorithm</h4>
-                            <p>Djikstra's is <b>unweighted</b> and finds the shortest path between one point and the <b>rest of the map.</b></p>
-                            <a href="pathfinding/pathfind.html?func=djikstra" class="btn menu-button btn-navajoWhite justify-content-end" role="button">Go</a>
+                    <div class="col">
+                        <div class="card menu-card card-algorithm mx-auto">
+                            <div class="card-body">
+                                <h4 class="card-title">Djikstra's Algorithm</h4>
+                                <p>Djikstra's is <b>unweighted</b> and finds the shortest path between one point and the <b>rest of the map.</b></p>
+                            </div>
+                            <div class="card-footer">
+                                <a href="pathfinding/pathfind.html?func=djikstra" class="btn menu-button btn-navajoWhite justify-content-end" role="button">Go</a>
+                            </div>
                         </div>
                     </div>
-                </div>  
-            </div>
-
-            
+                </div> 
+            </div>    
         </div>
 
         <!-- Bottom Bar -->

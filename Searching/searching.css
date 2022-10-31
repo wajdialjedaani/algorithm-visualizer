@@ -15,7 +15,7 @@
     position: relative;
     min-height: calc(100% - 60px);
     max-height: calc(60vh - 60px);
-    width: 75vw;
+    width: 90vw;   /*5% space from both sides*/
     left: 5%;
     display: grid;
     align-items: end;
@@ -23,16 +23,17 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+    top: 50px;
 }
 
 #pseudocode {
-    top: 25%;
-    right: 1%;
+    top: 50%;
+    right: 50%;
 }
 
 #annotation {
     top: 50%;
-    right: 1%;
+    right: 25%;
 }
 
 .arrBox {
@@ -45,17 +46,3 @@
     line-height: 100px;
 }
 
-.draggable {
-    position: absolute;
-    z-index: 9;
-    --bs-card-bg: var(--navajoWhite);
-}
-
-@media (max-width: 767.98px) {
-    .draggable {
-        display: none;
-    }
-}
-.card-body {
-    overflow-y: scroll;
-}

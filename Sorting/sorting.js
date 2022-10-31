@@ -13,20 +13,26 @@ if(!Cookies.get('sortVisited')) {
     Cookies.set('sortVisited', '1', {expires: 999})
 }
 
+// TODO: implement pseudocode change; refer pathfind.js
 function changeAlgo(func) {
-    let text
-    if(func == "insertion") {
-        text = ``
+    if(func == "insertionsort") {
         selectedFunction = insertionSort
         document.querySelector("#Header").textContent = "Insertion Sort"
     }
-    //else if(func == "djikstra") {
-    //    text = ``
-    //    selectedFunction = Djikstra
-    //    //document.querySelector("#Header").textContent = "Djikstra's Pathfinding"
-    //}
-    //DisplayAnnotation(text, document.querySelector("#annotation>.card-body>p"))
+    else if (func == "selectionsort") {
+        selectedFunction = selectionSort
+        document.querySelector("#Header").textContent = "Selection Sort"
+    }
+    else if (func == "bubblesort") {
+        selectedFunction = bubbleSort
+        document.querySelector("#Header").textContent = "Bubble Sort"
+    }
+    else if (func == "quicksort") {
+        selectedFunction = quickSort
+        document.querySelector("#Header").textContent = "Quick Sort"
+    }
 }
+changeAlgo(selectedFunction)
 
 // gets input and splits it into an array
 function getInput() {    
@@ -48,7 +54,7 @@ function generateBars() {
     container.style.setProperty("--width", document.querySelector('#arrCanvas').clientWidth / input.length)
     let max = Math.max(...input.map(o => o.value))
     let maxHeight = container.getBoundingClientRect().height
-    console.log(maxHeight)
+
     for(let i = 0; i < input.length; i++) {
         let arrBar = document.createElement('div')
         let arrBarID = 'arrBar' + i
@@ -67,130 +73,160 @@ function removeBars() {
     bars.forEach(element => element.remove())
 }
 
+// SORTING ALGORITHMS------------------------------------------------------------------------------------------------------------------------------------
+
 // insertion sort algorithm
 function insertionSort(arr) {
-    let swaps = [] // saves the pair of index that are being swapped
+    let actions = [] // saves the pair of index that are being swapped
     let steps = [] // saves the steps for the pseudocode highlighting
     let j, current, i
     for(i = 1; i < arr.length; i++) {
-        //steps.push(1)
-
         current = arr[i]
-        //steps.push(2)
-
         j = i - 1
-        //steps.push(3)
 
+        actions.push(new Comparison([arr[j], current]))
         while(j >= 0 && arr[j].value > current.value) { // checks if j is outside of array and compares j position value with current
-            //console.log(`left: ${arr[j].value} right: ${arr[j+1].value}`)
-            //console.log(`${j} , ${j+1}`)
-            //steps.push(4)
-            swaps.push([current, arr[j]])
+            actions.push(new Swap([current, arr[j]]))
+
             arr[j + 1] = arr[j]
-            //console.log(arr)
-            //steps.push(5)
-
             j--
-            //steps.push(6)
+
+            actions.push(new Comparison([arr[j], current]))
         }
-        //swaps.push([arr[j+1], current])
         arr[j + 1] = current   // once while is false, the last j position is current
-        //console.log(arr)
-        //steps.push(7)
     }
+    return actions
+}
+
+// BUG: swaps are not correct
+// selection sort algorithm
+function selectionSort(arr) {
+    let swaps = [] // saves the pair of index that are being swapped
+    let min_ind, temp
+
+    for(let i = 0; i < (arr.length - 1); i++) {
+        min_ind = i
+        
+        for(let j = i + 1; j < arr.length; j++) {
+            if(arr[j].value < arr[min_ind].value) {
+                min_ind = j
+            }
+        }
+
+        // swap
+        swaps.push([arr[i], arr[min_ind]])
+        temp = arr[min_ind].value
+        arr[min_ind].value = arr[i].value
+        arr[i].value = temp
+    }
+
+    printArrValue(arr)
+    printArr(swaps)
     return swaps
-    //console.log(swaps)
-    //swap(swaps)
-    //printArr(input)
 }
 
-// highlights the pseudocode step
-async function step(steps) {    
-    for (let i = 0; i < steps.length; i++) {
-        let step = '#step' + steps[i]
-
-        document.querySelector(step).classList.toggle('activeStep')
-        await new Promise(resolve => setTimeout(resolve, 1000))
-
-        document.querySelector(step).classList.toggle('activeStep')
-        await new Promise(resolve => setTimeout(resolve, 1000))
+// bubble sort algorithm
+function bubbleSort(arr) {
+    let swaps = [] // saves the pair of index
+    var temp
+    for(let i = 0; i < arr.length - 1; i++) {
+        for(let j = 0; j < arr.length - i - 1; j++) {
+            if(arr[j].value > arr[j + 1].value) {
+                // swap
+                swaps.push([arr[j], arr[j + 1]])
+                temp = arr[j].value
+                arr[j].value = arr[j + 1].value
+                arr[j + 1].value = temp
+            }
+        }
     }
+    printArrValue(arr)
+    printArr(swaps)
+    return swaps
 }
+
+// quick sort algorithm
+function quickSort(arr) {
+
+}
+
+// -----------------------------------------------------------------------------------------------------------------------------------------------------
 
 // highlights and swaps bars
-async function swap(swaps, steps) {
-
+async function swap(actions) {
     document.querySelector("#PlayPause").onclick = function() {
-        if(typeof swapAnim === "undefined" || !inProgress) {
+        if(typeof tl === "undefined" || !inProgress) {
             console.log("No animation playing")
             return
         }
         if(playing) {
             console.log("first")
             playing = false
-            swapAnim.pause()
+            tl.pause()
             this.firstChild.setAttribute("src", "../Assets/play-fill.svg")
         }
         else {
             console.log("second")
             playing = true
-            swapAnim.play()
+            tl.play()
             this.firstChild.setAttribute("src", "../Assets/pause-fill.svg")
         }
     }
+
     playing = true
-    for (let i = 0; i < swaps.length; i++) {
-        let duration = 500/speed
-        const bars = swaps.map((element) => {
-            return [document.querySelector(element[0].id), document.querySelector(element[1].id)]
-        })
-        let selected1 = bars[i][0]
-        let selected2 = bars[i][1]
-        let currentPos1 = Number(selected1.style.getPropertyValue('--position')) + Number(selected1.style.getPropertyValue('--translation'))
-        let currentPos2 = Number(selected2.style.getPropertyValue('--position')) + Number(selected2.style.getPropertyValue('--translation'))
-        swapAnim = anime.timeline({autoplay: false})
-        swapAnim.add({
-            targets: selected1,
-            translateX: Number(selected1.style.getPropertyValue('--translation')) + currentPos2 - currentPos1,
-            backgroundColor: [
-                {value: "#FFFFFF", duration: duration-1},
-                {value: "#6290C8", duration: 1}
-            ],
-            easing: 'easeOutCubic',
-            duration: duration,
-            complete: function(anim) {selected1.style.setProperty('--translation', currentPos2 - selected1.style.getPropertyValue('--position'))}
-        }).add({
-            targets: selected2,
-            translateX: Number(selected2.style.getPropertyValue('--translation')) + currentPos1 - currentPos2,
-            backgroundColor: [
-                {value: "#000000", duration: duration-1},
-                {value: "#6290C8", duration: 1}
-            ],
-            easing: 'easeOutCubic',
-            duration: duration,
-            complete: function(anim) {selected2.style.setProperty('--translation', currentPos1 - selected2.style.getPropertyValue('--position'))}
-        }, `-=${duration}`)
-        swapAnim.play()
-        await swapAnim.finished
-        document.querySelector("#Progress-Bar").style.width = ((i+1) / swaps.length * 100) + "%"
-
-        //document.querySelector(selected1).classList.toggle('arrBarSelected')
-        //selected1.classList.toggle('arrBarSelected')
-        //document.querySelector(selected2).classList.toggle('arrBarSelected')
-        //selected2.classList.toggle('arrBarSelected')
-        //await new Promise(resolve => setTimeout(resolve, 1000))
-
-        //document.querySelector(selected1).classList.toggle('arrBarSelected')
-        //selected1.classList.toggle('arrBarSelected')
-        //document.querySelector(selected2).classList.toggle('arrBarSelected')
-        //selected2.classList.toggle('arrBarSelected')
-        //await new Promise(resolve => setTimeout(resolve, 1000))
+    for (action of actions) {
+        tl = anime.timeline()
+        action.AddToTimeline(tl)
+        await tl.finished
     }
     playing = false
+    //playing = true
+    //for (let i = 0; i < swaps.length; i++) {
+    //    let duration = 500/speed
+    //    const bars = swaps.map((element) => {
+    //        return [document.querySelector(element[0].id), document.querySelector(element[1].id)]
+    //    })
+    //    let selected1 = bars[i][0]
+    //    let selected2 = bars[i][1]
+    //    let currentPos1 = Number(selected1.style.getPropertyValue('--position')) + Number(selected1.style.getPropertyValue('--translation'))
+    //    let currentPos2 = Number(selected2.style.getPropertyValue('--position')) + Number(selected2.style.getPropertyValue('--translation'))
+    //    swapAnim = anime.timeline({autoplay: false})
+    //    swapAnim.add({
+    //        targets: selected1,
+    //        translateX: Number(selected1.style.getPropertyValue('--translation')) + currentPos2 - currentPos1,
+    //        backgroundColor: [
+    //            {value: "#FFFFFF", duration: duration-1},
+    //            {value: "#6290C8", duration: 1}
+    //        ],
+    //        easing: 'easeOutCubic',
+    //        duration: duration,
+    //        complete: function(anim) {selected1.style.setProperty('--translation', currentPos2 - selected1.style.getPropertyValue('--position'))}
+    //    }).add({
+    //        targets: selected2,
+    //        translateX: Number(selected2.style.getPropertyValue('--translation')) + currentPos1 - currentPos2,
+    //        backgroundColor: [
+    //            {value: "#000000", duration: duration-1},
+    //            {value: "#6290C8", duration: 1}
+    //        ],
+    //        easing: 'easeOutCubic',
+    //        duration: duration,
+    //        complete: function(anim) {selected2.style.setProperty('--translation', currentPos1 - selected2.style.getPropertyValue('--position'))}
+    //    }, `-=${duration}`)
+    //    swapAnim.play()
+    //    await swapAnim.finished
+    //    document.querySelector("#Progress-Bar").style.width = ((i+1) / swaps.length * 100) + "%"
+    //}
+    //playing = false
 }
 
 // prints array to console
-function printArr(arr) { 
+function printArrValue(arr) { 
+    for(let i = 0; i < arr.length; i++) {
+        console.log(arr[i].value)
+    }
+}
+
+function printArr(arr) {
     for(let i = 0; i < arr.length; i++) {
         console.log(arr[i])
     }
@@ -204,7 +240,7 @@ function start() {
     inProgress = true
     let swaps = selectedFunction(input);
     swap(swaps)
-    .then( function(value) {
+    .then(function(value) {
         document.querySelector("#start").style.display = "none"
         document.querySelector("#reset").style.display = "inline"
     })
@@ -227,3 +263,98 @@ document.querySelector("#reset").addEventListener("click", function() {
     document.querySelector("#start").style.display = "inline"
     inProgress = false;
 })
+
+class Action {
+    constructor(targets) {
+        this.targets = targets
+    }
+
+    get duration() {
+        return 1000
+    }
+}
+
+class Swap extends Action {
+    constructor(targets) {
+        super(targets)
+        Swap.duration = 500
+    }
+
+    get duration() {
+        return Swap.duration / speed
+    }
+
+    get Animation() {
+        let selected1 = document.querySelector(`${this.targets[0].id}`)
+        let selected2 = document.querySelector(`${this.targets[1].id}`)
+        let currentPos1 = Number(selected1.style.getPropertyValue('--position')) + Number(selected1.style.getPropertyValue('--translation'))
+        let currentPos2 = Number(selected2.style.getPropertyValue('--position')) + Number(selected2.style.getPropertyValue('--translation'))
+        let duration = this.duration
+        return [{
+            targets: selected1,
+            translateX: Number(selected1.style.getPropertyValue('--translation')) + currentPos2 - currentPos1,
+            backgroundColor: [
+                {value: "#FFFFFF", duration: duration-1},
+                {value: "#6290C8", duration: 1}
+            ],
+            easing: 'easeOutCubic',
+            duration: duration,
+            complete: function() {selected1.style.setProperty('--translation', currentPos2 - selected1.style.getPropertyValue('--position'))}
+        },
+        {
+            targets: selected2,
+            translateX: Number(selected2.style.getPropertyValue('--translation')) + currentPos1 - currentPos2,
+            backgroundColor: [
+                {value: "#000000", duration: duration-1},
+                {value: "#6290C8", duration: 1}
+            ],
+            easing: 'easeOutCubic',
+            duration: duration,
+            complete: function() {selected2.style.setProperty('--translation', currentPos1 - selected2.style.getPropertyValue('--position'))}
+        }]
+    }
+
+    async Animate() {
+        let animations = this.Animation
+        for(let i=0; i<animations.length; i++) {
+            console.log("animating")
+            await anime(animations[i]).finished
+        }
+    }
+
+    AddToTimeline(tl) {
+        let animations = this.Animation
+        console.log("timeline")
+        tl.add(animations[0])
+        .add(animations[1], `-=${this.duration}`)
+    }
+
+}
+
+class Comparison extends Action {
+    constructor (targets) {
+        super(targets.filter(obj => typeof obj !== "undefined"))
+        Comparison.duration = 500
+    }
+
+    get duration() {
+        return Comparison.duration / speed
+    }
+
+    get Animation() {
+        return {
+            targets: this.targets.map((element) => {return document.querySelector(`${element.id}`)}),
+            backgroundColor: [{value: "#228C22", duration: this.duration-1},
+                {value: "#6290C8", duration: 1}],
+            duration: this.duration,
+        }
+    }
+
+    async Animate() {
+
+    }
+
+    AddToTimeline(tl) {
+        tl.add(this.Animation)
+    }
+}

@@ -40,15 +40,19 @@ img {
     height: 60px;
 }
 
+/* ---------------------------------------------------- */
+/* CARDS */
+/* ---------------------------------------------------- */
 .card {
-    width: 20rem;
-    height: 15rem;
-    top: 1rem;
-    position: relative;
+    width: 18rem;
+    height: 11rem;
 }
 
-.card-body>a {
-    float: right;
+.menu-card {
+    width: 20rem;
+    height: 17rem;
+    top: 1rem;
+    position: relative;
 }
 
 .card-algorithm-type {
@@ -74,24 +78,11 @@ img {
 }
 
 .menu-button {
-    position:absolute;
-    bottom: 25px;
-    right: 25px;
+    float: right;
 }
 
 .btn-orangeRed:hover {
     transform: scale(1.1);
-}
-
-.modal-setting {
-    --bs-modal-bg: var(--darkSeaGreen);
-    --bs-modal-color: black;
-    transition: .5s;
-}
-
-.modal-setting-dark {
-    --bs-modal-bg: var(--darkSlateGray);
-    --bs-modal-color: white;
 }
 
 .card-algorithm {
@@ -114,6 +105,38 @@ img {
 .btn-navajoWhite:hover {
     transform: scale(1.1);
 }
+/* ---------------------------------------------------- */
+
+/* ---------------------------------------------------- */
+/* SETTINGS */
+/* ---------------------------------------------------- */
+.modal-setting {
+    --bs-modal-bg: var(--darkSeaGreen);
+    --bs-modal-color: black;
+    transition: .5s;
+}
+
+.modal-setting-dark {
+    --bs-modal-bg: var(--darkSlateGray);
+    --bs-modal-color: white;
+}
+/* ---------------------------------------------------- */
+
+/* ---------------------------------------------------- */
+/* INTRO MODAL */
+/* ---------------------------------------------------- */
+.introModal {
+    --bs-modal-bg: var(--darkSeaGreen);
+    --bs-modal-color: black;
+}
+
+.introModal-dark {
+    --bs-modal-bg: var(--ming);
+    --bs-modal-color: white;
+}
+/* ---------------------------------------------------- */
+
+
 
 .grid-dark {
     height: calc(100%);
@@ -191,3 +214,28 @@ button.btn-menu {
 .navbar-image:hover {
     cursor: pointer;
 }
+
+
+/* ---------------------------------------------------- */
+/* DRAGGABLE */
+/* ---------------------------------------------------- */
+.draggable {
+    position: absolute;
+    z-index: 9;
+    --bs-card-bg: var(--navajoWhite);
+}
+
+.draggable-dark {
+    --bs-card-bg: var(--graniteGray);
+    --bs-card-color: white;
+}
+
+@media (max-width: 767.98px) {
+    .draggable {
+        display: none;
+    }
+}
+.card-body-draggable {
+    overflow-y: scroll;
+}
+/* ---------------------------------------------------- */

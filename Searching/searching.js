@@ -1,15 +1,22 @@
 let selectedFunction = (new URLSearchParams(window.location.search)).get("func")
-console.log(selectedFunction);
-
 let input = []
 let x
+const speeds = [1, 2, 4]
+let speed = 1
+let inProgress = false
+let playing = false
 
 window.onload = generateBox
 window.onresize = generateBox
 
+// instruction modal cookies
+if(!Cookies.get('searchVisited')) {
+    $('#introModal').modal('show')
+    Cookies.set('searchVisited', '1', {expires: 999})
+}
+
 // Binary Search iterative approach
 function binarySearchInterative(arr, x) {
-    console.log("binary", x);
     let left = 0
     let right = arr.length - 1
     let mid
@@ -20,9 +27,6 @@ function binarySearchInterative(arr, x) {
         current.push("#arrBox" + mid)
         if(x == arr[mid].value) {
             ruleOutRange.push([-1, -1])
-            console.log("Found at " + mid);
-            // printArr(current)
-            printArr(ruleOutRange)
             binaryAnimation(current, ruleOutRange, mid)
             return mid
         } else if(x > arr[mid].value) {   // x is on the right side
@@ -33,9 +37,6 @@ function binarySearchInterative(arr, x) {
             right = mid - 1
         }
     }
-    console.log("Could not find " + x);
-    // printArr(current)
-    printArr(ruleOutRange)
     binaryAnimation(current, ruleOutRange)
     return -1
 }
@@ -263,4 +264,8 @@ document.querySelector('#FindValue').addEventListener('keypress', function(e) {
         e.preventDefault()
         document.querySelector('#start').click()
     }
+})
+document.querySelector("#AnimSpeed").addEventListener("click", function() {
+    speed = speeds[(speeds.indexOf(speed)+1)%speeds.length]
+    this.innerHTML = `${speed}x`
 })
