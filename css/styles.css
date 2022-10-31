@@ -96,6 +96,16 @@ img {
     --bs-modal-color: white;
 }
 
+.introModal {
+    --bs-modal-bg: var(--darkSeaGreen);
+    --bs-modal-color: black;
+}
+
+.introModal-dark {
+    --bs-modal-bg: var(--ming);
+    --bs-modal-color: white;
+}
+
 .card-algorithm {
     --bs-card-color: white;
     --bs-card-bg: var(--ming);
