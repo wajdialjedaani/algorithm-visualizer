@@ -7,8 +7,11 @@ function darkMode() {   // enables dark mode
     var settingModal = document.getElementById("settingModalDialog");
     var back = document.body;
     var algoCard = document.querySelectorAll(".card-algorithm-type");
-    var grid = document.querySelector("#grid-container");
     var btnOutline = document.querySelectorAll(".btnResize");
+    var introModal = document.querySelector("#introModal");
+    var grid = document.querySelector("#grid-container");
+
+    
 
     settingModal.classList.toggle("modal-setting-dark");    // settings
     back.classList.toggle("back-dark");                     // background
@@ -18,8 +21,15 @@ function darkMode() {   // enables dark mode
     btnOutline.forEach(element => {
         element.classList.toggle("light-outline")
     });
-    //grid.classList.toggle("grid-dark"); // grid
 
+    if(introModal) {    // 
+        introModal.classList.toggle("introModal-dark");
+    }
+    
+    if(grid) {
+        grid.classList.toggle("grid-dark"); // grid
+    }
+    
     dark = !dark
     console.log(dark);
 }
