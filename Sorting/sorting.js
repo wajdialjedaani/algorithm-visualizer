@@ -95,54 +95,55 @@ function insertionSort(arr) {
         }
         arr[j + 1] = current   // once while is false, the last j position is current
     }
+    printArr(actions)
     return actions
 }
 
 // BUG: swaps are not correct
 // selection sort algorithm
 function selectionSort(arr) {
-    let swaps = [] // saves the pair of index that are being swapped
+    let actions = []
     let min_ind, temp
 
     for(let i = 0; i < (arr.length - 1); i++) {
         min_ind = i
         
         for(let j = i + 1; j < arr.length; j++) {
+            actions.push(new Comparison([arr[j], arr[min_ind]]))
             if(arr[j].value < arr[min_ind].value) {
                 min_ind = j
             }
         }
 
         // swap
-        swaps.push([arr[i], arr[min_ind]])
+        actions.push(new Swap([arr[min_ind], arr[i]]))
         temp = arr[min_ind].value
         arr[min_ind].value = arr[i].value
         arr[i].value = temp
     }
 
-    printArrValue(arr)
-    printArr(swaps)
-    return swaps
+    printArr(actions)
+    return actions
 }
 
 // bubble sort algorithm
 function bubbleSort(arr) {
-    let swaps = [] // saves the pair of index
+    let actions = []
     var temp
     for(let i = 0; i < arr.length - 1; i++) {
         for(let j = 0; j < arr.length - i - 1; j++) {
+            actions.push(new Comparison([arr[j], arr[j + 1]]))
             if(arr[j].value > arr[j + 1].value) {
                 // swap
-                swaps.push([arr[j], arr[j + 1]])
+                actions.push(new Swap([arr[j], arr[j + 1]]))
                 temp = arr[j].value
                 arr[j].value = arr[j + 1].value
                 arr[j + 1].value = temp
             }
         }
     }
-    printArrValue(arr)
-    printArr(swaps)
-    return swaps
+    printArr(actions)
+    return actions
 }
 
 // quick sort algorithm
