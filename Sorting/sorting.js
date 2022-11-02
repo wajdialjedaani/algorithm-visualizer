@@ -1,9 +1,11 @@
 let input = []
+let actions = []
 let selectedFunction = (new URLSearchParams(window.location.search)).get("func") || insertionSort
 const speeds = [1, 2, 4]
 let speed = 1
 let inProgress = false
 let playing = false
+let quick_sort = false
 
 window.onload = generateBars
 window.onresize = generateBars
@@ -18,18 +20,22 @@ function changeAlgo(func) {
     if(func == "insertionsort") {
         selectedFunction = insertionSort
         document.querySelector("#Header").textContent = "Insertion Sort"
+        quick_sort = false
     }
     else if (func == "selectionsort") {
         selectedFunction = selectionSort
         document.querySelector("#Header").textContent = "Selection Sort"
+        quick_sort = false
     }
     else if (func == "bubblesort") {
         selectedFunction = bubbleSort
         document.querySelector("#Header").textContent = "Bubble Sort"
+        quick_sort = false
     }
     else if (func == "quicksort") {
         selectedFunction = quickSort
         document.querySelector("#Header").textContent = "Quick Sort"
+        quick_sort = true
     }
 }
 changeAlgo(selectedFunction)
@@ -102,10 +108,15 @@ function removeBars() {
 
 // SORTING ALGORITHMS------------------------------------------------------------------------------------------------------------------------------------
 
+function swap(arr, i, j) {
+    let temp = arr[i];
+    arr[i] = arr[j];
+    arr[j] = temp;
+}
+
 // insertion sort algorithm
 function insertionSort(arr) {
-    let actions = [] // saves the pair of index that are being swapped
-    let steps = [] // saves the steps for the pseudocode highlighting
+    actions = [] // saves the pair of index that are being swapped
     let j, current, i
     for(i = 1; i < arr.length; i++) {
         current = arr[i]
@@ -129,8 +140,8 @@ function insertionSort(arr) {
 // BUG: swaps are not correct
 // selection sort algorithm
 function selectionSort(arr) {
-    let actions = []
-    let min_ind, temp
+    actions = []
+    let min_ind
 
     for(let i = 0; i < (arr.length - 1); i++) {
         min_ind = i
@@ -144,28 +155,28 @@ function selectionSort(arr) {
 
         // swap
         actions.push(new Swap([arr[min_ind], arr[i]]))
-        temp = arr[min_ind]
-        arr[min_ind] = arr[i]
-        arr[i] = temp
+        swap(arr, min_ind, i)
+        // temp = arr[min_ind]
+        // arr[min_ind] = arr[i]
+        // arr[i] = temp
     }
-
     printArr(actions)
     return actions
 }
 
 // bubble sort algorithm
 function bubbleSort(arr) {
-    let actions = []
-    var temp
+    actions = []
     for(let i = 0; i < arr.length - 1; i++) {
         for(let j = 0; j < arr.length - i - 1; j++) {
             actions.push(new Comparison([arr[j], arr[j + 1]]))
             if(arr[j].value > arr[j + 1].value) {
                 // swap
                 actions.push(new Swap([arr[j], arr[j + 1]]))
-                temp = arr[j]
-                arr[j] = arr[j + 1]
-                arr[j + 1] = temp
+                swap(arr, j, j + 1)
+                // temp = arr[j]
+                // arr[j] = arr[j + 1]
+                // arr[j + 1] = temp
             }
         }
     }
@@ -174,13 +185,37 @@ function bubbleSort(arr) {
 }
 
 // quick sort algorithm
-function quickSort(arr) {
+function quickSort(arr, low, high) {
+    if(low < high) {
+        let pivot = Partition(arr, low, high, actions)
 
+        quickSort(arr, low, pivot - 1)
+        quickSort(arr, pivot + 1, high)
+    }
+    printArr(actions)
+    return actions
+}
+
+function Partition(arr, low, high, actions) {
+    let pivot = arr[high].value
+    let i = (low - 1)
+
+    for (let j = low; j <= high - 1; j++) {
+        actions.push(new Comparison([arr[j], arr[high]]))
+        if(arr[j].value < pivot) {
+            i++
+            actions.push(new Swap([arr[i], arr[j]]))
+            swap(arr, i, j)
+        }   
+    }
+    actions.push(new Swap([arr[i + 1], arr[high]]))
+    swap(arr, i + 1, high)
+    return (i + 1)
 }
 // -----------------------------------------------------------------------------------------------------------------------------------------------------
 
 // highlights and swaps bars
-async function swap(actions) {
+async function swapAnimation(actions) {
     document.querySelector("#PlayPause").onclick = function() {
         if(typeof tl === "undefined" || !inProgress) {
             console.log("No animation playing")
@@ -207,43 +242,6 @@ async function swap(actions) {
         await tl.finished
     }
     playing = false
-    //playing = true
-    //for (let i = 0; i < swaps.length; i++) {
-    //    let duration = 500/speed
-    //    const bars = swaps.map((element) => {
-    //        return [document.querySelector(element[0].id), document.querySelector(element[1].id)]
-    //    })
-    //    let selected1 = bars[i][0]
-    //    let selected2 = bars[i][1]
-    //    let currentPos1 = Number(selected1.style.getPropertyValue('--position')) + Number(selected1.style.getPropertyValue('--translation'))
-    //    let currentPos2 = Number(selected2.style.getPropertyValue('--position')) + Number(selected2.style.getPropertyValue('--translation'))
-    //    swapAnim = anime.timeline({autoplay: false})
-    //    swapAnim.add({
-    //        targets: selected1,
-    //        translateX: Number(selected1.style.getPropertyValue('--translation')) + currentPos2 - currentPos1,
-    //        backgroundColor: [
-    //            {value: "#FFFFFF", duration: duration-1},
-    //            {value: "#6290C8", duration: 1}
-    //        ],
-    //        easing: 'easeOutCubic',
-    //        duration: duration,
-    //        complete: function(anim) {selected1.style.setProperty('--translation', currentPos2 - selected1.style.getPropertyValue('--position'))}
-    //    }).add({
-    //        targets: selected2,
-    //        translateX: Number(selected2.style.getPropertyValue('--translation')) + currentPos1 - currentPos2,
-    //        backgroundColor: [
-    //            {value: "#000000", duration: duration-1},
-    //            {value: "#6290C8", duration: 1}
-    //        ],
-    //        easing: 'easeOutCubic',
-    //        duration: duration,
-    //        complete: function(anim) {selected2.style.setProperty('--translation', currentPos1 - selected2.style.getPropertyValue('--position'))}
-    //    }, `-=${duration}`)
-    //    swapAnim.play()
-    //    await swapAnim.finished
-    //    document.querySelector("#Progress-Bar").style.width = ((i+1) / swaps.length * 100) + "%"
-    //}
-    //playing = false
 }
 
 // prints array to console
@@ -265,8 +263,14 @@ function start() {
         return
     }
     inProgress = true
-    let swaps = selectedFunction(input);
-    swap(swaps)
+    let swaps
+    if(quick_sort) {
+        actions = []
+        swaps = quickSort(input, 0, input.length - 1)
+    } else {
+        swaps = selectedFunction(input);
+    }
+    swapAnimation(swaps)
     .then(function(value) {
         document.querySelector("#start").style.display = "none"
         document.querySelector("#reset").style.display = "inline"
