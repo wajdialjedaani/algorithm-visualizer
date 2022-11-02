@@ -112,6 +112,30 @@ function getInput() {
     return input
 }
 
+function getRandomIntInclusive(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1) + min); // The maximum is inclusive and the minimum is inclusive
+}
+
+function randomInput() {
+    input = []
+    let inputString, random
+    let length = getRandomIntInclusive(5, 20)
+    
+    inputString = getRandomIntInclusive(1, 100) + ", "
+    for (let i = 0; i < length - 2; i++) {
+        inputString += getRandomIntInclusive(1, 100) + ", "
+    }
+    inputString += getRandomIntInclusive(1, 100)
+
+    document.querySelector("#input").value = inputString
+    document.querySelector("#reset").style.display = "none"
+    document.querySelector("#start").style.display = "inline"
+    
+    generateBox()
+}
+
 function getFindValue() {
     x = document.getElementById('FindValue').value
     return x
@@ -126,6 +150,7 @@ function removeBox() {
 function generateBox() {
     removeBox()
     input = getInput()
+    input.sort((a,b) => a.value - b.value)
     let container = document.querySelector('#arrCanvas')
     container.style.setProperty("--columns", input.length)
     container.style.setProperty("--width", document.querySelector('#arrCanvas').clientWidth / input.length)
@@ -221,6 +246,7 @@ function start() {
     selectedFunction(input, x)
 }
 
+
 document.querySelectorAll(".draggable").forEach((element) => {dragElement(element)})
 
 function dragElement(elmnt) {
@@ -269,3 +295,4 @@ document.querySelector("#AnimSpeed").addEventListener("click", function() {
     speed = speeds[(speeds.indexOf(speed)+1)%speeds.length]
     this.innerHTML = `${speed}x`
 })
+document.querySelector('#getNewInput').addEventListener('click', generateBox)

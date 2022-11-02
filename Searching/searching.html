@@ -113,15 +113,22 @@
         </div>
 
         <!-- Inputs -->
-        <div class="offcanvas offcanvas-start" tabindex="-1" id="inputs" aria-labelledby="offcanvasExampleLabel">
+        <div class="offcanvas offcanvas-start" data-bs-backdrop="static" tabindex="-1" id="inputs" aria-labelledby="offcanvasExampleLabel">
             <div class="offcanvas-header">
-                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                <h2>Input</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close""></button>
             </div>
-            <div class="offcanvas-body">
-                <div>Input</div>
+            <div class="offcanvas-body" style="margin: 10px;">
                 <div class="row">
-                    <input id="input" class="col-8" type="text" value="7, 15, 26, 33, 36, 48, 60, 79, 85, 86">
-                    <div id="getNewInput" class="col btn btn-orangeRed" data-bs-dismiss="offcanvas" onclick="generateBox()">Go</div>
+                    <p>Type in your custom input.</p>
+                    <p><i>Ex. "1, 2, 3, 4"</i></p>
+                    <input id="input" class="col" type="text" value="7, 15, 26, 33, 36, 48, 60, 79, 85, 86" style="margin-bottom: 10px;">
+                </div>
+                <div class="row justify-content-end">
+                    <div id="getNewInput" data-bs-dismiss="offcanvas" class="col-auto btn btn-orangeRed">Go</div>
+                </div>
+                <div class="row">
+                    <div id="randomNumbers" data-bs-dismiss="offcanvas" class="col btn btn-orangeRed" onclick="randomInput()">Random</div>
                 </div>
             </div>
         </div>
