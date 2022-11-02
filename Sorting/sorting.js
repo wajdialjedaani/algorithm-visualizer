@@ -5,7 +5,6 @@ const speeds = [1, 2, 4]
 let speed = 1
 let inProgress = false
 let playing = false
-let quick_sort = false
 
 window.onload = generateBars
 window.onresize = generateBars
@@ -20,22 +19,18 @@ function changeAlgo(func) {
     if(func == "insertionsort") {
         selectedFunction = insertionSort
         document.querySelector("#Header").textContent = "Insertion Sort"
-        quick_sort = false
     }
     else if (func == "selectionsort") {
         selectedFunction = selectionSort
         document.querySelector("#Header").textContent = "Selection Sort"
-        quick_sort = false
     }
     else if (func == "bubblesort") {
         selectedFunction = bubbleSort
         document.querySelector("#Header").textContent = "Bubble Sort"
-        quick_sort = false
     }
     else if (func == "quicksort") {
         selectedFunction = quickSort
         document.querySelector("#Header").textContent = "Quick Sort"
-        quick_sort = true
     }
 }
 changeAlgo(selectedFunction)
@@ -116,7 +111,6 @@ function swap(arr, i, j) {
 
 // insertion sort algorithm
 function insertionSort(arr) {
-    actions = [] // saves the pair of index that are being swapped
     let j, current, i
     for(i = 1; i < arr.length; i++) {
         current = arr[i]
@@ -140,7 +134,6 @@ function insertionSort(arr) {
 // BUG: swaps are not correct
 // selection sort algorithm
 function selectionSort(arr) {
-    actions = []
     let min_ind
 
     for(let i = 0; i < (arr.length - 1); i++) {
@@ -166,7 +159,6 @@ function selectionSort(arr) {
 
 // bubble sort algorithm
 function bubbleSort(arr) {
-    actions = []
     for(let i = 0; i < arr.length - 1; i++) {
         for(let j = 0; j < arr.length - i - 1; j++) {
             actions.push(new Comparison([arr[j], arr[j + 1]]))
@@ -263,13 +255,8 @@ function start() {
         return
     }
     inProgress = true
-    let swaps
-    if(quick_sort) {
-        actions = []
-        swaps = quickSort(input, 0, input.length - 1)
-    } else {
-        swaps = selectedFunction(input);
-    }
+    actions = []
+    let swaps = selectedFunction(input, 0, input.length - 1);
     swapAnimation(swaps)
     .then(function(value) {
         document.querySelector("#start").style.display = "none"
