@@ -45,6 +45,30 @@ function getInput() {
     return input
 }
 
+function getRandomIntInclusive(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1) + min); // The maximum is inclusive and the minimum is inclusive
+}
+
+function randomInput() {
+    input = []
+    let inputString, random
+    let length = getRandomIntInclusive(5, 20)
+    
+    inputString = getRandomIntInclusive(1, 100) + ", "
+    for (let i = 0; i < length - 2; i++) {
+        inputString += getRandomIntInclusive(1, 100) + ", "
+    }
+    inputString += getRandomIntInclusive(1, 100)
+
+    document.querySelector("#input").value = inputString
+    document.querySelector("#reset").style.display = "none"
+    document.querySelector("#start").style.display = "inline"
+    
+    generateBars()
+}
+
 // generates the bars, can be used with user inputs
 function generateBars() {
     removeBars()
@@ -153,7 +177,6 @@ function bubbleSort(arr) {
 function quickSort(arr) {
 
 }
-
 // -----------------------------------------------------------------------------------------------------------------------------------------------------
 
 // highlights and swaps bars
@@ -362,8 +385,6 @@ class Comparison extends Action {
         tl.add(this.Animation)
     }
 }
-
-
 
 // Draggable ----------------------------------------------------------------
 document.querySelectorAll(".draggable").forEach((element) => {dragElement(element)})
