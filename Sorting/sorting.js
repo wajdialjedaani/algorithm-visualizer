@@ -62,7 +62,7 @@ function generateBars() {
         arrBar.setAttribute('id', arrBarID)
         arrBar.style.setProperty('--position', `${i * document.querySelector('#arrCanvas').clientWidth / input.length}`)
         arrBar.style.setProperty('--translation', 0)
-        arrBar.style.height = (maxHeight * ((input[i].value * 1.5) / max)) + 'px'
+        arrBar.style.height = (maxHeight * (input[i].value / max)) + 'px'
         arrBar.innerHTML = input[i].value
         arrBar.style.lineHeight = (parseFloat(arrBar.style.height.replace('px', '')) * 2 + 20) + 'px'
         //console.log(parseFloat(arrBar.style.height.replace('px', '')));
