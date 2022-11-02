@@ -117,9 +117,9 @@ function selectionSort(arr) {
 
         // swap
         actions.push(new Swap([arr[min_ind], arr[i]]))
-        temp = arr[min_ind].value
-        arr[min_ind].value = arr[i].value
-        arr[i].value = temp
+        temp = arr[min_ind]
+        arr[min_ind] = arr[i]
+        arr[i] = temp
     }
 
     printArr(actions)
@@ -136,9 +136,9 @@ function bubbleSort(arr) {
             if(arr[j].value > arr[j + 1].value) {
                 // swap
                 actions.push(new Swap([arr[j], arr[j + 1]]))
-                temp = arr[j].value
-                arr[j].value = arr[j + 1].value
-                arr[j + 1].value = temp
+                temp = arr[j]
+                arr[j] = arr[j + 1]
+                arr[j + 1] = temp
             }
         }
     }
