@@ -53,7 +53,7 @@ function generateBars() {
     container.style.setProperty("--columns", input.length)
     container.style.setProperty("--width", document.querySelector('#arrCanvas').clientWidth / input.length)
     let max = Math.max(...input.map(o => o.value))
-    let maxHeight = container.getBoundingClientRect().height
+    let maxHeight = document.querySelector('#arrCanvas').offsetHeight
 
     for(let i = 0; i < input.length; i++) {
         let arrBar = document.createElement('div')
@@ -62,7 +62,10 @@ function generateBars() {
         arrBar.setAttribute('id', arrBarID)
         arrBar.style.setProperty('--position', `${i * document.querySelector('#arrCanvas').clientWidth / input.length}`)
         arrBar.style.setProperty('--translation', 0)
-        arrBar.style.height = (maxHeight * (input[i].value / max)) + 'px'
+        arrBar.style.height = (maxHeight * ((input[i].value * 1.5) / max)) + 'px'
+        arrBar.innerHTML = input[i].value
+        arrBar.style.lineHeight = (parseFloat(arrBar.style.height.replace('px', '')) * 2 + 20) + 'px'
+        //console.log(parseFloat(arrBar.style.height.replace('px', '')));
         container.appendChild(arrBar)
     }
 }
@@ -359,3 +362,44 @@ class Comparison extends Action {
         tl.add(this.Animation)
     }
 }
+
+
+
+// Draggable ----------------------------------------------------------------
+document.querySelectorAll(".draggable").forEach((element) => {dragElement(element)})
+
+function dragElement(elmnt) {
+  var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+    elmnt.onmousedown = dragMouseDown;
+
+  function dragMouseDown(e) {
+    e = e || window.event;
+    e.preventDefault();
+    // get the mouse cursor position at startup:
+    pos3 = e.clientX;
+    pos4 = e.clientY;
+    document.onmouseup = closeDragElement;
+    // call a function whenever the cursor moves:
+    document.onmousemove = elementDrag;
+  }
+
+  function elementDrag(e) {
+    e = e || window.event;
+    e.preventDefault();
+    // calculate the new cursor position:
+    pos1 = pos3 - e.clientX;
+    pos2 = pos4 - e.clientY;
+    pos3 = e.clientX;
+    pos4 = e.clientY;
+    // set the element's new position:
+    elmnt.style.top = ((elmnt.offsetTop - pos2) / window.innerHeight * 100) + "%";
+    elmnt.style.right = ((window.innerWidth - parseFloat(window.getComputedStyle(elmnt, null).getPropertyValue("width")) - elmnt.offsetLeft + pos1) / window.innerWidth * 100) + "%";
+  }
+
+  function closeDragElement() {
+    // stop moving when mouse button is released:
+    document.onmouseup = null;
+    document.onmousemove = null;
+  }
+}
+// ----------------------------------------------------------------
