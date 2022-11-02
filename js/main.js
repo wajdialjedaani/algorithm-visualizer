@@ -115,12 +115,6 @@ function sortingGo() {    // animation if sorting go is selected
     $('#algorithmsMenu').fadeTo(500, 0, function() {
         document.querySelector('#algorithmsMenu').style.visibility = 'hidden';
     });
-    
-    // anime.timeline({
-    //     targets: '#searchingAlgorithmsGo, #pathfindingAlgorithmsGo',
-    //     translateX: 200,
-    //     duration: 500,
-    // });
 
     document.querySelector('#sortingMenu').style.visibility = 'visible';
 
@@ -131,14 +125,9 @@ function sortingBack() { // animation if sorting back button is selected
     $('#sortingMenu').fadeTo(500, 0, function() {
         document.querySelector('#sortingMenu').style.visibility = 'hidden';
     });
-    
-    // anime({
-    //     targets: '.card-algorithm',
-    //     translateX: 200,
-    // });
 
     document.querySelector('#algorithmsMenu').style.visibility = 'visible';
-
+    
     $('#algorithmsMenu').fadeTo(500, 1);
 }
 
