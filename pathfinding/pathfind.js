@@ -42,7 +42,16 @@ let drag = false
 
 function cellDrag(e) {
     drag = true
-    this.className = "wall"
+    if(e.type == "mousemove") {
+        this.className = "wall"
+    }
+    else {
+        let x = e.touches[0].clientX
+        let y = e.touches[0].clientY
+
+        let element = document.elementFromPoint(x, y)
+        element.className = "wall"
+    }
 }
 
 function cleanUp(e) {
