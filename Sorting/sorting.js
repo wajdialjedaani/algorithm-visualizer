@@ -83,10 +83,11 @@ function insertionSort(arr) {
     for(i = 1; i < arr.length; i++) {
         current = arr[i]
         j = i - 1
-
+        actions.push(new Sorted(arr[j]))
         actions.push(new Comparison([arr[j], current]))
         while(j >= 0 && arr[j].value > current.value) { // checks if j is outside of array and compares j position value with current
             actions.push(new Swap([current, arr[j]]))
+            //actions.push(new Sorted(arr[j]))
 
             arr[j + 1] = arr[j]
             j--
@@ -94,8 +95,9 @@ function insertionSort(arr) {
             actions.push(new Comparison([arr[j], current]))
         }
         arr[j + 1] = current   // once while is false, the last j position is current
+        actions.push(new Sorted(current))
     }
-    printArr(actions)
+    //printArr(actions)
     return actions
 }
 
@@ -296,7 +298,7 @@ class Swap extends Action {
             translateX: Number(selected1.style.getPropertyValue('--translation')) + currentPos2 - currentPos1,
             backgroundColor: [
                 {value: "#FFFFFF", duration: duration-1},
-                {value: "#6290C8", duration: 1}
+                {value: anime.get(selected1, "backgroundColor"), duration: 1}
             ],
             easing: 'easeOutCubic',
             duration: duration,
@@ -307,7 +309,7 @@ class Swap extends Action {
             translateX: Number(selected2.style.getPropertyValue('--translation')) + currentPos1 - currentPos2,
             backgroundColor: [
                 {value: "#000000", duration: duration-1},
-                {value: "#6290C8", duration: 1}
+                {value: anime.get(selected2, "backgroundColor"), duration: 1}
             ],
             easing: 'easeOutCubic',
             duration: duration,
@@ -343,16 +345,45 @@ class Comparison extends Action {
     }
 
     get Animation() {
-        return {
-            targets: this.targets.map((element) => {return document.querySelector(`${element.id}`)}),
+        const animations = this.targets.map((element) => {
+            return {
+            targets: document.querySelector(`${element.id}`),
             backgroundColor: [{value: "#228C22", duration: this.duration-1},
-                {value: "#6290C8", duration: 1}],
+                {value: anime.get(document.querySelector(`${element.id}`), "backgroundColor"), duration: 1}],
             duration: this.duration,
-        }
+        }})
+        return animations
     }
 
     async Animate() {
 
+    }
+
+    AddToTimeline(tl) {
+        this.Animation.forEach((animation, index) => {
+            index == 0 ? tl.add(animation) : tl.add(animation, `-=${this.duration}`)
+        })
+        //tl.add(animations[0])
+        //.add(animations[1], `-=${this.duration}`)
+    }
+}
+
+class Sorted extends Action {
+    constructor(targets) {
+        super(targets)
+        Sorted.duration = 1
+    }
+
+    get duration() {
+        return Sorted.duration / speed
+    }
+
+    get Animation() {
+        return {
+            targets: document.querySelector(`${this.targets.id}`),
+            backgroundColor: "#FFA500",
+            duration: this.duration,
+        }
     }
 
     AddToTimeline(tl) {
