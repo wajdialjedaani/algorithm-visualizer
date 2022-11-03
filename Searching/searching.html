@@ -50,6 +50,7 @@
                     <input type="number" class="form-control" id="FindValue" placeholder="36">
                     <label for="FindValue">Number</label>
                 </div>
+                <button id="start" class="col-auto btn btn-orangeRed">Go</button>
             </div>
         </div>
 
@@ -61,9 +62,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">Searching Tutorial</h5>
-                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                       <p>Searching Algorithms are designed to check for an element or retrieve an element from any data structure where it is stored.<br><br>
@@ -115,15 +114,22 @@
         </div>
 
         <!-- Inputs -->
-        <div class="offcanvas offcanvas-start" tabindex="-1" id="inputs" aria-labelledby="offcanvasExampleLabel">
+        <div class="offcanvas offcanvas-start" data-bs-backdrop="static" tabindex="-1" id="inputs" aria-labelledby="offcanvasExampleLabel">
             <div class="offcanvas-header">
-                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                <h2>Input</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close""></button>
             </div>
-            <div class="offcanvas-body">
-                <div>Input</div>
+            <div class="offcanvas-body" style="margin: 10px;">
                 <div class="row">
-                    <input id="input" class="col-8" type="text" value="7, 15, 26, 33, 36, 48, 60, 79, 85, 86">
-                    <div id="getNewInput" class="col btn btn-orangeRed" data-bs-dismiss="offcanvas" onclick="generateBox()">Go</div>
+                    <p>Type in your custom input.</p>
+                    <p><i>Ex. "1, 2, 3, 4"</i></p>
+                    <input id="input" class="col" type="text" value="7, 15, 26, 33, 36, 48, 60, 79, 85, 86" style="margin-bottom: 10px;">
+                </div>
+                <div class="row justify-content-end">
+                    <div id="getNewInput" data-bs-dismiss="offcanvas" class="col-auto btn btn-orangeRed">Go</div>
+                </div>
+                <div class="row">
+                    <div id="randomNumbers" data-bs-dismiss="offcanvas" class="col btn btn-orangeRed" onclick="randomInput()">Random</div>
                 </div>
             </div>
         </div>
@@ -154,7 +160,6 @@
         <div class="container-fluid">
             <div class="row">
                 <div id="arrCanvas"></div>
-                </div>
             </div>
         </div>
 
@@ -175,11 +180,11 @@
                 <div class="btn-group dropup col-auto gx-0">
                     <button type="button" class="btn btn-menu dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Sorting</button>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="../Sorting/sorting.html">Insertion Sort</a></li>
-                        <li><a class="dropdown-item" href="#">Selection Sort</a></li>
-                        <li><a class="dropdown-item" href="#">Merge Sort</a></li>
-                        <li><a class="dropdown-item" href="#">Bubble Sort</a></li>
-                        <li><a class="dropdown-item" href="#">Quick Sort</a></li>
+                        <li><a class="dropdown-item" href="../Sorting/sorting.html?func=insertionsort">Insertion Sort</a></li>
+                        <li><a class="dropdown-item" href="../Sorting/sorting.html?func=selectionsort">Selection Sort</a></li>
+                        <!-- <li><a class="dropdown-item" href="../Sorting/sorting.html?func=insertionsort">Merge Sort</a></li> -->
+                        <li><a class="dropdown-item" href="../Sorting/sorting.html?func=bubblesort">Bubble Sort</a></li>
+                        <li><a class="dropdown-item" href="../Sorting/sorting.html?func=quicksort">Quick Sort</a></li>
                     </ul>
                 </div>
 
@@ -198,9 +203,7 @@
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="../pathfinding/pathfind.html?func=a*">A* Pathfinding</a></li>
                         <li><a class="dropdown-item" href="../pathfinding/pathfind.html?func=djikstra">Djikstra's</a></li>
-
-<!-- FIXME: add query string for bfs -->
-                        <li><a class="dropdown-item" onclick="changeAlgo('bfs')">BFS</a></li>
+                        <!-- <li><a class="dropdown-item" onclick="changeAlgo('bfs')">BFS</a></li> -->
                     </ul>
                 </div>
             </div>

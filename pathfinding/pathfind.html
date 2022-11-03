@@ -33,14 +33,12 @@
         </div>
         
         <!-- Introduction Modal -->
-        <div class="modal fade" id="introModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade introModal" id="introModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">Pathfinding Tutorial</h5>
-                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                       <p>Pathfinding Algorithms are used to help find a path between two locations - whether pixels on a screen, addresses in Google Maps, or positions in a video game.<br>
@@ -128,11 +126,11 @@
                 <div class="btn-group dropup col-auto gx-0">
                     <button type="button" class="btn btn-menu dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Sorting</button>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="../Sorting/sorting.html?func=insertion">Insertion Sort</a></li>
-                        <li><a class="dropdown-item" href="#">Selection Sort</a></li>
-                        <li><a class="dropdown-item" href="#">Merge Sort</a></li>
-                        <li><a class="dropdown-item" href="#">Bubble Sort</a></li>
-                        <li><a class="dropdown-item" href="#">Quick Sort</a></li>
+                        <li><a class="dropdown-item" href="../Sorting/sorting.html?func=insertionsort">Insertion Sort</a></li>
+                        <li><a class="dropdown-item" href="../Sorting/sorting.html?func=selectionsort">Selection Sort</a></li>
+                        <!-- <li><a class="dropdown-item" href="../Sorting/sorting.html?func=insertionsort">Merge Sort</a></li> -->
+                        <li><a class="dropdown-item" href="../Sorting/sorting.html?func=bubblesort">Bubble Sort</a></li>
+                        <li><a class="dropdown-item" href="../Sorting/sorting.html?func=quicksort">Quick Sort</a></li>
                     </ul>
                 </div>
 
@@ -140,8 +138,8 @@
                 <div class="btn-group dropup col-auto gx-0">
                     <button type="button" class="btn btn-menu dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Searching</button>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">Linear Search</a></li>
-                        <li><a class="dropdown-item" href="#">Binary Search</a></li>
+                        <li><a class="dropdown-item" href="../Searching/searching.html?func=linearsearch">Linear Search</a></li>
+                        <li><a class="dropdown-item" href="../Searching/searching.html?func=binarysearch">Binary Search</a></li>
                     </ul>
                 </div>
 
