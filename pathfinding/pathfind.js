@@ -40,15 +40,15 @@ changeAlgo(selectedFunction)
 
 let drag = false
 
-function cellDrag() {
+function cellDrag(e) {
     drag = true
     this.className = "wall"
 }
 
-function cleanUp() {
+function cleanUp(e) {
     document.querySelectorAll("td").forEach((node)=>{
-        node.removeEventListener("mousemove", cellDrag)
-        node.removeEventListener("mouseup", cleanUp)
+        node.removeEventListener(e.type == "mouseup" ? "mousemove" : "touchmove", cellDrag)
+        node.removeEventListener(e.type == "mouseup" ? "mouseup" : "touchend", cleanUp)
     })
     if(!drag) {
         console.log("clicking")
@@ -67,8 +67,8 @@ function cleanUp() {
 
 function cellHandler(event) {
     document.querySelectorAll("td").forEach((node)=>{
-        node.addEventListener("mousemove", cellDrag)
-        node.addEventListener("mouseup", cleanUp)
+        node.addEventListener(event.type == "mousedown" ? "mousemove" : "touchmove", cellDrag)
+        node.addEventListener(event.type == "mousedown" ? "mouseup" : "touchend", cleanUp)
     })
 }
 
@@ -95,6 +95,7 @@ function generateTable() {
             let cell = document.createElement("td")
             cell.id = (`${y},${x}`)
             cell.addEventListener('mousedown', cellHandler)
+            cell.addEventListener('touchstart', cellHandler)
             cell.style.setProperty("--width", width)
             cell.style.setProperty("--height", height)
             table.appendChild(cell)
