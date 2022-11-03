@@ -4,6 +4,17 @@ let dark = false
 
 /// SETTINGS ----------------------------------------------------------------------------------
 function darkMode() {   // enables dark mode
+    //If there's a mismatch between cookie and current mode: Match the cookie.
+    if(Cookies.get('darkMode') == '1' && dark == false) {
+        Cookies.set('darkMode', '1', {expires: 999, sameSite: 'strict'})
+    }
+    else if(Cookies.get('darkMode') == '1') {
+        Cookies.set('darkMode', '0', {expires: 999, sameSite: 'strict'})
+    }
+    else {
+        Cookies.set('darkMode', '1', {expires: 999, sameSite: 'strict'})
+    }
+
     var settingModal = document.getElementById("settingModalDialog");
     var back = document.body;
     var algoCard = document.querySelectorAll(".card-algorithm-type");
@@ -181,3 +192,19 @@ function pathfindingBack() { // animation if sorting back button is selected
 
     $('#algorithmsMenu').fadeTo(500, 1);
 }
+
+window.addEventListener('load', function() {
+    if(!Cookies.get('darkMode')) { //If no cookie, default to light mode
+        console.log(Cookies.get('darkMode'))
+        Cookies.set('darkMode', '0', {expires: 999, sameSite: 'strict'})
+    }
+    else if(Cookies.get('darkMode') === '1') { //Cookie says dark mode
+        console.log(Cookies.get('darkMode'))
+        document.querySelector("#darkModeSwitch").toggleAttribute('checked')
+        darkMode()
+    }
+    else
+    {
+        console.log('lightmode')
+    }
+})
