@@ -13,7 +13,7 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous" defer></script>
         <script src="../anime.min.js" defer></script>
         <script src="sorting.js" defer></script>
-        <script src="../js/main.js"defer></script>
+        <script src="../js/main.js"async></script>
     </head>
 
     <body class="back">
@@ -56,10 +56,9 @@
                     </div>
                     <div class="modal-body">
                       <p>Sorting Algorithms take lists and sorts them in ascending or descending order.<br><br>
-                        To get started, just press 'Go' - a list of numbers is pre-filled for you.<br><br>
+                        To get started, just press 'Go' at the bottom left corner - a list of numbers is pre-filled for you.<br><br>
                         You can make your own list by clicking the "Inputs" button and typing a comma-separated list.<br><br>
                       </p>
-                    </div>
                     </div>
                 </div>
             </div>
@@ -105,38 +104,44 @@
         <!-- Inputs -->
         <div class="offcanvas offcanvas-start" data-bs-backdrop="static" tabindex="-1" id="inputs" aria-labelledby="offcanvasExampleLabel">
             <div class="offcanvas-header">
+                <h2>Input</h2>
                 <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close""></button>
             </div>
-            <div class="offcanvas-body">
-                <div>Input</div>
+            <div class="offcanvas-body" style="margin: 10px;">
                 <div class="row">
-                    <input id="input" class="col-8" type="text" value="32, 24, 10, 22, 18, 40, 4, 43, 2, 25">
-                    <div id="getNewInput" class="col btn btn-orangeRed">Go</div>
+                    <p>Type in your custom input.</p>
+                    <p><i>Ex. "1, 2, 3, 4"</i></p>
+                    <input id="input" class="col" type="text" value="32, 24, 10, 22, 18, 40, 4, 43, 2, 25" style="margin-bottom: 10px;">
                 </div>
+                <div class="row justify-content-end">
+                    <div id="getNewInput" data-bs-dismiss="offcanvas" class="col-auto btn btn-orangeRed">Go</div>
+                </div>
+                <div class="row">
+                    <div id="randomNumbers" data-bs-dismiss="offcanvas" class="col btn btn-orangeRed" onclick="randomInput()">Random</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Draggable DIV -->
+        <div class="card draggable" id="pseudocode">
+            <div class="card-body card-body-draggable">
+                <h4 class="card-title">Pseudocode</h4>
+            </div>
+        </div>
+        <div class="card draggable" id="annotation">
+            <div class="card-body card-body-draggable">
+                <h4 class="card-title">Details</h4>
+                <p></p>
             </div>
         </div>
 
         <!-- Canvas -->
         <div class="container-fluid">
             <div class="row">
-                <div id="arrCanvas">
-                </div>
-                <div class="col align-self-end">
-                    <div class="row justify-content-end">
-                        <div id="annotationBox"></div>
-                    </div>
-                    <div class="row justify-content-end">
-                            <div id="pseudocodeBox">
-                                <p id="step1">for i = 1 to A.length</p>
-                                <p id="step2">&emsp;key = A[i]</p>
-                                <p id="step3">&emsp;j = j - i</p>
-                                <p id="step4">&emsp;while (j >= 0 and A[j] > key)</p>
-                                <p id="step5">&emsp;&emsp;&emsp;A[j + 1] = A[j]</p>
-                                <p id="step6">&emsp;&emsp;&emsp;j = j - 1</p>
-                                <p id="step7">&emsp;A[j + 1] = key</p>
-                            </div> 
-                    </div>
-                </div>
+                <div id="arrCanvas"></div>
+            </div>
+            <div class="row">
+                <div id="numbers"></div>
             </div>
         </div>
 
@@ -180,7 +185,7 @@
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="../pathfinding/pathfind.html?func=a*">A* Pathfinding</a></li>
                         <li><a class="dropdown-item" href="../pathfinding/pathfind.html?func=djikstra">Djikstra's</a></li>
-                        <li><a class="dropdown-item" >BFS</a></li>
+                        <!-- <li><a class="dropdown-item" >BFS</a></li> -->
                     </ul>
                 </div>
             </div>
