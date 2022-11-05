@@ -12,15 +12,17 @@
         <!-- Top Bar -->
         <div class="container-fluid">
             <div class="row top-bar align-items-center">
-
                 <!-- Logo -->
-                <div class="col text-start"><a href="index.html"><img class="" src="Assets/icon.png" width="50" aria-label="Logo"></a></div>
+                <div class="col-auto text-start"><a href="../index.html"><img class="" src="../Assets/icon.png" width="50" aria-label="Logo"></a></div>
 
                 <!-- Title -->
-                <h1 class="col-sm-8 d-none d-sm-inline" id="Header">Algorithm Visualizer</h1>
+                <h1 class="col d-none d-sm-inline" id="Header">Algorithm Visualizer</h1>
+
+                <!-- intro button -->
+                <img src="../Assets/info-circle.svg" height=30 width=30 class="col-auto gx-0 navbar-image" data-bs-toggle="modal" data-bs-target="#introModal"/>
 
                 <!-- Settings Button -->
-                <div class="col text-end">
+                <div class="col-auto text-end">
                     <svg xmlns="http://www.w3.org/2000/svg" height = 50 fill="white" class="justify-content-end btn" viewBox="0 0 16 16" type="button" data-bs-toggle="modal" data-bs-target="#settingModal">
                         <path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492zM5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0z"/>
                         <path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52l-.094-.319zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115l.094-.319z"/>
@@ -51,13 +53,6 @@
                                 <button type="button" class="btn btn-outline-dark btnResize" onclick="decreaseFontSize()">-</button>
                             </div>
                         </div>
-                        <div class="row mt-1">
-                            <div class="col">Zoom</div>
-                            <div class="col-4 btn-group btn-group-sm" role="group" aria-label="Increase or decrease element size">
-                                <button type="button" class="btn btn-outline-dark btnResize" onclick="zoomIn()">+</button>
-                                <button type="button" class="btn btn-outline-dark btnResize" onclick="zoomOut()">-</button>
-                            </div>
-                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-orangeRed" aria-label="Save changes" onclick="resetSettings()">Reset</button>
@@ -67,11 +62,29 @@
             </div>
         </div>
 
+        <!--Introduction Modal-->
+        <div class="modal fade introModal" id="introModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Sorting Tutorial</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                      <p>Sorting Algorithms take lists and sorts them in ascending or descending order.<br><br>
+                        To get started, just press 'Go' at the bottom left corner - a list of numbers is pre-filled for you.<br><br>
+                        You can make your own list by clicking the "Inputs" button and typing a comma-separated list.<br><br>
+                      </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Menu -->
         <div class="container-fluid" style="padding: 0;">
             <!-- Main menu -->
-            <div id="algorithmsMenu" class="container-fluid position-absolute" style="visibility: visible; opacity: 1;">
-                <div class="row row-cols-1 row-cols-lg-3 row-cols-md-2 g-4">
+            <div id="algorithmsMenu" class="container-fluid position-absolute" style="visibility: visible; opacity: 1; padding-top: 20px;">
+                <div class="row row-cols-1 row-cols-lg-3 row-cols-md-2 g-4" style="margin: 0;">
                     <div class="col">
                         <div id="sortingAlgorithmsGo" class="card menu-card card-algorithm-type mx-auto">
                             <div class="card-body">
@@ -109,9 +122,9 @@
             </div>
 
             <!-- Sorting Menu -->
-            <div id="sortingMenu" class="container-fluid position-absolute" style="visibility: hidden; opacity: 0;">
+            <div id="sortingMenu" class="container-fluid position-absolute" style="visibility: hidden; opacity: 0; padding-top: 20px;">
                 <a class="btn btn-orangeRed back-btn" role="button" onclick="sortingBack()">< Back</a>
-                <div class="row row-cols-1 row-cols-md-3 g-4">
+                <div class="row row-cols-1 row-cols-lg-3 row-cols-md-2 g-4" style="margin: 0;">
                     <div class="col">
                         <div class="card menu-card card-algorithm-type mx-auto">
                             <div class="card-body">
@@ -178,9 +191,9 @@
             </div>
 
             <!-- Searching Menu -->
-            <div id="searchingMenu" class="container-fluid position-absolute" style="visibility: hidden; opacity: 0;">
+            <div id="searchingMenu" class="container-fluid position-absolute" style="visibility: hidden; opacity: 0; padding-top: 20px;">
                 <a class="btn btn-orangeRed back-btn" role="button" onclick="searchingBack()">< Back</a>
-                <div class="row row-cols-1 row-cols-md-3 g-4">
+                <div class="row row-cols-1 row-cols-lg-3 row-cols-md-2 g-4" style="margin: 0;">
                     <div class="col">
                         <div class="card menu-card card-algorithm-type mx-auto">
                             <div class="card-body">
@@ -200,22 +213,25 @@
                             </div>
                         </div>  
                     </div>
-                    <div class="card menu-card card-algorithm mx-auto">
-                        <div class="card-body">
-                            <h4 class="card-title">Binary Search</h4>
-                            <p>Binary Search is a searching algorithm used in a sorted array by <b>repeatedly dividing the search interval in half</b>.</p>
-                        </div>
-                        <div class="card-footer">
-                            <a href="Searching/searching.html?func=binarysearch" class="btn menu-button btn-navajoWhite justify-content-end" role="button">Go</a>
+                    <div class="col">
+                        <div class="card menu-card card-algorithm mx-auto">
+                            <div class="card-body">
+                                <h4 class="card-title">Binary Search</h4>
+                                <p>Binary Search is a searching algorithm used in a sorted array by <b>repeatedly dividing the search interval in half</b>.</p>
+                            </div>
+                            <div class="card-footer">
+                                <a href="Searching/searching.html?func=binarysearch" class="btn menu-button btn-navajoWhite justify-content-end" role="button">Go</a>
+                            </div>
                         </div>
                     </div>
+                    
                 </div>
             </div>
 
             <!-- Pathfinding Menu -->
-            <div id="pathfindingMenu" class="container-fluid position-absolute" style="visibility: hidden; opacity: 0;">
+            <div id="pathfindingMenu" class="container-fluid position-absolute" style="visibility: hidden; opacity: 0; padding-top: 20px;">
                 <a class="btn btn-orangeRed back-btn" role="button" onclick="pathfindingBack()">< Back</a>
-                <div class="row row-cols-1 row-cols-md-3 g-4">
+                <div class="row row-cols-1 row-cols-lg-3 row-cols-md-2 g-4" style="margin: 0;">
                     <div class="col">
                         <div class="card menu-card card-algorithm-type mx-auto">
                             <div class="card-body">
