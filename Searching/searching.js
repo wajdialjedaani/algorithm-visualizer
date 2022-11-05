@@ -49,7 +49,7 @@ function linearSearch(arr, x) {
         current.push("#arrBox" + i)
         if(arr[i].value == x) {
             printArr(current)
-            let foundInd = "#arrBox" + i
+            let foundInd = i
             linearAnimation(current, foundInd)
             console.log("Found at " + i);
             return i
@@ -60,15 +60,34 @@ function linearSearch(arr, x) {
     return -1
 }
 
+function DisplayAnnotation(msg, element) {
+    element.innerHTML = msg
+}
+
 function changeAlgo(func) {
+    let pseudocode
     if(func == "binarysearch") {
+        pseudocode = `binarySearch(arr, x, low, high) <br>
+        repeat till low = high <br>
+        mid = (low + high)/2 <br>
+        if (x == arr[mid]) <br>
+        return mid <br>
+        else if (x > arr[mid]) // x is on the right side <br>
+        low = mid + 1 <br>
+        else                  // x is on the left side <br>
+        high = mid - 1 <br>`
         selectedFunction = binarySearchInterative
         document.querySelector("#Header").textContent = "Binary Search"
     }
     else if(func == "linearsearch") {
+        pseudocode = `linearSearch(arr, x) <br>
+        loop till end of array <br>
+        if (x == current value)<br>
+        return i<br>`
         selectedFunction = linearSearch
         document.querySelector("#Header").textContent = "Linear Search"
     }
+    DisplayAnnotation(pseudocode, document.querySelector("#pseudocode>.card-body>p"))
 }
 
 changeAlgo(selectedFunction)
@@ -120,7 +139,7 @@ function getRandomIntInclusive(min, max) {
 
 function randomInput() {
     input = []
-    let inputString, random
+    let inputString
     let length = getRandomIntInclusive(5, 20)
     
     inputString = getRandomIntInclusive(1, 100) + ", "
@@ -204,13 +223,15 @@ async function linearAnimation(current, foundInd) {
             easing: 'easeOutCubic',
         })
 
-        if(current[i] == foundInd) {
+        if(current[i] == "#arrBox" + foundInd) {
+            DisplayAnnotation(`Found ${input[foundInd].value} at ${foundInd}`, document.querySelector("#annotation>.card-body>p"))
             searchAnim.add({
                 targets: current[i],
                 backgroundColor: {value: "#F26419"},
                 easing: 'easeOutCubic', 
             })
         } else {
+            DisplayAnnotation(`not found`, document.querySelector("#annotation>.card-body>p"))
             searchAnim.add({
             targets: current[i],
             backgroundColor: {value: "#696464"},
