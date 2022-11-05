@@ -82,19 +82,13 @@
                         <div class="row mt-1">
                             <div class="col">Text Size</div>
                             <div class="col-4 btn-group btn-group-sm" role="group" aria-label="Increase or decrease text size">
-                                <button type="button" class="btn btn-outline-dark" onclick="increaseFontSize(1)">+</button>
-                                <button type="button" class="btn btn-outline-dark" onclick="decreaseFontSize(1)">-</button>
-                            </div>
-                        </div>
-                        <div class="row mt-1">
-                            <div class="col">Zoom</div>
-                            <div class="col-4 btn-group btn-group-sm" role="group" aria-label="Increase or decrease element size">
-                                <button type="button" class="btn btn-outline-dark" onclick="zoomIn()">+</button>
-                                <button type="button" class="btn btn-outline-dark" onclick="zoomOut()">-</button>
+                                <button type="button" class="btn btn-outline-dark btnResize" onclick="increaseFontSize()">+</button>
+                                <button type="button" class="btn btn-outline-dark btnResize" onclick="decreaseFontSize()">-</button>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
+                        <button type="button" class="btn btn-orangeRed" aria-label="Save changes" onclick="resetSettings()">Reset</button>
                         <button type="button" class="btn btn-orangeRed" data-bs-dismiss="modal" aria-label="Save changes">Save changes</button>
                     </div>
                 </div>
