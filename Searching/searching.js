@@ -285,6 +285,7 @@ function dragElement(elmnt) {
 }
 
 document.querySelector('#start').addEventListener('click', start)
+document.querySelector('#start1').addEventListener('click', start)
 document.querySelector('#FindValue').addEventListener('keypress', function(e) {
     if(e.key === 'Enter') {
         e.preventDefault()
@@ -296,3 +297,13 @@ document.querySelector("#AnimSpeed").addEventListener("click", function() {
     this.innerHTML = `${speed}x`
 })
 document.querySelector('#getNewInput').addEventListener('click', generateBox)
+document.querySelector('#input').addEventListener('keypress', function(e) {
+    if(e.key === 'Enter') {    
+        e.preventDefault()
+        if(document.getElementById('input').value == "") {
+            document.querySelector('#randomNumbers').click()
+        } else {
+            document.querySelector('#getNewInput').click()
+        }
+    }
+})
