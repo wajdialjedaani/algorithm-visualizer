@@ -16,22 +16,35 @@ if(!Cookies.get('sortVisited')) {
 
 // TODO: implement pseudocode change; refer pathfind.js
 function changeAlgo(func) {
+    let text
     if(func == "insertionsort") {
         selectedFunction = insertionSort
         document.querySelector("#Header").textContent = "Insertion Sort"
+        text = `Insertion sort treats an array as two subarrays: one <b>sorted</b> and one <b>unsorted.</b> The sorted subarray begins with just the <b>first element</b>, 
+        so it is "sorted" from the start. It then iterates through the list, selecting the first element of the <b>unsorted subarray</b> and 'inserting' it into the proper spot of the 
+        sorted subarray. Once the final element is inserted, the list is sorted.`
     }
     else if (func == "selectionsort") {
         selectedFunction = selectionSort
         document.querySelector("#Header").textContent = "Selection Sort"
+        text = `Selection sort treats an array as two subarrays: one <b>sorted</b> and one <b>unsorted.</b> The sorted subarray begins <b>emtpy</b>.
+        The algorithm iterates through the <b>unsorted subarray</b> and finds the <b>smallest element</b>. It then moves this element to the <b>front</b> of the unsorted array,
+        now treating the sorted subarray as though it grew.`
     }
     else if (func == "bubblesort") {
         selectedFunction = bubbleSort
         document.querySelector("#Header").textContent = "Bubble Sort"
+        text = `Bubble sort repeatedly iterates through a list <b>one by one</b>, comparing and swapping elements as it goes. By the end of the <b>first iteration</b>, the final element will be the largest.
+        Bubble sort then repeats the process, this time placing the second-largest number in the second-last spot. Repeating this process <b>n</b> (length of the list) times guarantees
+        a sorted array.`
     }
     else if (func == "quicksort") {
         selectedFunction = quickSort
         document.querySelector("#Header").textContent = "Quick Sort"
+        text = `Quick sort is a <b>divide-and-conquer</b> algorithm. It chooses an element to act as a 'pivot', splitting the rest of the array into two subarrays based on if
+        the elements are smaller or larger than the pivot. It repeats this <b>recursively</b> until the arrays are one element and, effectively, sorted.`
     }
+    DisplayAnnotation(text, document.querySelector("#annotation>.card-body>p"))
 }
 changeAlgo(selectedFunction)
 
@@ -232,6 +245,7 @@ async function swapAnimation(actions) {
     playing = true
     for (action of actions) {
         tl = anime.timeline()
+        DisplayAnnotation(action.annotation, document.querySelector("#annotation>.card-body>p"))
         action.AddToTimeline(tl)
         await tl.finished
     }
@@ -297,7 +311,12 @@ class Action {
 class Swap extends Action {
     constructor(targets) {
         super(targets)
-        Swap.duration = 500
+        Swap.duration = 1000
+    }
+
+    get annotation() {
+        return `${this.targets[0].value < this.targets[1].value ? this.targets[0].value : this.targets[1].value} is less than 
+        ${this.targets[0].value > this.targets[1].value ? this.targets[0].value : this.targets[1].value}, so we will swap them.`
     }
 
     get duration() {
@@ -313,10 +332,10 @@ class Swap extends Action {
         return [{
             targets: selected1,
             translateX: Number(selected1.style.getPropertyValue('--translation')) + currentPos2 - currentPos1,
-            backgroundColor: [
-                {value: "#FFFFFF", duration: duration-1},
-                {value: anime.get(selected1, "backgroundColor"), duration: 1}
-            ],
+            //backgroundColor: [
+            //    {value: "#FFFFFF", duration: duration-1},
+            //    {value: anime.get(selected1, "backgroundColor"), duration: 1}
+            //],
             easing: 'easeOutCubic',
             duration: duration,
             complete: function() {selected1.style.setProperty('--translation', currentPos2 - selected1.style.getPropertyValue('--position'))}
@@ -324,10 +343,10 @@ class Swap extends Action {
         {
             targets: selected2,
             translateX: Number(selected2.style.getPropertyValue('--translation')) + currentPos1 - currentPos2,
-            backgroundColor: [
-                {value: "#000000", duration: duration-1},
-                {value: anime.get(selected2, "backgroundColor"), duration: 1}
-            ],
+            //backgroundColor: [
+            //    {value: "#000000", duration: duration-1},
+            //    {value: anime.get(selected2, "backgroundColor"), duration: 1}
+            //],
             easing: 'easeOutCubic',
             duration: duration,
             complete: function() {selected2.style.setProperty('--translation', currentPos1 - selected2.style.getPropertyValue('--position'))}
@@ -354,11 +373,18 @@ class Swap extends Action {
 class Comparison extends Action {
     constructor (targets) {
         super(targets.filter(obj => typeof obj !== "undefined"))
-        Comparison.duration = 500
+        Comparison.duration = 1000
     }
 
     get duration() {
         return Comparison.duration / speed
+    }
+
+    get annotation() {
+        if(this.targets.length == 1) {
+            return `The element reached the first spot - it is the smallest in the list.`
+        }
+        return `Checking if ${this.targets[1].value} is less than ${this.targets[0].value}. If it is, then we will swap them.`
     }
 
     get Animation() {
@@ -446,3 +472,7 @@ function dragElement(elmnt) {
   }
 }
 // ----------------------------------------------------------------
+
+function DisplayAnnotation(msg, element) {
+    element.innerHTML = msg
+}
