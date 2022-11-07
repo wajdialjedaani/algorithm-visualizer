@@ -24,7 +24,7 @@ function binarySearchInterative(arr, x) {
     let ruleOutRange = []
     while (left <= right) {
         mid = Math.floor(left + (right - left) / 2)
-        current.push("#arrBox" + mid)
+        current.push(mid)
         if(x == arr[mid].value) {
             ruleOutRange.push([-1, -1])
             binaryAnimation(current, ruleOutRange, mid)
@@ -37,7 +37,8 @@ function binarySearchInterative(arr, x) {
             right = mid - 1
         }
     }
-    binaryAnimation(current, ruleOutRange)
+    mid = -1
+    binaryAnimation(current, ruleOutRange, mid)
     return -1
 }
 
@@ -68,22 +69,22 @@ function changeAlgo(func) {
     let pseudocode
     if(func == "binarysearch") {
         pseudocode = `binarySearch(arr, x, low, high) <br>
-        repeat till low = high <br>
-        mid = (low + high)/2 <br>
-        if (x == arr[mid]) <br>
-        return mid <br>
-        else if (x > arr[mid]) // x is on the right side <br>
-        low = mid + 1 <br>
-        else                  // x is on the left side <br>
-        high = mid - 1 <br>`
+        &emsp;repeat till low = high <br>
+        &emsp;&emsp;mid = (low + high)/2 <br>
+        &emsp;&emsp;if (x == arr[mid]) <br>
+        &emsp;&emsp;&emsp;return mid <br>
+        &emsp;&emsp;else if (x > arr[mid]) <br>
+        &emsp;&emsp;&emsp;low = mid + 1 <br>
+        &emsp;&emsp;else<br>
+        &emsp;&emsp;&emsp;high = mid - 1 <br>`
         selectedFunction = binarySearchInterative
         document.querySelector("#Header").textContent = "Binary Search"
     }
     else if(func == "linearsearch") {
         pseudocode = `linearSearch(arr, x) <br>
-        loop till end of array <br>
-        if (x == current value)<br>
-        return i<br>`
+        &emsp;loop till end of array <br>
+        &emsp;&emsp;if (x == current value)<br>
+        &emsp;&emsp;&emsp;return i<br>`
         selectedFunction = linearSearch
         document.querySelector("#Header").textContent = "Linear Search"
     }
@@ -189,13 +190,21 @@ async function binaryAnimation(current, ruleOutRange, mid) {
     for (let i = 0; i < current.length; i++) {
         var searchAnim = anime.timeline({autoplay: false})
 
-        searchAnim
-        .add({
-            targets: current[i],
+        searchAnim.add({
+            targets: "#arrBox" + current[i],
             backgroundColor: {value: "#84A98C", duration: 500},
             easing: 'easeOutCubic',
         })
-        .add({
+
+        if(input[current[i]].value > x) {
+            DisplayAnnotation(`${input[current[i]].value} > ${x}<br>Eliminating left side of ${input[current[i]].value}.`, document.querySelector("#annotation>.card-body>p"))
+        } else if (input[current[i]].value < x) {
+            DisplayAnnotation(`${input[current[i]].value} < ${x}<br>Eliminating right side of ${input[current[i]].value}.`, document.querySelector("#annotation>.card-body>p"))
+        } else if (input[current[i]].value == x){
+            DisplayAnnotation(`${input[current[i]].value} == ${x}<br>Target value has been found.`, document.querySelector("#annotation>.card-body>p"))
+        }
+
+        searchAnim.add({
             targets: ruleOut(ruleOutRange[i]),
             backgroundColor: {value: "#696464"},
             easing: 'easeOutCubic', 
@@ -205,6 +214,10 @@ async function binaryAnimation(current, ruleOutRange, mid) {
         await searchAnim.finished
 
         
+    }
+
+    if (mid == -1) {
+        DisplayAnnotation(`${x} is not in the list.`, document.querySelector("#annotation>.card-body>p"))
     }
     anime({
         targets: "#arrBox" + mid,
@@ -224,14 +237,14 @@ async function linearAnimation(current, foundInd) {
         })
 
         if(current[i] == "#arrBox" + foundInd) {
-            DisplayAnnotation(`Found ${input[foundInd].value} at ${foundInd}`, document.querySelector("#annotation>.card-body>p"))
+            DisplayAnnotation(`${input[foundInd].value} == ${input[i].value}.<br>Found ${input[foundInd].value} at index ${foundInd}`, document.querySelector("#annotation>.card-body>p"))
             searchAnim.add({
                 targets: current[i],
                 backgroundColor: {value: "#F26419"},
                 easing: 'easeOutCubic', 
             })
         } else {
-            DisplayAnnotation(`not found`, document.querySelector("#annotation>.card-body>p"))
+            DisplayAnnotation(`${input[foundInd].value} > ${input[i].value}<br>Eliminate and check next value.`, document.querySelector("#annotation>.card-body>p"))
             searchAnim.add({
             targets: current[i],
             backgroundColor: {value: "#696464"},
