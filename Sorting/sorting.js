@@ -17,19 +17,35 @@ if(!Cookies.get('sortVisited')) {
 // TODO: implement pseudocode change; refer pathfind.js
 function changeAlgo(func) {
     let text
+    let pseudo
     if(func == "insertionsort") {
         selectedFunction = insertionSort
         document.querySelector("#Header").textContent = "Insertion Sort"
         text = `Insertion sort treats an array as two subarrays: one <b>sorted</b> and one <b>unsorted.</b> The sorted subarray begins with just the <b>first element</b>, 
         so it is "sorted" from the start. It then iterates through the list, selecting the first element of the <b>unsorted subarray</b> and 'inserting' it into the proper spot of the 
         sorted subarray. Once the final element is inserted, the list is sorted.`
+        pseudo = `i = 1<br>
+        while i < length(arr)<br>
+        &emsp;j = i<br>
+        <span id="pseudo1">&emsp;while j > 0 and arr[j-1] > arr[j]</span><br>
+        <span id="pseudo2">&emsp;&emsp;swap arr[j] and arr[j-1]</span><br>
+        &emsp;&emsp;j = j - 1<br>
+        <span id="pseudo3">&emsp;i = i + 1</span>`
     }
     else if (func == "selectionsort") {
         selectedFunction = selectionSort
         document.querySelector("#Header").textContent = "Selection Sort"
-        text = `Selection sort treats an array as two subarrays: one <b>sorted</b> and one <b>unsorted.</b> The sorted subarray begins <b>emtpy</b>.
+        text = `Selection sort treats an array as two subarrays: one <b>sorted</b> and one <b>unsorted.</b> The sorted subarray begins <b>empty</b>.
         The algorithm iterates through the <b>unsorted subarray</b> and finds the <b>smallest element</b>. It then moves this element to the <b>front</b> of the unsorted array,
         now treating the sorted subarray as though it grew.`
+        pseudo = `
+        for i = 1 to length(arr) - 1<br>
+        &emsp;min = i<br>
+        &emsp;for j = i+1 to length(arr)<br> 
+        <span id="pseudo1">&emsp;&emsp;if arr[j] < arr[min]<br>
+        &emsp;&emsp;min = j;<br></span>
+        &emsp;if indexMin != i<br>
+        <span id="pseudo2">&emsp;&emsp;swap arr[min] and arr[i]<br></span>`
     }
     else if (func == "bubblesort") {
         selectedFunction = bubbleSort
@@ -37,14 +53,27 @@ function changeAlgo(func) {
         text = `Bubble sort repeatedly iterates through a list <b>one by one</b>, comparing and swapping elements as it goes. By the end of the <b>first iteration</b>, the final element will be the largest.
         Bubble sort then repeats the process, this time placing the second-largest number in the second-last spot. Repeating this process <b>n</b> (length of the list) times guarantees
         a sorted array.`
+        pseudo = `
+        for i = 0 to length(arr)<br>
+        <span id="pseudo1">&emsp;if arr[i] > arr[i+1]<br></span>
+        <span id="pseudo2">&emsp;&emsp;swap arr[i] and arr[i+1]<br></span>`
     }
     else if (func == "quicksort") {
         selectedFunction = quickSort
         document.querySelector("#Header").textContent = "Quick Sort"
         text = `Quick sort is a <b>divide-and-conquer</b> algorithm. It chooses an element to act as a 'pivot', splitting the rest of the array into two subarrays based on if
         the elements are smaller or larger than the pivot. It repeats this <b>recursively</b> until the arrays are one element and, effectively, sorted.`
+        pseudo = `
+        pivot = arr[right]<br>
+        i = left-1<br>
+        for j = low to right-1<br>
+        <span id="pseudo1">&emsp;if arr[j] < pivot<br></span>
+        &emsp;&emsp;i++<br>
+        <span id="pseudo21">&emsp;&emsp;swap arr[i] and arr[j]<br></span>
+        <span id="pseudo22">swap arr[i+1] and arr[high]<br></span>`
     }
     DisplayAnnotation(text, document.querySelector("#annotation>.card-body>p"))
+    DisplayAnnotation(pseudo, document.querySelector("#pseudocode>.card-body>p"))
 }
 changeAlgo(selectedFunction)
 
@@ -211,11 +240,11 @@ function Partition(arr, low, high, actions) {
         actions.push(new Comparison([arr[j], arr[high]]))
         if(arr[j].value < pivot) {
             i++
-            actions.push(new Swap([arr[i], arr[j]]))
+            actions.push(new Swap([arr[i], arr[j]], 21))
             swap(arr, i, j)
         }   
     }
-    actions.push(new Swap([arr[i + 1], arr[high]]))
+    actions.push(new Swap([arr[i + 1], arr[high]], 22))
     swap(arr, i + 1, high)
     return (i + 1)
 }
@@ -223,6 +252,7 @@ function Partition(arr, low, high, actions) {
 
 // highlights and swaps bars
 async function swapAnimation(actions) {
+    progress = document.querySelector("#Progress-Bar")
     document.querySelector("#PlayPause").onclick = function() {
         if(typeof tl === "undefined" || !inProgress) {
             console.log("No animation playing")
@@ -246,8 +276,11 @@ async function swapAnimation(actions) {
     for (action of actions) {
         tl = anime.timeline()
         DisplayAnnotation(action.annotation, document.querySelector("#annotation>.card-body>p"))
+        action.AnimatePseudocode()
         action.AddToTimeline(tl)
         await tl.finished
+
+        progress.style.width = `${(actions.indexOf(action) + 1) / actions.length * 100}%`
     }
     playing = false
 }
@@ -299,18 +332,30 @@ document.querySelector("#reset").addEventListener("click", function() {
 })
 
 class Action {
-    constructor(targets) {
+    constructor(targets, line) {
         this.targets = targets
+        this.line = `#pseudo${line}`
     }
 
     get duration() {
         return 1000
     }
+
+    AnimatePseudocode() {
+        console.log(this.line)
+        anime({
+            targets: action.line,
+            backgroundColor: [{value: "#000000", duration: this.duration-1},
+                {value: anime.get(document.querySelector(`${this.line}`), "backgroundColor"), duration: 1}],
+            color: [{value: "#FFFFFF", duration: this.duration-1},
+                {value: anime.get(document.querySelector(`${this.line}`), "color"), duration: 1}]
+        })
+    }
 }
 
 class Swap extends Action {
-    constructor(targets) {
-        super(targets)
+    constructor(targets, line=2) {
+        super(targets, line)
         Swap.duration = 1000
     }
 
@@ -371,8 +416,8 @@ class Swap extends Action {
 }
 
 class Comparison extends Action {
-    constructor (targets) {
-        super(targets.filter(obj => typeof obj !== "undefined"))
+    constructor (targets, line=1) {
+        super(targets.filter(obj => typeof obj !== "undefined"), line)
         Comparison.duration = 1000
     }
 
@@ -409,11 +454,12 @@ class Comparison extends Action {
         //tl.add(animations[0])
         //.add(animations[1], `-=${this.duration}`)
     }
+
 }
 
 class Sorted extends Action {
-    constructor(targets) {
-        super(targets)
+    constructor(targets, line=3) {
+        super(targets, line)
         Sorted.duration = 1
     }
 
