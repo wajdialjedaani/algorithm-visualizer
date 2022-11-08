@@ -187,6 +187,7 @@ function generateBox() {
 }
 
 async function binaryAnimation(current, ruleOutRange, mid) {
+    progress = document.querySelector("#Progress-Bar");
     for (let i = 0; i < current.length; i++) {
         var searchAnim = anime.timeline({autoplay: false})
 
@@ -211,21 +212,23 @@ async function binaryAnimation(current, ruleOutRange, mid) {
         })
 
         searchAnim.play()
+        progress.style.width = `${(i/current.length) * 100}%`;
         await searchAnim.finished
-
-        
     }
 
     if (mid == -1) {
         DisplayAnnotation(`${x} is not in the list.`, document.querySelector("#annotation>.card-body>p"))
     }
-    anime({
+    searchAnim = anime({
         targets: "#arrBox" + mid,
         backgroundColor: "#F26419",
     })
+    progress.style.width = `100%`;
+    await searchAnim.finished
 }
 
 async function linearAnimation(current, foundInd) {
+    progress = document.querySelector("#Progress-Bar");
     console.log(current[0], foundInd);
     for (let i = 0; i < current.length; i++) {
         var searchAnim = anime.timeline({autoplay: false})
@@ -253,8 +256,10 @@ async function linearAnimation(current, foundInd) {
         }
 
         searchAnim.play()
+        progress.style.width = `${(i/current.length) * 100}%`;
         await searchAnim.finished   
     }
+    progress.style.width = `100%`;
 }
 
 function ruleOut(givenRange) {
