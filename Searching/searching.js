@@ -33,6 +33,14 @@ function binarySearchInterative(arr, x) {
         if(x == arr[mid].value) {
             ruleOutRange.push([-1, -1])
             binaryAnimation(current, ruleOutRange, mid)
+            .then(function(value) {
+                document.querySelector("#start").style.display = "none"
+                document.querySelector("#reset").style.display = "inline"
+            })
+            .catch((error) => {console.log("Error in start()")})
+            .finally( function() {
+                inProgress = false
+            })
             return mid
         } else if(x > arr[mid].value) {   // x is on the right side
             ruleOutRange.push([left, mid])
@@ -44,6 +52,14 @@ function binarySearchInterative(arr, x) {
     }
     mid = -1
     binaryAnimation(current, ruleOutRange, mid)
+    .then(function(value) {
+        document.querySelector("#start").style.display = "none"
+        document.querySelector("#reset").style.display = "inline"
+    })
+    .catch((error) => {console.log("Error in start()")})
+    .finally( function() {
+        inProgress = false
+    })
     return -1
 }
 
@@ -57,12 +73,28 @@ function linearSearch(arr, x) {
             printArr(current)
             let foundInd = i
             linearAnimation(current, foundInd)
+            .then(function(value) {
+                document.querySelector("#start").style.display = "none"
+                document.querySelector("#reset").style.display = "inline"
+            })
+            .catch((error) => {console.log("Error in start()")})
+            .finally( function() {
+                inProgress = false
+            })
             console.log("Found at " + i);
             return i
         }
     }
     printArr(current)
     linearAnimation(current, x)
+    .then(function(value) {
+        document.querySelector("#start").style.display = "none"
+        document.querySelector("#reset").style.display = "inline"
+    })
+    .catch((error) => {console.log("Error in start()")})
+    .finally( function() {
+        inProgress = false
+    })
     return -1
 }
 
@@ -301,14 +333,7 @@ function start() {
     generateBox()
     getFindValue()
     selectedFunction(input, x)
-    // .then(function(value) {
-    //     document.querySelector("#start").style.display = "none"
-    //     document.querySelector("#reset").style.display = "inline"
-    // })
-    //.catch((error) => {console.log("Error in start()")})
-    .finally( function() {
-        inProgress = false
-    })
+    
 }
 
 
