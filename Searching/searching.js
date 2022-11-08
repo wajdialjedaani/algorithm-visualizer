@@ -193,7 +193,7 @@ async function binaryAnimation(current, ruleOutRange, mid) {
 
         searchAnim.add({
             targets: "#arrBox" + current[i],
-            backgroundColor: {value: "#84A98C", duration: 500},
+            backgroundColor: {value: "#84A98C", delay: 60 / speed, duration: 500},
             easing: 'easeOutCubic',
         })
 
@@ -207,7 +207,7 @@ async function binaryAnimation(current, ruleOutRange, mid) {
 
         searchAnim.add({
             targets: ruleOut(ruleOutRange[i]),
-            backgroundColor: {value: "#696464"},
+            backgroundColor: {value: "#696464", delay: 60 / speed, duration: 500},
             easing: 'easeOutCubic', 
         })
 
@@ -222,6 +222,8 @@ async function binaryAnimation(current, ruleOutRange, mid) {
     searchAnim = anime({
         targets: "#arrBox" + mid,
         backgroundColor: "#F26419",
+        delay: 60 / speed,
+        duration: 500
     })
     progress.style.width = `100%`;
     await searchAnim.finished
@@ -235,7 +237,7 @@ async function linearAnimation(current, foundInd) {
 
         searchAnim.add({
             targets: current[i],
-            backgroundColor: {value: "#84A98C", duration: 500},
+            backgroundColor: {value: "#84A98C", delay: 60 / speed, duration: 500},
             easing: 'easeOutCubic',
         })
 
@@ -243,14 +245,18 @@ async function linearAnimation(current, foundInd) {
             DisplayAnnotation(`${input[foundInd].value} == ${input[i].value}.<br>Found ${input[foundInd].value} at index ${foundInd}`, document.querySelector("#annotation>.card-body>p"))
             searchAnim.add({
                 targets: current[i],
-                backgroundColor: {value: "#F26419"},
+                backgroundColor: "#F26419",
+                delay: 60 / speed,
+                duration: 500,
                 easing: 'easeOutCubic', 
             })
         } else {
             DisplayAnnotation(`${input[foundInd].value} > ${input[i].value}<br>Eliminate and check next value.`, document.querySelector("#annotation>.card-body>p"))
             searchAnim.add({
             targets: current[i],
-            backgroundColor: {value: "#696464"},
+            backgroundColor: "#696464",
+            delay: 60 / speed,
+            duration: 500,
             easing: 'easeOutCubic', 
             })
         }
