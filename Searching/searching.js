@@ -15,6 +15,11 @@ if(!Cookies.get('searchVisited')) {
     Cookies.set('searchVisited', '1', {expires: 999})
 }
 
+document.querySelector("#AnimSpeed").addEventListener("click", function() {
+    speed = speeds[(speeds.indexOf(speed)+1)%speeds.length]
+    this.innerHTML = `${speed}x`
+})
+
 // Binary Search iterative approach
 function binarySearchInterative(arr, x) {
     let left = 0
@@ -193,7 +198,7 @@ async function binaryAnimation(current, ruleOutRange, mid) {
 
         searchAnim.add({
             targets: "#arrBox" + current[i],
-            backgroundColor: {value: "#84A98C", delay: 60 / speed, duration: 500},
+            backgroundColor: {value: "#84A98C", delay: 60 / speed, duration: 300},
             easing: 'easeOutCubic',
         })
 
@@ -207,7 +212,7 @@ async function binaryAnimation(current, ruleOutRange, mid) {
 
         searchAnim.add({
             targets: ruleOut(ruleOutRange[i]),
-            backgroundColor: {value: "#696464", delay: 60 / speed, duration: 500},
+            backgroundColor: {value: "#696464", delay: 60 / speed, duration: 300},
             easing: 'easeOutCubic', 
         })
 
@@ -237,7 +242,9 @@ async function linearAnimation(current, foundInd) {
 
         searchAnim.add({
             targets: current[i],
-            backgroundColor: {value: "#84A98C", delay: 60 / speed, duration: 500},
+            backgroundColor: "#84A98C",
+            delay: 60 / speed,
+            duration: 300,
             easing: 'easeOutCubic',
         })
 
@@ -247,7 +254,7 @@ async function linearAnimation(current, foundInd) {
                 targets: current[i],
                 backgroundColor: "#F26419",
                 delay: 60 / speed,
-                duration: 500,
+                duration: 300,
                 easing: 'easeOutCubic', 
             })
         } else {
@@ -256,7 +263,7 @@ async function linearAnimation(current, foundInd) {
             targets: current[i],
             backgroundColor: "#696464",
             delay: 60 / speed,
-            duration: 500,
+            duration: 300,
             easing: 'easeOutCubic', 
             })
         }
@@ -286,9 +293,22 @@ function printArr(arr) {
 }
 
 function start() {
+    if(inProgress) {
+        console.log("Animation in progress, can't play")
+        return
+    }
+    inProgress = true
     generateBox()
     getFindValue()
     selectedFunction(input, x)
+    // .then(function(value) {
+    //     document.querySelector("#start").style.display = "none"
+    //     document.querySelector("#reset").style.display = "inline"
+    // })
+    //.catch((error) => {console.log("Error in start()")})
+    .finally( function() {
+        inProgress = false
+    })
 }
 
 
