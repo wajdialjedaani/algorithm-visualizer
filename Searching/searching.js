@@ -70,7 +70,6 @@ function linearSearch(arr, x) {
     for (let i = 0; i < arr.length; i++) {
         current.push("#arrBox" + i)
         if(arr[i].value == x) {
-            printArr(current)
             let foundInd = i
             linearAnimation(current, foundInd)
             .then(function(value) {
@@ -85,13 +84,12 @@ function linearSearch(arr, x) {
             return i
         }
     }
-    printArr(current)
     linearAnimation(current, x)
     .then(function(value) {
         document.querySelector("#start").style.display = "none"
         document.querySelector("#reset").style.display = "inline"
     })
-    .catch((error) => {console.log("Error in start()")})
+    // .catch((error) => {console.log("Error in start()")})
     .finally( function() {
         inProgress = false
     })
@@ -104,7 +102,11 @@ function DisplayAnnotation(msg, element) {
 
 function changeAlgo(func) {
     let pseudocode
+    let text
     if(func == "binarysearch") {
+        text = `Binary search compares the <b>target value to the middle element</b> of the array. 
+        If they are <b>not equal</b>, the half where target cannot be in is eliminated and the search continues on the remaining half repeating this until the target value is found. 
+        If the search ends with the remaining half being empty, the target is <b>not</b> in the array.`
         pseudocode = `binarySearch(arr, x, low, high) <br>
         &emsp;repeat till low = high <br>
         &emsp;&emsp;mid = (low + high)/2 <br>
@@ -118,6 +120,7 @@ function changeAlgo(func) {
         document.querySelector("#Header").textContent = "Binary Search"
     }
     else if(func == "linearsearch") {
+        text = `Linear Search <b>sequentially</b> checks each element of the list until a <b>match is found</b> or until the <b>entire list has been searched</b>.`
         pseudocode = `linearSearch(arr, x) <br>
         &emsp;loop till end of array <br>
         &emsp;&emsp;if (x == current value)<br>
@@ -126,6 +129,7 @@ function changeAlgo(func) {
         document.querySelector("#Header").textContent = "Linear Search"
     }
     DisplayAnnotation(pseudocode, document.querySelector("#pseudocode>.card-body>p"))
+    DisplayAnnotation(text, document.querySelector("#annotation>.card-body>p"))
 }
 
 changeAlgo(selectedFunction)
@@ -249,7 +253,7 @@ async function binaryAnimation(current, ruleOutRange, mid) {
         })
 
         searchAnim.play()
-        progress.style.width = `${(i/current.length) * 100}%`;
+        progress.style.width = `${((i + 1) / current.length) * 100}%`;
         await searchAnim.finished
     }
 
@@ -262,13 +266,11 @@ async function binaryAnimation(current, ruleOutRange, mid) {
         delay: 60 / speed,
         duration: 500
     })
-    progress.style.width = `100%`;
     await searchAnim.finished
 }
 
 async function linearAnimation(current, foundInd) {
     progress = document.querySelector("#Progress-Bar");
-    console.log(current[0], foundInd);
     for (let i = 0; i < current.length; i++) {
         var searchAnim = anime.timeline({autoplay: false})
 
@@ -301,10 +303,9 @@ async function linearAnimation(current, foundInd) {
         }
 
         searchAnim.play()
-        progress.style.width = `${(i/current.length) * 100}%`;
+        progress.style.width = `${((i + 1) / current.length) * 100}%`;
         await searchAnim.finished   
     }
-    progress.style.width = `100%`;
 }
 
 function ruleOut(givenRange) {
@@ -374,12 +375,28 @@ function dragElement(elmnt) {
   }
 }
 
-document.querySelector('#start').addEventListener('click', start)
-document.querySelector('#start1').addEventListener('click', start)
+document.querySelector('#start').addEventListener('click', function() {
+    if(document.querySelector("#FindValue").value == "") {
+        $("#warningModal").modal("show")
+    } else {
+        start
+    }
+})
+document.querySelector('#start1').addEventListener('click', function() {
+    if(document.querySelector("#FindValue").value == "") {
+        $("#warningModal").modal("show")
+    } else {
+        start
+    }
+})
 document.querySelector('#FindValue').addEventListener('keypress', function(e) {
     if(e.key === 'Enter') {
         e.preventDefault()
-        document.querySelector('#start').click()
+        if(document.querySelector("#FindValue").value == "") {
+            $("#warningModal").modal("show")
+        } else {
+            document.querySelector('#start').click()
+        }
     }
 })
 document.querySelector("#AnimSpeed").addEventListener("click", function() {

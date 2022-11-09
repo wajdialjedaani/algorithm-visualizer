@@ -50,11 +50,24 @@
                     <input type="number" class="form-control" id="FindValue" placeholder="36">
                     <label for="FindValue">Number</label>
                 </div>
-                <button id="start1" class="col-auto btn btn-orangeRed">Go</button>
+                <button id="start1" class="col-auto btn btn-orangeRed start">Go</button>
             </div>
         </div>
 
-        
+        <!-- missing find number modal -->
+        <div class="modal fade introModal" id="warningModal" tabindex="-1" role="dialog" aria-labelledby="Warning" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Error</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                      <p>Please enter a number in the input field above the list of numbers.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <!-- Introduction Modal -->
         <div class="modal fade introModal" id="introModal" tabindex="-1" role="dialog" aria-labelledby="SearchingIntro" aria-hidden="true">
@@ -152,7 +165,7 @@
         <div class="bottom-bar container-fluid px-1">
             <div class="row justify-content-center" style="margin: 0;">
                 <div class="d-flex col-auto gx-1 justify-content-end align-items-center">
-                    <button id="start" class="btn btn-orangeRed">Go</button>
+                    <button id="start" class="btn btn-orangeRed start">Go</button>
                     <button id="reset" class="btn btn-orangeRed" style="display: none;">Reset</button>
                     <button id="AnimSpeed" class="btn btn-orangeRed">1x</button>
                     <button id="PlayPause" class="controls gx-0"><img height=40 src="../Assets/pause-fill.svg"/></button>
