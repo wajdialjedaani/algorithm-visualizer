@@ -15,46 +15,48 @@ function darkMode() {   // enables dark mode
         Cookies.set('darkMode', '1', {expires: 999, sameSite: 'strict'})
     }
 
-    var settingModal = document.getElementById("settingModalDialog");
-    var back = document.body;
-    var algoCard = document.querySelectorAll(".card-algorithm-type");
-    var btnOutline = document.querySelectorAll(".btnResize");
-    var introModal = document.querySelector("#introModal");
-    var grid = document.querySelector("#grid-container");
-    var draggable = document.querySelectorAll(".draggable");
-    var arrBar = document.querySelectorAll(".arrBar");
+    var settingModal = document.getElementById("settingModalDialog")
+    var back = document.body
+    var algoCard = document.querySelectorAll(".card-algorithm-type")
+    var btnOutline = document.querySelectorAll(".btnResize")
+    var introModal = document.querySelector("#introModal")
+    var grid = document.querySelector("#grid-container")
+    var draggable = document.querySelectorAll(".draggable")
+    var arrBar = document.querySelectorAll(".arrBar")
+    var inputTab = document.querySelector(".input-tab")
+    var customInput = document.querySelector(".customInputs")
 
-    settingModal.classList.toggle("modal-setting-dark");    // settings
-    back.classList.toggle("back-dark");                     // background
+    settingModal.classList.toggle("modal-setting-dark")    // settings
+    back.classList.toggle("back-dark")                    // background
     algoCard.forEach(element => {
-        element.classList.toggle("card-algorithm-type-dark");
-    });
+        element.classList.toggle("card-algorithm-type-dark")
+    })
     btnOutline.forEach(element => {
         element.classList.toggle("light-outline")
-    });
-
+    })
     if(introModal) {    // 
-        introModal.classList.toggle("introModal-dark");
+        introModal.classList.toggle("introModal-dark")
     }
-    
     if(grid) {
-        grid.classList.toggle("grid-dark"); // grid
+        grid.classList.toggle("grid-dark") // grid
     }
-
     if(draggable) {
         draggable.forEach(element => {
             element.classList.toggle("draggable-dark")
-        });
+        })
     }
-
     if(arrBar) {
         arrBar.forEach(element => {
-            element.classList.toggle("arrBar-dark");
-        });
+            element.classList.toggle("arrBar-dark")
+        })
+    }
+    if(inputTab) {
+        inputTab.classList.toggle("input-tab-dark")
+        customInput.classList.toggle("customInputs-dark")
     }
     
     dark = !dark
-    console.log(dark);
+    console.log(dark)
 }
 
 function increaseFontSize() {
