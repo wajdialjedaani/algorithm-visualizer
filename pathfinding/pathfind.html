@@ -20,7 +20,7 @@
                 <h1 class="col d-none d-sm-inline" id="Header">Algorithm Visualizer</h1>
 
                 <!-- intro button -->
-                <img src="../Assets/info-circle.svg" height=30 width=30 class="col-auto gx-0 navbar-image" data-bs-toggle="modal" data-bs-target="#introModal"/>
+                <img src="../Assets/info-circle.svg" height=30 width=30 class="col-auto gx-0 navbar-image" data-bs-toggle="modal" data-bs-target="#introModal" aria-label="Info"/>
 
                 <!-- Settings Button -->
                 <div class="col-auto text-end">
@@ -107,10 +107,10 @@
         <div class="bottom-bar container-fluid px-1">
             <div class="row justify-content-center" style="margin: 0;">
                 <div class="d-flex col-auto gx-1 justify-content-end align-items-center">
-                    <button id="generate" class="btn btn-orangeRed">Go</button>
-                    <button id="reset" class="btn btn-orangeRed" style="display: none;">Reset</button>
-                    <button id="AnimSpeed" class="btn btn-orangeRed">1x</button>
-                    <button id="PlayPause" class="controls gx-0"><img height=40 src="../Assets/pause-fill.svg"/></button>
+                    <button id="generate" class="btn btn-orangeRed" aria-label="Go">Go</button>
+                    <button id="reset" class="btn btn-orangeRed" style="display: none;" aria-label="Reset">Reset</button>
+                    <button id="AnimSpeed" class="btn btn-orangeRed" aria-label="Speed">1x</button>
+                    <button id="PlayPause" class="controls gx-0" aria-label="Play/Pause"><img height=40 src="../Assets/pause-fill.svg"/></button>
                 </div>
                 <div class="progress col align-self-center gx-0">
                     <div id="Progress-Bar" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>

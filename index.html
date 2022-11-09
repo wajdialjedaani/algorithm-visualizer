@@ -19,7 +19,7 @@
                 <h1 class="col d-none d-sm-inline" id="Header">Algorithm Visualizer</h1>
 
                 <!-- intro button -->
-                <img src="Assets/info-circle.svg" height=30 width=30 class="col-auto gx-0 navbar-image" data-bs-toggle="modal" data-bs-target="#introModal"/>
+                <img src="Assets/info-circle.svg" height=30 width=30 class="col-auto gx-0 navbar-image" data-bs-toggle="modal" data-bs-target="#introModal" aria-label="Info"/>
 
                 <!-- Settings Button -->
                 <div class="col-auto text-end">
@@ -93,7 +93,7 @@
                                 <p>A sorting algorithm is an algorithm that puts elements of a list into an order.</p>
                             </div>
                             <div class="card-footer">
-                                <a class="btn menu-button btn-orangeRed" role="button" onclick="sortingGo()">Go</a>
+                                <a class="btn menu-button btn-orangeRed" role="button" onclick="sortingGo()"><b>Go</b></a>
                             </div>
                         </div>
                     </div>
@@ -104,7 +104,7 @@
                                 <p>Searching Algorithms are designed to check for an element or retrieve an element from any data structure where it is stored.</p>
                             </div>
                             <div class="card-footer">
-                                <a class="btn menu-button btn-orangeRed justify-content-end" role="button" onclick="searchingGo()">Go</a>
+                                <a class="btn menu-button btn-orangeRed justify-content-end" role="button" onclick="searchingGo()"><b>Go</b></a>
                             </div>
                         </div>
                     </div>
@@ -115,7 +115,7 @@
                                 <p>Pathfinding is the plotting of the shortest route between two points.</p>
                             </div>
                             <div class="card-footer">
-                                <a class="btn menu-button btn-orangeRed justify-content-end" role="button" onclick="pathfindingGo()">Go</a>
+                                <a class="btn menu-button btn-orangeRed justify-content-end" role="button" onclick="pathfindingGo()"><b>Go</b></a>
                             </div>
                         </div>
                     </div>
@@ -141,7 +141,7 @@
                                 <p>Insertion sort is a sorting algorithm that places an <b>unsorted element</b> at its suitable place in each iteration.</p>
                             </div>
                             <div class="card-footer">
-                                <a href="Sorting/sorting.html?func=insertionsort" class="btn menu-button btn-navajoWhite justify-content-end" role="button">Go</a>                               
+                                <a href="Sorting/sorting.html?func=insertionsort" class="btn menu-button btn-navajoWhite justify-content-end" role="button"><b>Go</b></a>                               
                             </div>
                         </div> 
                     </div>
@@ -152,7 +152,7 @@
                                 <p>The selection sort algorithm sorts an array by <b>repeatedly finding the minimum element</b> (considering ascending order) from the unsorted part and putting it at the beginning.</p>
                             </div>
                             <div class="card-footer">
-                                <a href="Sorting/sorting.html?func=selectionsort" class="btn menu-button btn-navajoWhite justify-content-end" role="button">Go</a>
+                                <a href="Sorting/sorting.html?func=selectionsort" class="btn menu-button btn-navajoWhite justify-content-end" role="button"><b>Go</b></a>
                             </div>
                         </div>
                     </div>
@@ -162,7 +162,7 @@
                                 <h4 class="card-title">Merge Sort</h4>
                             </div>
                             <div class="card-footer">
-                                <a href="#" class="btn menu-button btn-navajoWhite justify-content-end" role="button">Go</a>
+                                <a href="#" class="btn menu-button btn-navajoWhite justify-content-end" role="button"><b>Go</b></a>
                             </div>
                         </div>
                     </div> -->
@@ -173,7 +173,7 @@
                                 <p>Bubble Sort is the <b>simplest</b> sorting algorithm that works by repeatedly swapping the adjacent elements if they are in the wrong order.</p>
                             </div>
                             <div class="card-footer">
-                                <a href="Sorting/sorting.html?func=bubblesort" class="btn menu-button btn-navajoWhite justify-content-end" role="button">Go</a>                               
+                                <a href="Sorting/sorting.html?func=bubblesort" class="btn menu-button btn-navajoWhite justify-content-end" role="button"><b>Go</b></a>                               
                             </div>
                         </div>
                     </div>
@@ -184,7 +184,7 @@
                                 <p>QuickSort is a <b>Divide and Conquer algorithm</b>. It picks an element as a pivot and partitions the given array around the picked pivot.</p>
                             </div>
                             <div class="card-footer">
-                                <a href="Sorting/sorting.html?func=quicksort" class="btn menu-button btn-navajoWhite justify-content-end" role="button">Go</a>
+                                <a href="Sorting/sorting.html?func=quicksort" class="btn menu-button btn-navajoWhite justify-content-end" role="button"><b>Go</b></a>
                             </div>
                         </div> 
                     </div>
@@ -210,7 +210,7 @@
                                 <p>Linear Search is a <b>sequential</b> search algorithm that starts at one end and goes through each element of a list until the desired element is found.</p>
                             </div>
                             <div class="card-footer">
-                                <a href="Searching/searching.html?func=linearsearch" class="btn menu-button btn-navajoWhite justify-content-end" role="button">Go</a>
+                                <a href="Searching/searching.html?func=linearsearch" class="btn menu-button btn-navajoWhite justify-content-end" role="button"><b>Go</b></a>
                             </div>
                         </div>  
                     </div>
@@ -221,7 +221,7 @@
                                 <p>Binary Search is a searching algorithm used in a sorted array by <b>repeatedly dividing the search interval in half</b>.</p>
                             </div>
                             <div class="card-footer">
-                                <a href="Searching/searching.html?func=binarysearch" class="btn menu-button btn-navajoWhite justify-content-end" role="button">Go</a>
+                                <a href="Searching/searching.html?func=binarysearch" class="btn menu-button btn-navajoWhite justify-content-end" role="button"><b>Go</b></a>
                             </div>
                         </div>
                     </div>
@@ -248,7 +248,7 @@
                                 <p>A* is <b>more efficient</b> than Djikstra's and guarantees the shortest path between two points.</p>
                             </div>
                             <div class="card-footer">
-                                <a href="pathfinding/pathfind.html?func=a*" class="btn menu-button btn-navajoWhite justify-content-end" role="button">Go</a>
+                                <a href="pathfinding/pathfind.html?func=a*" class="btn menu-button btn-navajoWhite justify-content-end" role="button"><b>Go</b></a>
                             </div>
                         </div>
                     </div>
@@ -259,7 +259,7 @@
                                 <p>Djikstra's is <b>unweighted</b> and finds the shortest path between one point and the <b>rest of the map.</b></p>
                             </div>
                             <div class="card-footer">
-                                <a href="pathfinding/pathfind.html?func=djikstra" class="btn menu-button btn-navajoWhite justify-content-end" role="button">Go</a>
+                                <a href="pathfinding/pathfind.html?func=djikstra" class="btn menu-button btn-navajoWhite justify-content-end" role="button"><b>Go</b></a>
                             </div>
                         </div>
                     </div>
