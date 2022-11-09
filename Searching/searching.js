@@ -234,7 +234,7 @@ async function binaryAnimation(current, ruleOutRange, mid) {
 
         searchAnim.add({
             targets: "#arrBox" + current[i],
-            backgroundColor: {value: "#84A98C", delay: 60 / speed, duration: 300},
+            backgroundColor: {value: "#84A98C", delay: 60 / speed, duration: 500},
             easing: 'easeOutCubic',
         })
 
@@ -248,7 +248,7 @@ async function binaryAnimation(current, ruleOutRange, mid) {
 
         searchAnim.add({
             targets: ruleOut(ruleOutRange[i]),
-            backgroundColor: {value: "#696464", delay: 60 / speed, duration: 300},
+            backgroundColor: {value: "#696464", delay: 60 / speed, duration: 500},
             easing: 'easeOutCubic', 
         })
 
@@ -278,7 +278,7 @@ async function linearAnimation(current, foundInd) {
             targets: current[i],
             backgroundColor: "#84A98C",
             delay: 60 / speed,
-            duration: 300,
+            duration: 500,
             easing: 'easeOutCubic',
         })
 
@@ -288,7 +288,7 @@ async function linearAnimation(current, foundInd) {
                 targets: current[i],
                 backgroundColor: "#F26419",
                 delay: 60 / speed,
-                duration: 300,
+                duration: 500,
                 easing: 'easeOutCubic', 
             })
         } else {
@@ -297,7 +297,7 @@ async function linearAnimation(current, foundInd) {
             targets: current[i],
             backgroundColor: "#696464",
             delay: 60 / speed,
-            duration: 300,
+            duration: 500,
             easing: 'easeOutCubic', 
             })
         }
@@ -379,14 +379,14 @@ document.querySelector('#start').addEventListener('click', function() {
     if(document.querySelector("#FindValue").value == "") {
         $("#warningModal").modal("show")
     } else {
-        start
+        start()
     }
 })
 document.querySelector('#start1').addEventListener('click', function() {
     if(document.querySelector("#FindValue").value == "") {
         $("#warningModal").modal("show")
     } else {
-        start
+        start()
     }
 })
 document.querySelector('#FindValue').addEventListener('keypress', function(e) {
@@ -399,10 +399,6 @@ document.querySelector('#FindValue').addEventListener('keypress', function(e) {
         }
     }
 })
-document.querySelector("#AnimSpeed").addEventListener("click", function() {
-    speed = speeds[(speeds.indexOf(speed)+1)%speeds.length]
-    this.innerHTML = `${speed}x`
-})
 document.querySelector('#getNewInput').addEventListener('click', generateBox)
 document.querySelector('#input').addEventListener('keypress', function(e) {
     if(e.key === 'Enter') {    
@@ -413,4 +409,11 @@ document.querySelector('#input').addEventListener('keypress', function(e) {
             document.querySelector('#getNewInput').click()
         }
     }
+})
+document.querySelector("#reset").addEventListener("click", function() {
+    generateBox()
+    document.querySelector("#Progress-Bar").style.width = "0%"
+    document.querySelector("#reset").style.display = "none"
+    document.querySelector("#start").style.display = "inline"
+    inProgress = false;
 })
