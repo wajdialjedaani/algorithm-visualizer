@@ -74,6 +74,7 @@ img {
      --bs-btn-active-color: var(--bs-btn-color);
      --bs-btn-active-bg: var(--bs-btn-bg);
      --bs-btn-active-border-color: var(--bs-btn-bg);
+     --bs-btn-disabled-bg: var(--bs-btn-bg);
      transition: .5s;
 }
 
@@ -100,6 +101,7 @@ img {
     --bs-btn-active-color: var(--bs-btn-color);
     --bs-btn-active-bg: var(--bs-btn-bg);
     --bs-btn-active-border-color: var(--bs-btn-bg);
+    --bs-btn-disabled-bg: var(--bs-btn-bg);
 }
 
 .btn-navajoWhite:hover {

@@ -117,7 +117,21 @@ function resetSettings() {
 }
 
 /// MAIN MENU ----------------------------------------------------------------------------------
+function menuChange() {
+    let menuBtn = document.querySelectorAll(".menu-button")
+    menuBtn.forEach(element => {
+        element.toggleAttribute('disabled')
+    })
+
+    setTimeout(function(){
+        menuBtn.forEach(element => {
+            element.toggleAttribute('disabled')
+        })
+    },500)
+}
+
 function sortingGo() {    // animation if sorting go is selected
+    menuChange()
     $('#algorithmsMenu').fadeTo(500, 0, function() {
         document.querySelector('#algorithmsMenu').style.visibility = 'hidden';
     });
@@ -128,6 +142,7 @@ function sortingGo() {    // animation if sorting go is selected
 }
 
 function sortingBack() { // animation if sorting back button is selected
+    menuChange()
     $('#sortingMenu').fadeTo(500, 0, function() {
         document.querySelector('#sortingMenu').style.visibility = 'hidden';
     });
@@ -138,6 +153,7 @@ function sortingBack() { // animation if sorting back button is selected
 }
 
 function searchingGo() {    // animation if sorting go is selected
+    menuChange()
     $('#algorithmsMenu').fadeTo(500, 0, function() {
         document.querySelector('#algorithmsMenu').style.visibility = 'hidden';
     });
@@ -148,6 +164,7 @@ function searchingGo() {    // animation if sorting go is selected
 }
 
 function searchingBack() { // animation if sorting back button is selected
+    menuChange()
     $('#searchingMenu').fadeTo(500, 0, function() {
         document.querySelector('#searchingMenu').style.visibility = 'hidden';
     });
@@ -158,6 +175,7 @@ function searchingBack() { // animation if sorting back button is selected
 }
 
 function pathfindingGo() {    // animation if sorting go is selected
+    menuChange()
     $('#algorithmsMenu').fadeTo(500, 0, function() {
         document.querySelector('#algorithmsMenu').style.visibility = 'hidden';
     });
@@ -168,6 +186,7 @@ function pathfindingGo() {    // animation if sorting go is selected
 }
 
 function pathfindingBack() { // animation if sorting back button is selected
+    menuChange()
     $('#pathfindingMenu').fadeTo(500, 0, function() {
         document.querySelector('#pathfindingMenu').style.visibility = 'hidden';
     });
