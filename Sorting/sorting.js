@@ -126,13 +126,16 @@ function generateBars() {
         let arrBar = document.createElement('div')
         let arrBarID = 'arrBar' + i
         arrBar.classList.add('arrBar')
+        if((Cookies.get('darkMode') === '1') && (!arrBar.classList.contains('arrBar-dark'))) {  // if dark mode and arrBar does not have dark, add dark
+            arrBar.classList.add('arrBar-dark')
+            console.log("true");
+        }
         arrBar.setAttribute('id', arrBarID)
         arrBar.style.setProperty('--position', `${i * document.querySelector('#arrCanvas').clientWidth / input.length}`)
         arrBar.style.setProperty('--translation', 0)
         arrBar.style.height = (maxHeight * (input[i].value / max)) + 'px'
         arrBar.innerHTML = input[i].value
         arrBar.style.lineHeight = (parseFloat(arrBar.style.height.replace('px', '')) * 2 + 20) + 'px'
-        //console.log(parseFloat(arrBar.style.height.replace('px', '')));
         container.appendChild(arrBar)
     }
 }
