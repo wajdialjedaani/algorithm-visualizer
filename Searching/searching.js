@@ -15,6 +15,11 @@ if(!Cookies.get('searchVisited')) {
     Cookies.set('searchVisited', '1', {expires: 999})
 }
 
+document.querySelector("#AnimSpeed").addEventListener("click", function() {
+    speed = speeds[(speeds.indexOf(speed)+1)%speeds.length]
+    this.innerHTML = `${speed}x`
+})
+
 // Binary Search iterative approach
 function binarySearchInterative(arr, x) {
     let left = 0
@@ -24,10 +29,18 @@ function binarySearchInterative(arr, x) {
     let ruleOutRange = []
     while (left <= right) {
         mid = Math.floor(left + (right - left) / 2)
-        current.push("#arrBox" + mid)
+        current.push(mid)
         if(x == arr[mid].value) {
             ruleOutRange.push([-1, -1])
             binaryAnimation(current, ruleOutRange, mid)
+            .then(function(value) {
+                document.querySelector("#start").style.display = "none"
+                document.querySelector("#reset").style.display = "inline"
+            })
+            .catch((error) => {console.log("Error in start()")})
+            .finally( function() {
+                inProgress = false
+            })
             return mid
         } else if(x > arr[mid].value) {   // x is on the right side
             ruleOutRange.push([left, mid])
@@ -37,7 +50,16 @@ function binarySearchInterative(arr, x) {
             right = mid - 1
         }
     }
-    binaryAnimation(current, ruleOutRange)
+    mid = -1
+    binaryAnimation(current, ruleOutRange, mid)
+    .then(function(value) {
+        document.querySelector("#start").style.display = "none"
+        document.querySelector("#reset").style.display = "inline"
+    })
+    .catch((error) => {console.log("Error in start()")})
+    .finally( function() {
+        inProgress = false
+    })
     return -1
 }
 
@@ -46,29 +68,69 @@ function linearSearch(arr, x) {
     console.log("linear", x)
     let current = []
     for (let i = 0; i < arr.length; i++) {
-        current.push("#arrBox" + i)
+        current.push(i)
         if(arr[i].value == x) {
-            printArr(current)
-            let foundInd = "#arrBox" + i
+            let foundInd = i
             linearAnimation(current, foundInd)
+            .then(function(value) {
+                document.querySelector("#start").style.display = "none"
+                document.querySelector("#reset").style.display = "inline"
+            })
+            .catch((error) => {console.log("Error in start()")})
+            .finally( function() {
+                inProgress = false
+            })
             console.log("Found at " + i);
             return i
         }
     }
-    printArr(current)
+    current.push(-1)
     linearAnimation(current, x)
+    .then(function(value) {
+        document.querySelector("#start").style.display = "none"
+        document.querySelector("#reset").style.display = "inline"
+    })
+    // .catch((error) => {console.log("Error in start()")})
+    .finally( function() {
+        inProgress = false
+    })
     return -1
 }
 
+function DisplayAnnotation(msg, element) {
+    element.innerHTML = msg
+}
+
 function changeAlgo(func) {
+    let pseudocode
+    let text
     if(func == "binarysearch") {
+        text = `Binary search compares the <b>target value to the middle element</b> of the array. 
+        If they are <b>not equal</b>, the half where target cannot be in is eliminated and the search continues on the remaining half repeating this until the target value is found. 
+        If the search ends with the remaining half being empty, the target is <b>not</b> in the array.`
+        pseudocode = `binarySearch(arr, x, low, high) <br>
+        &emsp;repeat till low = high <br>
+        &emsp;&emsp;mid = (low + high)/2 <br>
+        &emsp;&emsp;if (x == arr[mid]) <br>
+        &emsp;&emsp;&emsp;return mid <br>
+        &emsp;&emsp;else if (x > arr[mid]) <br>
+        &emsp;&emsp;&emsp;low = mid + 1 <br>
+        &emsp;&emsp;else<br>
+        &emsp;&emsp;&emsp;high = mid - 1 <br>`
         selectedFunction = binarySearchInterative
         document.querySelector("#Header").textContent = "Binary Search"
     }
     else if(func == "linearsearch") {
+        text = `Linear Search <b>sequentially</b> checks each element of the list until a <b>match is found</b> or until the <b>entire list has been searched</b>.`
+        pseudocode = `linearSearch(arr, x) <br>
+        &emsp;loop till end of array <br>
+        &emsp;&emsp;if (x == current value)<br>
+        &emsp;&emsp;&emsp;return i<br>`
         selectedFunction = linearSearch
         document.querySelector("#Header").textContent = "Linear Search"
     }
+    DisplayAnnotation(pseudocode, document.querySelector("#pseudocode>.card-body>p"))
+    DisplayAnnotation(text, document.querySelector("#annotation>.card-body>p"))
 }
 
 changeAlgo(selectedFunction)
@@ -112,6 +174,30 @@ function getInput() {
     return input
 }
 
+function getRandomIntInclusive(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1) + min); // The maximum is inclusive and the minimum is inclusive
+}
+
+function randomInput() {
+    input = []
+    let inputString
+    let length = getRandomIntInclusive(5, 20)
+    
+    inputString = getRandomIntInclusive(1, 100) + ", "
+    for (let i = 0; i < length - 2; i++) {
+        inputString += getRandomIntInclusive(1, 100) + ", "
+    }
+    inputString += getRandomIntInclusive(1, 100)
+
+    document.querySelector("#input").value = inputString
+    document.querySelector("#reset").style.display = "none"
+    document.querySelector("#start").style.display = "inline"
+    
+    generateBox()
+}
+
 function getFindValue() {
     x = document.getElementById('FindValue').value
     return x
@@ -126,6 +212,7 @@ function removeBox() {
 function generateBox() {
     removeBox()
     input = getInput()
+    input.sort((a,b) => a.value - b.value)
     let container = document.querySelector('#arrCanvas')
     container.style.setProperty("--columns", input.length)
     container.style.setProperty("--width", document.querySelector('#arrCanvas').clientWidth / input.length)
@@ -142,60 +229,90 @@ function generateBox() {
 }
 
 async function binaryAnimation(current, ruleOutRange, mid) {
-    for (let i = 0; i < current.length; i++) {
-        var searchAnim = anime.timeline({autoplay: false})
-
-        searchAnim
-        .add({
-            targets: current[i],
-            backgroundColor: {value: "#84A98C", duration: 500},
-            easing: 'easeOutCubic',
-        })
-        .add({
-            targets: ruleOut(ruleOutRange[i]),
-            backgroundColor: {value: "#696464"},
-            easing: 'easeOutCubic', 
-        })
-
-        searchAnim.play()
-        await searchAnim.finished
-
-        
-    }
-    anime({
-        targets: "#arrBox" + mid,
-        backgroundColor: "#F26419",
-    })
-}
-
-async function linearAnimation(current, foundInd) {
-    console.log(current[0], foundInd);
+    progress = document.querySelector("#Progress-Bar");
     for (let i = 0; i < current.length; i++) {
         var searchAnim = anime.timeline({autoplay: false})
 
         searchAnim.add({
-            targets: current[i],
-            backgroundColor: {value: "#84A98C", duration: 500},
+            targets: "#arrBox" + current[i],
+            backgroundColor: {value: "#84A98C", delay: 60 / speed, duration: 500},
             easing: 'easeOutCubic',
         })
 
-        if(current[i] == foundInd) {
+        if(input[current[i]].value > x) {
+            DisplayAnnotation(`${input[current[i]].value} > ${x}<br>Eliminating left side of ${input[current[i]].value}.`, document.querySelector("#annotation>.card-body>p"))
+        } else if (input[current[i]].value < x) {
+            DisplayAnnotation(`${input[current[i]].value} < ${x}<br>Eliminating right side of ${input[current[i]].value}.`, document.querySelector("#annotation>.card-body>p"))
+        } else if (input[current[i]].value == x){
+            DisplayAnnotation(`${input[current[i]].value} == ${x}<br>Target value has been found.`, document.querySelector("#annotation>.card-body>p"))
+        }
+
+        searchAnim.add({
+            targets: ruleOut(ruleOutRange[i]),
+            backgroundColor: {value: "#696464", delay: 60 / speed, duration: 500},
+            easing: 'easeOutCubic', 
+        })
+
+        searchAnim.play()
+        progress.style.width = `${((i + 1) / current.length) * 100}%`;
+        await searchAnim.finished
+    }
+
+    if (mid == -1) {
+        DisplayAnnotation(`${x} is not in the list.`, document.querySelector("#annotation>.card-body>p"))
+    }
+    searchAnim = anime({
+        targets: "#arrBox" + mid,
+        backgroundColor: "#F26419",
+        delay: 60 / speed,
+        duration: 500
+    })
+    await searchAnim.finished
+}
+
+async function linearAnimation(current, foundInd) {
+    progress = document.querySelector("#Progress-Bar");
+    for (let i = 0; i < current.length; i++) {
+        var searchAnim = anime.timeline({autoplay: false})
+
+        searchAnim.add({
+            targets: "#arrBox" + current[i],
+            backgroundColor: "#84A98C",
+            delay: 60 / speed,
+            duration: 500,
+            easing: 'easeOutCubic',
+        })
+        console.log(current[i]);
+
+        if(current[i] == -1) {
+            DisplayAnnotation(`Element does not exist in the list.`, document.querySelector("#annotation>.card-body>p"))
+        } else if("#arrBox" + current[i] == "#arrBox" + foundInd) {
+            DisplayAnnotation(`${x} == ${input[i].value}.<br>Found ${input[foundInd].value} at index ${foundInd}`, document.querySelector("#annotation>.card-body>p"))
             searchAnim.add({
-                targets: current[i],
-                backgroundColor: {value: "#F26419"},
+                targets: "#arrBox" + current[i],
+                backgroundColor: "#F26419",
+                delay: 60 / speed,
+                duration: 500,
                 easing: 'easeOutCubic', 
             })
         } else {
+            DisplayAnnotation(`${x} > ${input[i].value}<br>Eliminate and check next value.`, document.querySelector("#annotation>.card-body>p"))
             searchAnim.add({
-            targets: current[i],
-            backgroundColor: {value: "#696464"},
+            targets: "#arrBox" + current[i],
+            backgroundColor: "#696464",
+            delay: 60 / speed,
+            duration: 500,
             easing: 'easeOutCubic', 
             })
         }
+        
+        
 
         searchAnim.play()
+        progress.style.width = `${((i + 1) / current.length) * 100}%`;
         await searchAnim.finished   
     }
+    
 }
 
 function ruleOut(givenRange) {
@@ -216,10 +333,17 @@ function printArr(arr) {
 }
 
 function start() {
+    if(inProgress) {
+        console.log("Animation in progress, can't play")
+        return
+    }
+    inProgress = true
     generateBox()
     getFindValue()
     selectedFunction(input, x)
+    
 }
+
 
 document.querySelectorAll(".draggable").forEach((element) => {dragElement(element)})
 
@@ -258,14 +382,45 @@ function dragElement(elmnt) {
   }
 }
 
-document.querySelector('#start').addEventListener('click', start)
+document.querySelector('#start').addEventListener('click', function() {
+    if(document.querySelector("#FindValue").value == "") {
+        $("#warningModal").modal("show")
+    } else {
+        start()
+    }
+})
+document.querySelector('#start1').addEventListener('click', function() {
+    if(document.querySelector("#FindValue").value == "") {
+        $("#warningModal").modal("show")
+    } else {
+        start()
+    }
+})
 document.querySelector('#FindValue').addEventListener('keypress', function(e) {
     if(e.key === 'Enter') {
         e.preventDefault()
-        document.querySelector('#start').click()
+        if(document.querySelector("#FindValue").value == "") {
+            $("#warningModal").modal("show")
+        } else {
+            document.querySelector('#start').click()
+        }
     }
 })
-document.querySelector("#AnimSpeed").addEventListener("click", function() {
-    speed = speeds[(speeds.indexOf(speed)+1)%speeds.length]
-    this.innerHTML = `${speed}x`
+document.querySelector('#getNewInput').addEventListener('click', generateBox)
+document.querySelector('#input').addEventListener('keypress', function(e) {
+    if(e.key === 'Enter') {    
+        e.preventDefault()
+        if(document.getElementById('input').value == "") {
+            document.querySelector('#randomNumbers').click()
+        } else {
+            document.querySelector('#getNewInput').click()
+        }
+    }
+})
+document.querySelector("#reset").addEventListener("click", function() {
+    generateBox()
+    document.querySelector("#Progress-Bar").style.width = "0%"
+    document.querySelector("#reset").style.display = "none"
+    document.querySelector("#start").style.display = "inline"
+    inProgress = false;
 })

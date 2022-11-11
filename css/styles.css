@@ -74,6 +74,7 @@ img {
      --bs-btn-active-color: var(--bs-btn-color);
      --bs-btn-active-bg: var(--bs-btn-bg);
      --bs-btn-active-border-color: var(--bs-btn-bg);
+     --bs-btn-disabled-bg: var(--bs-btn-bg);
      transition: .5s;
 }
 
@@ -100,6 +101,7 @@ img {
     --bs-btn-active-color: var(--bs-btn-color);
     --bs-btn-active-bg: var(--bs-btn-bg);
     --bs-btn-active-border-color: var(--bs-btn-bg);
+    --bs-btn-disabled-bg: var(--bs-btn-bg);
 }
 
 .btn-navajoWhite:hover {
@@ -174,16 +176,29 @@ button.btn-menu {
     --bs-dropdown-spacer: 0;
 }
 
-#tab {
+.input-tab {
     width: 100px;
-    background: var(--darkSeaGreen);
-    color: black;
+    --bs-btn-bg: var(--darkSeaGreen);
+    --bs-btn-hover-bg: var(--darkSeaGreen);
+    --bs-btn-color: black;
     border-radius: 0 10px 10px 0;
     margin-top: 20px;
 }
 
-.offcanvas-start {
+.input-tab-dark {
+    --bs-btn-bg: var(--ming);
+    --bs-btn-hover-bg: var(--ming);
+    --bs-btn-color: white;
+}
+
+.customInputs {
     --bs-offcanvas-bg: var(--darkSeaGreen);
+    --bs-offcanvas-color: black;
+}
+
+.customInputs-dark {
+    --bs-offcanvas-bg: var(--ming);
+    --bs-offcanvas-color: white;
 }
 
 .controls {

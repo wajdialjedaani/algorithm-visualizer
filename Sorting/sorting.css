@@ -16,6 +16,11 @@
     box-sizing: border-box;
     border: 1px solid black;
     margin: 0 5px;
+    text-align: center;
+}
+
+.arrBar-dark {
+    color: white;
 }
 
 .arrBarSelected {
@@ -26,7 +31,8 @@
     position: relative;
     min-height: calc(100% - 60px);
     max-height: calc(60vh - 60px);
-    width: 75vw;
+    width: 90vw;
+    height: 30vh;
     left: 5%;
     display: grid;
     align-items: end;
@@ -34,27 +40,20 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-}
-
-#pseudocodeBox {
-    background: var(--navajoWhite);
-    position: relative;
-    display: inline;
-    top: 10%;
-    width: 20vw;
-    height: 280px;
-    /*margin: 25px 0;*/
-}
-
-#annotationBox {
-    background: var(--navajoWhite);
-    position: relative;
-    display: inline;
-    width: 20vw;
-    height: 100px;
+    top: 50px;
 }
 
 .activeStep {
     background: black;
     color: white;
+}
+
+#pseudocode {
+    top: 70%;
+    right: 50%;
+}
+
+#annotation {
+    top: 70%;
+    right: 25%;
 }
