@@ -68,7 +68,7 @@ function linearSearch(arr, x) {
     console.log("linear", x)
     let current = []
     for (let i = 0; i < arr.length; i++) {
-        current.push("#arrBox" + i)
+        current.push(i)
         if(arr[i].value == x) {
             let foundInd = i
             linearAnimation(current, foundInd)
@@ -84,6 +84,7 @@ function linearSearch(arr, x) {
             return i
         }
     }
+    current.push(-1)
     linearAnimation(current, x)
     .then(function(value) {
         document.querySelector("#start").style.display = "none"
@@ -275,37 +276,43 @@ async function linearAnimation(current, foundInd) {
         var searchAnim = anime.timeline({autoplay: false})
 
         searchAnim.add({
-            targets: current[i],
+            targets: "#arrBox" + current[i],
             backgroundColor: "#84A98C",
             delay: 60 / speed,
             duration: 500,
             easing: 'easeOutCubic',
         })
+        console.log(current[i]);
 
-        if(current[i] == "#arrBox" + foundInd) {
-            DisplayAnnotation(`${input[foundInd].value} == ${input[i].value}.<br>Found ${input[foundInd].value} at index ${foundInd}`, document.querySelector("#annotation>.card-body>p"))
+        if(current[i] == -1) {
+            DisplayAnnotation(`Element does not exist in the list.`, document.querySelector("#annotation>.card-body>p"))
+        } else if("#arrBox" + current[i] == "#arrBox" + foundInd) {
+            DisplayAnnotation(`${x} == ${input[i].value}.<br>Found ${input[foundInd].value} at index ${foundInd}`, document.querySelector("#annotation>.card-body>p"))
             searchAnim.add({
-                targets: current[i],
+                targets: "#arrBox" + current[i],
                 backgroundColor: "#F26419",
                 delay: 60 / speed,
                 duration: 500,
                 easing: 'easeOutCubic', 
             })
         } else {
-            DisplayAnnotation(`${input[foundInd].value} > ${input[i].value}<br>Eliminate and check next value.`, document.querySelector("#annotation>.card-body>p"))
+            DisplayAnnotation(`${x} > ${input[i].value}<br>Eliminate and check next value.`, document.querySelector("#annotation>.card-body>p"))
             searchAnim.add({
-            targets: current[i],
+            targets: "#arrBox" + current[i],
             backgroundColor: "#696464",
             delay: 60 / speed,
             duration: 500,
             easing: 'easeOutCubic', 
             })
         }
+        
+        
 
         searchAnim.play()
         progress.style.width = `${((i + 1) / current.length) * 100}%`;
         await searchAnim.finished   
     }
+    
 }
 
 function ruleOut(givenRange) {
