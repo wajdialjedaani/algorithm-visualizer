@@ -1,8 +1,19 @@
 let fontIncrease = 0    // positive means there is a change; negative is an offset if there is a combo of increase and decrease
 let fontDecrease = 0
+let dark = false
 
 /// SETTINGS ----------------------------------------------------------------------------------
 function darkMode() {   // enables dark mode
+    //If there's a mismatch between cookie and current mode: Match the cookie.
+    if(Cookies.get('darkMode') == '1' && dark == false) {
+        Cookies.set('darkMode', '1', {expires: 999, sameSite: 'strict'})
+    }
+    else if(Cookies.get('darkMode') == '1') {
+        Cookies.set('darkMode', '0', {expires: 999, sameSite: 'strict'})
+    }
+    else {
+        Cookies.set('darkMode', '1', {expires: 999, sameSite: 'strict'})
+    }
 
     var settingModal = document.getElementById("settingModalDialog")
     var back = document.body
@@ -43,6 +54,8 @@ function darkMode() {   // enables dark mode
         inputTab.classList.toggle("input-tab-dark")
         customInput.classList.toggle("customInputs-dark")
     }
+
+    dark = !dark
 }
 
 function increaseFontSize() {
