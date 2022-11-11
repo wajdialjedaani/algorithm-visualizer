@@ -127,7 +127,7 @@ function menuChange() {
         menuBtn.forEach(element => {
             element.toggleAttribute('disabled')
         })
-    },500)
+    },600)
 }
 
 function sortingGo() {    // animation if sorting go is selected
