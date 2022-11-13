@@ -103,8 +103,8 @@ function generateTable() {
         for(let x=0; x<columns; x++) {
             let cell = document.createElement("td")
             cell.id = (`${y},${x}`)
-            cell.addEventListener('mousedown', cellHandler)
-            cell.addEventListener('touchstart', cellHandler)
+            cell.addEventListener('ontouchstart' in document.documentElement === true ? 'touchstart' : 'mousedown', cellHandler)
+            //cell.addEventListener('touchstart', cellHandler)
             cell.style.setProperty("--width", width)
             cell.style.setProperty("--height", height)
             table.appendChild(cell)
