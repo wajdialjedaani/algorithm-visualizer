@@ -20,7 +20,7 @@
                 <h1 class="col d-none d-sm-inline" id="Header">Algorithm Visualizer</h1>
 
                 <!-- intro button -->
-                <img src="../Assets/info-circle.svg" height=30 width=30 class="col-auto gx-0 navbar-image" data-bs-toggle="modal" data-bs-target="#introModal"/>
+                <img src="../Assets/info-circle.svg" height=30 width=30 class="col-auto gx-0 navbar-image" data-bs-toggle="modal" data-bs-target="#introModal" aria-label="Info"/>
 
                 <!-- Settings Button -->
                 <div class="col-auto text-end">
@@ -71,19 +71,13 @@
                         <div class="row mt-1">
                             <div class="col">Text Size</div>
                             <div class="col-4 btn-group btn-group-sm" role="group" aria-label="Increase or decrease text size">
-                                <button type="button" class="btn btn-outline-dark" onclick="increaseFontSize(1)">+</button>
-                                <button type="button" class="btn btn-outline-dark" onclick="decreaseFontSize(1)">-</button>
-                            </div>
-                        </div>
-                        <div class="row mt-1">
-                            <div class="col">Zoom</div>
-                            <div class="col-4 btn-group btn-group-sm" role="group" aria-label="Increase or decrease element size">
-                                <button type="button" class="btn btn-outline-dark" onclick="zoomIn()">+</button>
-                                <button type="button" class="btn btn-outline-dark" onclick="zoomOut()">-</button>
+                                <button type="button" class="btn btn-outline-dark btnResize" onclick="increaseFontSize()">+</button>
+                                <button type="button" class="btn btn-outline-dark btnResize" onclick="decreaseFontSize()">-</button>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
+                        <button type="button" class="btn btn-orangeRed" aria-label="Save changes" onclick="resetSettings()">Reset</button>
                         <button type="button" class="btn btn-orangeRed" data-bs-dismiss="modal" aria-label="Save changes">Save changes</button>
                     </div>
                 </div>
@@ -113,10 +107,10 @@
         <div class="bottom-bar container-fluid px-1">
             <div class="row justify-content-center" style="margin: 0;">
                 <div class="d-flex col-auto gx-1 justify-content-end align-items-center">
-                    <button id="generate" class="btn btn-orangeRed">Go</button>
-                    <button id="reset" class="btn btn-orangeRed" style="display: none;">Reset</button>
-                    <button id="AnimSpeed" class="btn btn-orangeRed">1x</button>
-                    <button id="PlayPause" class="controls gx-0"><img height=40 src="../Assets/pause-fill.svg"/></button>
+                    <button id="generate" class="btn btn-orangeRed" aria-label="Go">Go</button>
+                    <button id="reset" class="btn btn-orangeRed" style="display: none;" aria-label="Reset">Reset</button>
+                    <button id="AnimSpeed" class="btn btn-orangeRed" aria-label="Speed">1x</button>
+                    <button id="PlayPause" class="controls gx-0" aria-label="Play/Pause"><img height=40 src="../Assets/pause-fill.svg"/></button>
                 </div>
                 <div class="progress col align-self-center gx-0">
                     <div id="Progress-Bar" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>
@@ -124,7 +118,7 @@
 
                 <!-- Sorting Dropdown -->
                 <div class="btn-group dropup col-auto gx-0">
-                    <button type="button" class="btn btn-menu dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Sorting</button>
+                    <button type="button" class="btn btn-menu dropdown-toggle d-none d-sm-block d-sm-none d-md-block" data-bs-toggle="dropdown" aria-expanded="false">Sorting</button>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="../Sorting/sorting.html?func=insertionsort">Insertion Sort</a></li>
                         <li><a class="dropdown-item" href="../Sorting/sorting.html?func=selectionsort">Selection Sort</a></li>
@@ -136,7 +130,7 @@
 
                 <!-- Searching dropdown -->
                 <div class="btn-group dropup col-auto gx-0">
-                    <button type="button" class="btn btn-menu dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Searching</button>
+                    <button type="button" class="btn btn-menu dropdown-toggle d-none d-sm-block d-sm-none d-md-block" data-bs-toggle="dropdown" aria-expanded="false">Searching</button>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="../Searching/searching.html?func=linearsearch">Linear Search</a></li>
                         <li><a class="dropdown-item" href="../Searching/searching.html?func=binarysearch">Binary Search</a></li>
@@ -145,11 +139,11 @@
 
                 <!-- Pathfinding Dropdown -->
                 <div class="btn-group dropup col-auto gx-0">
-                    <button type="button" class="btn btn-menu dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">Pathfinding</button>
+                    <button type="button" class="btn btn-menu dropdown-toggle d-none d-sm-block d-sm-none d-md-block" data-bs-toggle="dropdown" aria-expanded="false">Pathfinding</button>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" onclick="changeAlgo('a*')">A* Pathfinding</a></li>
                         <li><a class="dropdown-item" onclick="changeAlgo('djikstra')">Djikstra's</a></li>
-                        <li><a class="dropdown-item" onclick="changeAlgo('bfs')">BFS</a></li>
+                        <!-- <li><a class="dropdown-item" onclick="changeAlgo('bfs')">BFS</a></li> -->
                     </ul>
                 </div>
             </div>

@@ -96,7 +96,7 @@ function getRandomIntInclusive(min, max) {
 
 function randomInput() {
     input = []
-    let inputString, random
+    let inputString
     let length = getRandomIntInclusive(5, 20)
     
     inputString = getRandomIntInclusive(1, 100) + ", "
@@ -126,13 +126,16 @@ function generateBars() {
         let arrBar = document.createElement('div')
         let arrBarID = 'arrBar' + i
         arrBar.classList.add('arrBar')
+        if((Cookies.get('darkMode') === '1') && (!arrBar.classList.contains('arrBar-dark'))) {  // if dark mode and arrBar does not have dark, add dark
+            arrBar.classList.add('arrBar-dark')
+            console.log("true");
+        }
         arrBar.setAttribute('id', arrBarID)
         arrBar.style.setProperty('--position', `${i * document.querySelector('#arrCanvas').clientWidth / input.length}`)
         arrBar.style.setProperty('--translation', 0)
         arrBar.style.height = (maxHeight * (input[i].value / max)) + 'px'
         arrBar.innerHTML = input[i].value
         arrBar.style.lineHeight = (parseFloat(arrBar.style.height.replace('px', '')) * 2 + 20) + 'px'
-        //console.log(parseFloat(arrBar.style.height.replace('px', '')));
         container.appendChild(arrBar)
     }
 }
@@ -320,20 +323,6 @@ function start() {
         inProgress = false
     })
 }
-
-document.querySelector('#start').addEventListener('click', start)
-document.querySelector('#getNewInput').addEventListener('click', generateBars)
-document.querySelector("#AnimSpeed").addEventListener("click", function() {
-    speed = speeds[(speeds.indexOf(speed)+1)%speeds.length]
-    this.innerHTML = `${speed}x`
-})
-document.querySelector("#reset").addEventListener("click", function() {
-    generateBars()
-    document.querySelector("#Progress-Bar").style.width = "0%"
-    document.querySelector("#reset").style.display = "none"
-    document.querySelector("#start").style.display = "inline"
-    inProgress = false;
-})
 
 class Action {
     constructor(targets, line) {
@@ -578,3 +567,27 @@ function dragElement(elmnt) {
 function DisplayAnnotation(msg, element) {
     element.innerHTML = msg
 }
+
+document.querySelector('#start').addEventListener('click', start)
+document.querySelector('#getNewInput').addEventListener('click', generateBars)
+document.querySelector('#input').addEventListener('keypress', function(e) {
+    if(e.key === 'Enter') {    
+        e.preventDefault()
+        if(document.getElementById('input').value == "") {
+            document.querySelector('#randomNumbers').click()
+        } else {
+            document.querySelector('#getNewInput').click()
+        }
+    }
+})
+document.querySelector("#AnimSpeed").addEventListener("click", function() {
+    speed = speeds[(speeds.indexOf(speed)+1)%speeds.length]
+    this.innerHTML = `${speed}x`
+})
+document.querySelector("#reset").addEventListener("click", function() {
+    generateBars()
+    document.querySelector("#Progress-Bar").style.width = "0%"
+    document.querySelector("#reset").style.display = "none"
+    document.querySelector("#start").style.display = "inline"
+    inProgress = false;
+})

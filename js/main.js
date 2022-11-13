@@ -15,39 +15,47 @@ function darkMode() {   // enables dark mode
         Cookies.set('darkMode', '1', {expires: 999, sameSite: 'strict'})
     }
 
-    var settingModal = document.getElementById("settingModalDialog");
-    var back = document.body;
-    var algoCard = document.querySelectorAll(".card-algorithm-type");
-    var btnOutline = document.querySelectorAll(".btnResize");
-    var introModal = document.querySelector("#introModal");
-    var grid = document.querySelector("#grid-container");
-    var draggable = document.querySelectorAll(".draggable");
+    var settingModal = document.getElementById("settingModalDialog")
+    var back = document.body
+    var algoCard = document.querySelectorAll(".card-algorithm-type")
+    var btnOutline = document.querySelectorAll(".btnResize")
+    var introModal = document.querySelector("#introModal")
+    var grid = document.querySelector("#grid-container")
+    var draggable = document.querySelectorAll(".draggable")
+    var arrBar = document.querySelectorAll(".arrBar")
+    var inputTab = document.querySelector(".input-tab")
+    var customInput = document.querySelector(".customInputs")
 
-    settingModal.classList.toggle("modal-setting-dark");    // settings
-    back.classList.toggle("back-dark");                     // background
+    settingModal.classList.toggle("modal-setting-dark")    // settings
+    back.classList.toggle("back-dark")                    // background
     algoCard.forEach(element => {
-        element.classList.toggle("card-algorithm-type-dark");
-    });
+        element.classList.toggle("card-algorithm-type-dark")
+    })
     btnOutline.forEach(element => {
         element.classList.toggle("light-outline")
-    });
-
+    })
     if(introModal) {    // 
-        introModal.classList.toggle("introModal-dark");
+        introModal.classList.toggle("introModal-dark")
     }
-    
     if(grid) {
-        grid.classList.toggle("grid-dark"); // grid
+        grid.classList.toggle("grid-dark") // grid
     }
-
     if(draggable) {
         draggable.forEach(element => {
             element.classList.toggle("draggable-dark")
-        });
+        })
     }
-    
+    if(arrBar) {
+        arrBar.forEach(element => {
+            element.classList.toggle("arrBar-dark")
+        })
+    }
+    if(inputTab) {
+        inputTab.classList.toggle("input-tab-dark")
+        customInput.classList.toggle("customInputs-dark")
+    }
+
     dark = !dark
-    console.log(dark);
 }
 
 function increaseFontSize() {
@@ -122,7 +130,21 @@ function resetSettings() {
 }
 
 /// MAIN MENU ----------------------------------------------------------------------------------
+function menuChange() {
+    let menuBtn = document.querySelectorAll(".menu-button")
+    menuBtn.forEach(element => {
+        element.toggleAttribute('disabled')
+    })
+
+    setTimeout(function(){
+        menuBtn.forEach(element => {
+            element.toggleAttribute('disabled')
+        })
+    },600)
+}
+
 function sortingGo() {    // animation if sorting go is selected
+    menuChange()
     $('#algorithmsMenu').fadeTo(500, 0, function() {
         document.querySelector('#algorithmsMenu').style.visibility = 'hidden';
     });
@@ -133,6 +155,7 @@ function sortingGo() {    // animation if sorting go is selected
 }
 
 function sortingBack() { // animation if sorting back button is selected
+    menuChange()
     $('#sortingMenu').fadeTo(500, 0, function() {
         document.querySelector('#sortingMenu').style.visibility = 'hidden';
     });
@@ -143,6 +166,7 @@ function sortingBack() { // animation if sorting back button is selected
 }
 
 function searchingGo() {    // animation if sorting go is selected
+    menuChange()
     $('#algorithmsMenu').fadeTo(500, 0, function() {
         document.querySelector('#algorithmsMenu').style.visibility = 'hidden';
     });
@@ -153,6 +177,7 @@ function searchingGo() {    // animation if sorting go is selected
 }
 
 function searchingBack() { // animation if sorting back button is selected
+    menuChange()
     $('#searchingMenu').fadeTo(500, 0, function() {
         document.querySelector('#searchingMenu').style.visibility = 'hidden';
     });
@@ -163,6 +188,7 @@ function searchingBack() { // animation if sorting back button is selected
 }
 
 function pathfindingGo() {    // animation if sorting go is selected
+    menuChange()
     $('#algorithmsMenu').fadeTo(500, 0, function() {
         document.querySelector('#algorithmsMenu').style.visibility = 'hidden';
     });
@@ -173,6 +199,7 @@ function pathfindingGo() {    // animation if sorting go is selected
 }
 
 function pathfindingBack() { // animation if sorting back button is selected
+    menuChange()
     $('#pathfindingMenu').fadeTo(500, 0, function() {
         document.querySelector('#pathfindingMenu').style.visibility = 'hidden';
     });
@@ -184,11 +211,11 @@ function pathfindingBack() { // animation if sorting back button is selected
 
 window.addEventListener('load', function() {
     if(!Cookies.get('darkMode')) { //If no cookie, default to light mode
-        console.log(Cookies.get('darkMode'))
+        console.log("no cookie. creating cookie rn")
         Cookies.set('darkMode', '0', {expires: 999, sameSite: 'strict'})
     }
     else if(Cookies.get('darkMode') === '1') { //Cookie says dark mode
-        console.log(Cookies.get('darkMode'))
+        console.log("darkmode")
         document.querySelector("#darkModeSwitch").toggleAttribute('checked')
         darkMode()
     }
