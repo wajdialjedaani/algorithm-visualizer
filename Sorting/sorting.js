@@ -522,7 +522,7 @@ class Subarray extends Action {
         const animations = this.targets.map((element) => {
             return {
             targets: document.querySelector(`${element.id}`),
-            backgroundColor: anime.get(document.querySelector(`${element.id}`), "backgroundColor") === "rgb(98, 144, 200)" ? "#9c0b0b" : "#6290C8",
+            backgroundColor: anime.get(document.querySelector(`${element.id}`), "backgroundColor") === "rgb(98, 144, 200)" ? "#f68f58" : "#6290C8",
             duration: this.duration,
         }})
         return animations
