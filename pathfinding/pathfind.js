@@ -603,7 +603,7 @@ class NewChildren extends Action {
         return {
             targets: this.targets,
             duration: this.duration,
-            backgroundColor: "#FFFFFF"
+            backgroundColor: "#696464"
         }
     }
 
