@@ -43,6 +43,7 @@ let drag = false
 function cellDrag(e) {
     drag = true
     if(e.type == "mousemove") {
+        e.preventDefault()
         this.className = "wall"
     }
     else {
