@@ -234,6 +234,8 @@ function quickSort(arr, low, high) {
 
 function Partition(arr, low, high, actions) {
     let pivot = arr[high].value
+    actions.push(new PivotToggle(arr[high]))
+    actions.push(new Subarray(arr.slice(low, high)))
     let i = (low - 1)
 
     for (let j = low; j <= high - 1; j++) {
@@ -245,6 +247,8 @@ function Partition(arr, low, high, actions) {
         }   
     }
     actions.push(new Swap([arr[i + 1], arr[high]], 22))
+    actions.push(new PivotToggle(arr[high]))
+    actions.push(new Subarray(arr.slice(low, high)))
     swap(arr, i + 1, high)
     return (i + 1)
 }
@@ -478,6 +482,58 @@ class Sorted extends Action {
     AddToTimeline(tl) {
         tl.add(this.Animation)
     }
+}
+
+class PivotToggle extends Action {
+    constructor(targets, line=1) {
+        super(targets, line)
+        PivotToggle.duration = 500
+    }
+
+    get duration() {
+        return PivotToggle.duration / speed
+    }
+
+    get Animation() {
+        return {
+            targets: document.querySelector(`${this.targets.id}`),
+            duration: this.duration,
+            backgroundColor: anime.get(document.querySelector(`${this.targets.id}`), "backgroundColor") === "rgb(98, 144, 200)" ? "#A020F0" : "#6290C8",
+            begin: console.log(anime.get(document.querySelector(`${this.targets.id}`), "backgroundColor"))
+        }
+    }
+
+    AddToTimeline(tl) {
+        tl.add(this.Animation)
+    }
+}
+
+class Subarray extends Action {
+    constructor(targets, line=1) {
+        super(targets, line)
+        Subarray.duration = 0
+    }
+
+    get duration() {
+        return Subarray.duration / speed
+    }
+
+    get Animation() {
+        const animations = this.targets.map((element) => {
+            return {
+            targets: document.querySelector(`${element.id}`),
+            backgroundColor: anime.get(document.querySelector(`${element.id}`), "backgroundColor") === "rgb(98, 144, 200)" ? "#9c0b0b" : "#6290C8",
+            duration: this.duration,
+        }})
+        return animations
+    }
+
+    AddToTimeline(tl) {
+        this.Animation.forEach((animation, index) => {
+            index == 0 ? tl.add(animation) : tl.add(animation, `-=${this.duration}`)
+        })
+    }
+
 }
 
 // Draggable ----------------------------------------------------------------
