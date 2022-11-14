@@ -1,5 +1,6 @@
 let selectedFunction = (new URLSearchParams(window.location.search)).get("func")
 let input = []
+let actions = []
 let x
 const speeds = [1, 2, 4]
 let speed = 1
@@ -20,87 +21,6 @@ document.querySelector("#AnimSpeed").addEventListener("click", function() {
     this.innerHTML = `${speed}x`
 })
 
-// Binary Search iterative approach
-function binarySearchInterative(arr, x) {
-    let left = 0
-    let right = arr.length - 1
-    let mid
-    let current = []
-    let ruleOutRange = []
-    while (left <= right) {
-        mid = Math.floor(left + (right - left) / 2)
-        current.push(mid)
-        if(x == arr[mid].value) {
-            ruleOutRange.push([-1, -1])
-            binaryAnimation(current, ruleOutRange, mid)
-            .then(function(value) {
-                document.querySelector("#start").style.display = "none"
-                document.querySelector("#reset").style.display = "inline"
-            })
-            .catch((error) => {console.log("Error in start()")})
-            .finally( function() {
-                inProgress = false
-            })
-            return mid
-        } else if(x > arr[mid].value) {   // x is on the right side
-            ruleOutRange.push([left, mid])
-            left = mid + 1
-        } else { // x is on the left side
-            ruleOutRange.push([mid, right])
-            right = mid - 1
-        }
-    }
-    mid = -1
-    binaryAnimation(current, ruleOutRange, mid)
-    .then(function(value) {
-        document.querySelector("#start").style.display = "none"
-        document.querySelector("#reset").style.display = "inline"
-    })
-    .catch((error) => {console.log("Error in start()")})
-    .finally( function() {
-        inProgress = false
-    })
-    return -1
-}
-
-// linear search algorithm
-function linearSearch(arr, x) {
-    console.log("linear", x)
-    let current = []
-    for (let i = 0; i < arr.length; i++) {
-        current.push(i)
-        if(arr[i].value == x) {
-            let foundInd = i
-            linearAnimation(current, foundInd)
-            .then(function(value) {
-                document.querySelector("#start").style.display = "none"
-                document.querySelector("#reset").style.display = "inline"
-            })
-            .catch((error) => {console.log("Error in start()")})
-            .finally( function() {
-                inProgress = false
-            })
-            console.log("Found at " + i);
-            return i
-        }
-    }
-    current.push(-1)
-    linearAnimation(current, x)
-    .then(function(value) {
-        document.querySelector("#start").style.display = "none"
-        document.querySelector("#reset").style.display = "inline"
-    })
-    // .catch((error) => {console.log("Error in start()")})
-    .finally( function() {
-        inProgress = false
-    })
-    return -1
-}
-
-function DisplayAnnotation(msg, element) {
-    element.innerHTML = msg
-}
-
 function changeAlgo(func) {
     let pseudocode
     let text
@@ -111,21 +31,23 @@ function changeAlgo(func) {
         pseudocode = `binarySearch(arr, x, low, high) <br>
         &emsp;repeat till low = high <br>
         &emsp;&emsp;mid = (low + high)/2 <br>
-        &emsp;&emsp;if (x == arr[mid]) <br>
-        &emsp;&emsp;&emsp;return mid <br>
-        &emsp;&emsp;else if (x > arr[mid]) <br>
-        &emsp;&emsp;&emsp;low = mid + 1 <br>
-        &emsp;&emsp;else<br>
-        &emsp;&emsp;&emsp;high = mid - 1 <br>`
-        selectedFunction = binarySearchInterative
+        <span class="pseudo1">&emsp;&emsp;if (x == arr[mid])</span><br>
+        <span class="pseudo2">&emsp;&emsp;&emsp;return mid</span><br>
+        <span class="pseudo1">&emsp;&emsp;else if (x > arr[mid])</span><br>
+        <span class="pseudo4">&emsp;&emsp;&emsp;low = mid + 1</span><br>
+        <span class="pseudo1">&emsp;&emsp;else</span><br>
+        <span class="pseudo5">&emsp;&emsp;&emsp;high = mid - 1</span><br>`
+        selectedFunction = binarySearch
         document.querySelector("#Header").textContent = "Binary Search"
     }
     else if(func == "linearsearch") {
         text = `Linear Search <b>sequentially</b> checks each element of the list until a <b>match is found</b> or until the <b>entire list has been searched</b>.`
         pseudocode = `linearSearch(arr, x) <br>
         &emsp;loop till end of array <br>
-        &emsp;&emsp;if (x == current value)<br>
-        &emsp;&emsp;&emsp;return i<br>`
+        <span class="pseudo1">&emsp;&emsp;if (x[i] == current value)</span><br>
+        <span class="pseudo2">&emsp;&emsp;&emsp;return i</span><br>
+        &emsp;&emsp;else<br>
+        <span class="pseudo3">&emsp;&emsp;&emsp;eliminate</span><br>`
         selectedFunction = linearSearch
         document.querySelector("#Header").textContent = "Linear Search"
     }
@@ -135,43 +57,319 @@ function changeAlgo(func) {
 
 changeAlgo(selectedFunction)
 
-// // Binary Search recursive approach
-// function binarySearchRecursive(arr, left, right, x) {
-//     if(right >= 1) {    
-//         let mid = left + Math.floor((right - 1) / 2)
+// Algorithms ----------------------------------------------------------------
+// Binary Search iterative approach
+function binarySearch(arr, x) {
+    let left = 0
+    let right = arr.length - 1
+    let mid
+    let range = []
+    while (left <= right) {
+        mid = Math.floor(left + (right - left) / 2) // get mid value of subarray
+        console.log(mid);
+        actions.push(new Comparison([x, arr[mid]]))
+        if(x.value == arr[mid].value) {
+            actions.push(new Found([arr[mid]]))
+            return actions
+        } else if(x.value > arr[mid].value) {   // x is on the right side
+            range = getRangeToEliminate(range, left, mid)
+            actions.push(new EliminateLeft(range))
+            left = mid + 1
+        } else { // x is on the left side
+            range = getRangeToEliminate(range, mid, right)
+            actions.push(new EliminateRight(range))
+            right = mid - 1
+        }
+    }
+    console.log("not found");
+    return actions
+}
 
-//         // if element is at the middle; itself
-//         if(arr[mid] == x) {
-//             console.log("x was found");
-//             return mid
-//         }
+// linear search algorithm
+function linearSearch(arr, x) {
+    for (let i = 0; i < arr.length; i++) {
+        actions.push(new Comparison([x, arr[i]]))
+        if(arr[i].value == x.value) {
+            console.log("found")
+            actions.push(new Found([arr[i]]))
+            return actions
+        }
+        actions.push(new EliminateSingle([arr[i]]))
+    }
+    console.log("not found");
+    return actions
+}
 
-//         // if element is smaller than the mid value
-//         // can only be in left subarray
-//         if(arr[mid] > x) {
-//             return binarySearchRecursive(arr, left, mid - 1, x)
-//         }
+// Animation ----------------------------------------------------------------
+async function compareAnimation(actions) {
+    progress = document.querySelector("#Progress-Bar");
+    document.querySelector("#PlayPause").onclick = function() {
+        if(typeof tl === "undefined" || !inProgress) {
+            console.log("No animation playing")
+            return
+        }
+        if(playing) {
+            console.log("first")
+            playing = false
+            tl.pause()
+            this.firstChild.setAttribute("src", "../Assets/play-fill.svg")
+        }
+        else {
+            console.log("second")
+            playing = true
+            tl.play()
+            this.firstChild.setAttribute("src", "../Assets/pause-fill.svg")
+        }
+    }
 
-//         // if element is larger than the mid value
-//         // can only be in right subarray
-//         return binarySearchRecursive(arr, mid + 1, r, x)
-//     }
+    playing = true
 
-//     console.log("Element does not exist in the array")
-//     return -1
-// }
+    for(action of actions) {
+        tl = anime.timeline()
+        DisplayAnnotation(action.annotation, document.querySelector("#annotation>.card-body>p"))
+        action.AnimatePseudocode()
+        action.AddToTimeline(tl)
+        await tl.finished
 
-// ----------------------------------------------------------------
+        progress.style.width = `${(actions.indexOf(action) + 1) / actions.length * 100}%`
+    }
+
+    playing = false    
+}
+
+// Action ----------------------------------------------------------------
+class Action {
+    constructor(targets, line) {
+        this.targets = targets
+        this.line = `.pseudo${line}`
+    }
+
+    get duration() {
+        return 1000
+    }
+
+    AnimatePseudocode() {
+        anime({
+            targets: action.line,
+            backgroundColor: [
+                {value: "#000000", duration: this.duration - 1,},
+                {value: anime.get(document.querySelector(`${this.line}`), "backgroundColor"), duration: 1}
+            ],
+            color: [
+                {value: "#FFFFFF", duration: this.duration - 1}, 
+                {value: anime.get(document.querySelector(`${this.line}`), "color"), duration: 1}
+            ]
+        })
+    }
+}
+
+class Comparison extends Action {
+    constructor(targets, line = 1) {
+        super(targets.filter(obj => typeof obj !== "undefined"), line)
+        Comparison.duration = 999  // duration of comparison at 1x speed
+    }
+
+    get duration() {    // duration of comparison based on speed
+        return Comparison.duration / speed
+    }
+
+    get annotation() {
+        if(this.targets.length == 1) {
+            return `This is the only element in the list`
+        }
+        return `Checking if ${this.targets[0].value} is equal to ${this.targets[1].value}`
+    }
+
+    get Animation() {
+        this.target = [this.targets[1]] // get singleton in array form
+        const animations = this.target.map((element) => {
+            return {
+                targets: document.querySelector(`${element.id}`),
+                backgroundColor: "#84A98C",
+                duration: this.duration
+            }
+        })
+
+        return animations
+    }
+
+    AddToTimeline(tl) {
+        this.Animation.forEach((animation, index) => {
+            if(index == 0) {
+                tl.add(animation)
+            } else {
+                tl.add(animation, `-=${this.duration}`)
+            }
+        })
+    }
+}
+
+class Found extends Action {
+    constructor(targets, line = 2) {
+        super(targets, line)
+        Found.duration = 1
+    }
+
+    get annotation() {
+        return `${this.targets[0].value} has been found.`
+    }
+
+    get Animation() {
+        const animations = this.targets.map((element) => {
+            return {
+                targets: document.querySelector(`${element.id}`),
+                backgroundColor: "#F26419", 
+                duration: this.duration
+            }
+        })
+
+        return animations
+    }
+
+    AddToTimeline(tl) {
+        this.Animation.forEach((animation, index) => {
+            if(index == 0) {
+                tl.add(animation)
+            } else {
+                tl.add(animation, `-=${this.duration}`)
+            }
+        })
+    }
+}
+
+class EliminateSingle extends Action {
+    constructor(targets, line = 3) {
+        super(targets, line)
+        EliminateSingle.duration = 1
+    }
+
+    get annotation() {
+        return `${x.value} does not equal ${this.targets[0].value}`
+    }
+
+    get Animation() {
+        const animations = this.targets.map((element) => {
+            return {
+                targets: document.querySelector(`${element.id}`),
+                backgroundColor: "#696464",
+                color: "#FFFFFF",
+                duration: this.duration
+            }
+        })
+
+        return animations
+    }
+
+    AddToTimeline(tl) {
+        this.Animation.forEach((animation, index) => {
+            if(index == 0) {
+                tl.add(animation)
+            } else {
+                tl.add(animation, `-=${this.duration}`)
+            }
+        })
+    }
+}
+
+class EliminateLeft extends Action {
+    constructor(targets, line = 4) {
+        super(targets, line)
+        EliminateLeft.duration = 1
+    }
+
+    get annotation() {
+        return `${x.value} > ${this.targets[this.targets.length - 1].value}<br>
+        ${x.value} is in the right side.<br>
+        Elimitate the left side.<br>`
+    }
+
+    get Animation() {
+        const animations = this.targets.map((element) => {
+            return {
+                targets: document.querySelector(`${element.id}`),
+                backgroundColor: "#696464",
+                color: "#FFFFFF",
+                duration: this.duration
+            }
+        })
+
+        return animations
+    }
+
+    AddToTimeline(tl) {
+        this.Animation.forEach((animation, index) => {
+            if(index == 0) {
+                tl.add(animation)
+            } else {
+                tl.add(animation, `-=${this.duration}`)
+            }
+        })
+    }
+}
+
+class EliminateRight extends Action {
+    constructor(targets, line = 5) {
+        super(targets, line)
+        EliminateRight.duration = 1
+    }
+
+    get annotation() {
+        return `${x.value} < ${this.targets[this.targets.length - 1].value}<br>
+        ${x.value} is in the left side.<br>
+        Elimitate the right side.<br>`
+    }
+
+    get Animation() {
+        const animations = this.targets.map((element) => {
+            return {
+                targets: document.querySelector(`${element.id}`),
+                backgroundColor: "#696464",
+                color: "#FFFFFF",
+                duration: this.duration
+            }
+        })
+
+        return animations
+    }
+
+    AddToTimeline(tl) {
+        this.Animation.forEach((animation, index) => {
+            if(index == 0) {
+                tl.add(animation)
+            } else {
+                tl.add(animation, `-=${this.duration}`)
+            }
+        })
+    }
+}
+
+// Functions ----------------------------------------------------------------
+function DisplayAnnotation(msg, element) {
+    element.innerHTML = msg
+}
+
+function getRangeToEliminate(range, start, end) {
+    range = []
+    for(let i = start; i <= end; i++) {
+        range.push(input[i])
+    }
+    printArr(range)
+    return range
+}
 
 // gets input and splits it into an array
 function getInput() {    
     var inputString = document.getElementById('input').value
     input = inputString.split(", ")
+
     input.forEach((val, i, arr) => {arr[i] = {
         value: Number(val),
-        id: `#arrBox${i}`   // id="arrBoxi"
+        id: `#arrBox${val}`   // id="arrBoxi"
     }})
-    return input
+    input.sort((a,b) => a.value - b.value)
+    let unique = [...new Map(input.map((m) => [m.id, m])).values()]
+    console.log(unique);
+    return unique
 }
 
 function getRandomIntInclusive(min, max) {
@@ -199,7 +397,11 @@ function randomInput() {
 }
 
 function getFindValue() {
-    x = document.getElementById('FindValue').value
+    x = Number(document.getElementById('FindValue').value)
+    x = {
+        value: x,
+        id: `#arrBox${x}`
+    }
     return x
 }
 
@@ -212,13 +414,12 @@ function removeBox() {
 function generateBox() {
     removeBox()
     input = getInput()
-    input.sort((a,b) => a.value - b.value)
     let container = document.querySelector('#arrCanvas')
     container.style.setProperty("--columns", input.length)
     container.style.setProperty("--width", document.querySelector('#arrCanvas').clientWidth / input.length)
     for(let i = 0; i < input.length; i++) {
         let arrBox = document.createElement('div')
-        let arrBoxID = 'arrBox' + i
+        let arrBoxID = 'arrBox' + input[i].value
         arrBox.innerHTML = input[i].value
         arrBox.classList.add('arrBox')
         arrBox.setAttribute('id', arrBoxID)
@@ -226,103 +427,6 @@ function generateBox() {
         arrBox.style.setProperty('--translation', 0)
         container.appendChild(arrBox)
     }
-}
-
-async function binaryAnimation(current, ruleOutRange, mid) {
-    progress = document.querySelector("#Progress-Bar");
-    for (let i = 0; i < current.length; i++) {
-        var searchAnim = anime.timeline({autoplay: false})
-
-        searchAnim.add({
-            targets: "#arrBox" + current[i],
-            backgroundColor: {value: "#84A98C", delay: 60 / speed, duration: 500},
-            easing: 'easeOutCubic',
-        })
-
-        if(input[current[i]].value > x) {
-            DisplayAnnotation(`${input[current[i]].value} > ${x}<br>Eliminating left side of ${input[current[i]].value}.`, document.querySelector("#annotation>.card-body>p"))
-        } else if (input[current[i]].value < x) {
-            DisplayAnnotation(`${input[current[i]].value} < ${x}<br>Eliminating right side of ${input[current[i]].value}.`, document.querySelector("#annotation>.card-body>p"))
-        } else if (input[current[i]].value == x){
-            DisplayAnnotation(`${input[current[i]].value} == ${x}<br>Target value has been found.`, document.querySelector("#annotation>.card-body>p"))
-        }
-
-        searchAnim.add({
-            targets: ruleOut(ruleOutRange[i]),
-            backgroundColor: {value: "#696464", delay: 60 / speed, duration: 500},
-            easing: 'easeOutCubic', 
-        })
-
-        searchAnim.play()
-        progress.style.width = `${((i + 1) / current.length) * 100}%`;
-        await searchAnim.finished
-    }
-
-    if (mid == -1) {
-        DisplayAnnotation(`${x} is not in the list.`, document.querySelector("#annotation>.card-body>p"))
-    }
-    searchAnim = anime({
-        targets: "#arrBox" + mid,
-        backgroundColor: "#F26419",
-        delay: 60 / speed,
-        duration: 500
-    })
-    await searchAnim.finished
-}
-
-async function linearAnimation(current, foundInd) {
-    progress = document.querySelector("#Progress-Bar");
-    for (let i = 0; i < current.length; i++) {
-        var searchAnim = anime.timeline({autoplay: false})
-
-        searchAnim.add({
-            targets: "#arrBox" + current[i],
-            backgroundColor: "#84A98C",
-            delay: 60 / speed,
-            duration: 500,
-            easing: 'easeOutCubic',
-        })
-        console.log(current[i]);
-
-        if(current[i] == -1) {
-            DisplayAnnotation(`Element does not exist in the list.`, document.querySelector("#annotation>.card-body>p"))
-        } else if("#arrBox" + current[i] == "#arrBox" + foundInd) {
-            DisplayAnnotation(`${x} == ${input[i].value}.<br>Found ${input[foundInd].value} at index ${foundInd}`, document.querySelector("#annotation>.card-body>p"))
-            searchAnim.add({
-                targets: "#arrBox" + current[i],
-                backgroundColor: "#F26419",
-                delay: 60 / speed,
-                duration: 500,
-                easing: 'easeOutCubic', 
-            })
-        } else {
-            DisplayAnnotation(`${x} > ${input[i].value}<br>Eliminate and check next value.`, document.querySelector("#annotation>.card-body>p"))
-            searchAnim.add({
-            targets: "#arrBox" + current[i],
-            backgroundColor: "#696464",
-            delay: 60 / speed,
-            duration: 500,
-            easing: 'easeOutCubic', 
-            })
-        }
-        
-        
-
-        searchAnim.play()
-        progress.style.width = `${((i + 1) / current.length) * 100}%`;
-        await searchAnim.finished   
-    }
-    
-}
-
-function ruleOut(givenRange) {
-    let rangeID = []
-    console.log(givenRange);
-    for (let i = givenRange[0]; i <= givenRange[1]; i++) {
-        rangeID.push("#arrBox" + i)
-    }
-
-    return rangeID
 }
 
 // prints array to console
@@ -333,15 +437,24 @@ function printArr(arr) {
 }
 
 function start() {
+    generateBox()
     if(inProgress) {
         console.log("Animation in progress, can't play")
         return
     }
     inProgress = true
-    generateBox()
+    actions = []
     getFindValue()
-    selectedFunction(input, x)
-    
+    let comparisons = selectedFunction(input, x)
+    compareAnimation(comparisons)
+    .then(function(value) {
+        document.querySelector("#start").style.display = "none"
+        document.querySelector("#reset").style.display = "inline"
+    })
+    // .catch((error) => {console.log("Error in start()")})
+    .finally( function() {
+        inProgress = false
+    })
 }
 
 
