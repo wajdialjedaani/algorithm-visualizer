@@ -49,6 +49,7 @@ body {
 
 .top-bar {
     background-color: var(--charcoal);
+    height: 56px;
 }
 
 .bottom-bar {
