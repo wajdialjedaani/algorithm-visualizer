@@ -81,7 +81,11 @@ changeAlgo(selectedFunction)
 function getInput() {    
     var inputString = document.getElementById('input').value
     input = inputString.split(", ")
-    input.forEach((val, i, arr) => {arr[i] = {
+    input.forEach((val, i, arr) => {
+        if(Number.isNaN(Number(val))) {
+            throw new Error("Something went wrong with the input - check to make sure you put all necessary commas and only inserted numbers.")
+        }
+        arr[i] = {
         value: Number(val),
         id: `#arrBar${i}`
     }})
@@ -114,8 +118,13 @@ function randomInput() {
 
 // generates the bars, can be used with user inputs
 function generateBars() {
+    try {
+        input = getInput()
+    }
+    catch(error) {
+        throw error
+    }
     removeBars()
-    input = getInput()
     let container = document.querySelector('#arrCanvas')
     container.style.setProperty("--columns", input.length)
     container.style.setProperty("--width", document.querySelector('#arrCanvas').clientWidth / input.length)
@@ -569,7 +578,14 @@ function DisplayAnnotation(msg, element) {
 }
 
 document.querySelector('#start').addEventListener('click', start)
-document.querySelector('#getNewInput').addEventListener('click', generateBars)
+document.querySelector('#getNewInput').addEventListener('click', function() {
+    try {
+    generateBars()
+    }
+    catch(error) {
+        Alert(error.message, 'danger')
+    }
+})
 document.querySelector('#input').addEventListener('keypress', function(e) {
     if(e.key === 'Enter') {    
         e.preventDefault()
@@ -591,3 +607,18 @@ document.querySelector("#reset").addEventListener("click", function() {
     document.querySelector("#start").style.display = "inline"
     inProgress = false;
 })
+
+
+const alertContainer = document.getElementById('alertContainer')
+function Alert(msg, type) {
+    console.log("erroring")
+    const wrapper = document.createElement('div')
+    wrapper.innerHTML = [
+        `<div class="alert alert-${type} alert-dismissible position-absolute start-50 translate-middle-x" style="z-index: 999;" role="alert">`,
+        `   <div>${msg}</div>`,
+        '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
+        '</div>'
+      ].join('')
+      console.log(wrapper.innerHTML)
+      alertContainer.append(wrapper)
+}
