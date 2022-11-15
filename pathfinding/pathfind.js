@@ -65,7 +65,6 @@ let drag = false
 
 function cellDrag(e) {
     drag = true
-    e.preventDefault()
     if(e.type == "mousemove") {
         this.className = "wall"
     }
@@ -79,7 +78,6 @@ function cellDrag(e) {
 }
 
 function cleanUp(e) {
-    e.preventDefault()
     document.querySelectorAll("td").forEach((node)=>{
         node.removeEventListener(e.type == "mouseup" ? "mousemove" : "touchmove", cellDrag)
         node.removeEventListener(e.type == "mouseup" ? "mouseup" : "touchend", cleanUp)
@@ -100,7 +98,6 @@ function cleanUp(e) {
 }
 
 function cellHandler(event) {
-    event.preventDefault()
     document.querySelectorAll("td").forEach((node)=>{
         node.addEventListener(event.type == "mousedown" ? "mousemove" : "touchmove", cellDrag)
         node.addEventListener(event.type == "mousedown" ? "mouseup" : "touchend", cleanUp)
