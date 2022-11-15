@@ -23,6 +23,7 @@ td {
 body {
     height: calc(100vh - 116px);
     background-color: var(--ashGray);
+    overscroll-behavior: contain;
 }
 
 #grid-container {
