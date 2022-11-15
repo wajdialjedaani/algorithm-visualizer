@@ -238,11 +238,14 @@ async function FindPath(table)
                 }
             }
         });
-
+    if(typeof start == "undefined") {
+        throw new Error("Please place a start node.")
+    } else if (typeof end == "undefined") {
+        throw new Error("Please place an end node.")
+    }
     const actions = selectedFunction(graph, start, end)
     if(typeof actions === "undefined") {
-        window.alert("No path can be found, please remove some walls.")
-        throw new Error("No path")
+        throw new Error("No path was found.")
     }
     playing = true
     await animateResults(actions);
@@ -466,8 +469,7 @@ document.querySelector("#generate").addEventListener("click", () => {
     })
     .catch(
         function(error) {
-            console.log("Path promise rejected")
-            console.log(error)
+            Alert(error.message, 'danger')
     })
     .finally(
         () => {
@@ -612,3 +614,19 @@ class NewChildren extends Action {
         return currentAnim.finished
     }
 }
+
+const alertContainer = document.getElementById('alertContainer')
+
+function Alert(msg, type) {
+    console.log("erroring")
+    const wrapper = document.createElement('div')
+    wrapper.innerHTML = [
+        `<div class="alert alert-${type} alert-dismissible position-absolute start-50 translate-middle-x" style="z-index: 999;" role="alert">`,
+        `   <div>${msg}</div>`,
+        '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
+        '</div>'
+      ].join('')
+      console.log(wrapper.innerHTML)
+      alertContainer.append(wrapper)
+}
+
