@@ -112,8 +112,8 @@ function generateTable() {
   
     let cellSize = 30
 
-    columns = Math.floor((document.body.clientWidth / cellSize));
-    rows = Math.floor((document.body.clientHeight / cellSize));
+    columns = Math.floor((window.innerWidth / cellSize));
+    rows = Math.floor((window.innerHeight / cellSize));
 
     //console.log(`width: ${document.body.clientWidth}  height: ${document.body.clientHeight}`)
     //console.log(`columns: ${columns}, rows: ${rows}`)
