@@ -263,14 +263,6 @@ async function animateResults(actions) {
         progress.style.width = `${(actions.indexOf(action) + 1) / actions.length * 100}%`
     }
     playing = false
-    //Start each step of the animation with await to keep the thread unblocked, then continue when the step is done
-    //    DisplayAnnotation(`Cost to travel to current node: ${node.g} <br>
-    //    Estimated cost from node to the end: ${node.h} <br>
-    //    Estimated total cost: ${node.g + node.h}`, document.querySelector("#pseudocode>.card-body>p"));
-//
-    //    DisplayAnnotation(`A* is choosing the tiles that it thinks will lead us to the end fastest.<br>
-    //    The current tile is the cheapest we have, costing <b>${node.f}.</b> A* will continue towards the end until it hits a wall - then it'll search for another tile that costs <b>${node.f}</b>`,
-    //        document.querySelector("#annotation>.card-body>p"));
 }
 
 function AStar(graph, start, end) {
@@ -385,27 +377,6 @@ function Djikstra(graph, start, end) {
             }
             actions.push(new FinalPath(pathCells.reverse()))
             return actions
-                //{
-                //    path: pathArr.reverse(),
-                //    pathCells: pathCells.reverse(),
-                //    searched: closed.map((element) => document.getElementById(`${element.y},${element.x}`)),
-                //    untakenPaths: closed.map((element) => {
-                //      let path = []
-                //      while(element) {
-                //          path.push(document.getElementById(`${element.y},${element.x}`))
-                //          element = element.parent
-                //      }
-                //      return path
-                //    }),
-                //    untakenNodes: closed.map((element) => {
-                //      let path = []
-                //      while(element) {
-                //          path.push(element)
-                //          element = element.parent
-                //      }
-                //      return path
-                //    })
-                //}
         }
 
         let children = []
@@ -417,13 +388,8 @@ function Djikstra(graph, start, end) {
         //for each child
         let newChildren = []
         for (child of children) { //Continue if child has already been searched
-            //if(closed.some((element) => {return element === child})) {
-            //    continue
-            //}
 
             let g = current.g+1
-            //let h = Math.abs(child.x - end.x) + Math.abs(child.y - end.y)
-            //let f = g + h
 
             //Continue if better path has already been found
             if(child.g < g) {
@@ -435,8 +401,6 @@ function Djikstra(graph, start, end) {
             }
 
             child.g = g
-            //child.h = h
-            //child.f = f
             child.parent = current
             
             //If node isn't already in seearch list, add it
