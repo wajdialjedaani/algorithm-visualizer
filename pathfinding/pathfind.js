@@ -115,14 +115,11 @@ function generateTable() {
     columns = Math.floor((window.innerWidth / cellSize));
     rows = Math.floor((window.innerHeight / cellSize));
 
-    //console.log(`width: ${document.body.clientWidth}  height: ${document.body.clientHeight}`)
-    //console.log(`columns: ${columns}, rows: ${rows}`)
-
     table.style.setProperty("--columns", columns);
     table.style.setProperty("--rows", rows);
 
-    width = document.body.clientWidth / columns
-    height = document.body.clientHeight / rows
+    width = window.innerWidth / columns
+    height = window.innerHeight / rows
 
     for(let y=0; y<rows; y++) {
         for(let x=0; x<columns; x++) {
