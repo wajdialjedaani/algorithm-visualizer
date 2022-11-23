@@ -73,7 +73,6 @@ function cellDrag(e) {
         let y = e.touches[0].clientY
 
         let element = document.elementFromPoint(x, y)
-        console.log(element.tagName)
         if(element.tagName === "TD") {
             element.className = "wall"
         }
