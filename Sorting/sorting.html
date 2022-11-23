@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Algorithm Visualizer</title>
+        <title class="text">Algorithm Visualizer</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
         <link rel="stylesheet" href="../css/styles.css">
         <link rel="stylesheet" href="sorting.css">
@@ -24,7 +24,7 @@
                 <div class="col-auto text-start"><a href="../index.html"><img class="" src="../Assets/icon.png" width="50" aria-label="Logo"></a></div>
 
                 <!-- Title -->
-                <h1 class="col d-none d-sm-inline" id="Header">Algorithm Visualizer</h1>
+                <h1 class="col d-none d-sm-inline text" id="Header">Algorithm Visualizer</h1>
 
                 <!-- intro button -->
                 <img src="../Assets/info-circle.svg" height=30 width=30 class="col-auto gx-0 navbar-image ms-auto" data-bs-toggle="modal" data-bs-target="#introModal" aria-label="Info"/>
@@ -42,7 +42,7 @@
         <!-- Inputs button -->
         <div class="container-fluid">
             <div class="row align-items-center">
-                <div id="tab" class="btn input-tab" data-bs-toggle="offcanvas" href="#inputs" role="button" aria-controls="offcanvasExample">Inputs ></div>
+                <div id="tab" class="btn input-tab text" data-bs-toggle="offcanvas" href="#inputs" role="button" aria-controls="offcanvasExample">Inputs ></div>
             </div>
         </div>
         
@@ -51,11 +51,11 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Sorting Tutorial</h5>
+                        <h5 class="modal-title text" id="exampleModalLabel">Sorting Tutorial</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                      <p>Sorting Algorithms take lists and sorts them in ascending or descending order.<br><br>
+                      <p class="text">Sorting Algorithms take lists and sorts them in ascending or descending order.<br><br>
                         To get started, just press 'Go' at the bottom left corner - a list of numbers is pre-filled for you.<br><br>
                         You can make your own list by clicking the "Inputs" button and typing a comma-separated list.<br><br>
                       </p>
@@ -69,27 +69,27 @@
             <div id="settingModalDialog" class="modal-dialog modal-sm modal-setting">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="Settings">Settings</h5>
+                        <h5 class="modal-title text" id="Settings">Settings</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <div class="row mt-1">
-                            <div class="col">Dark Mode</div>
+                            <div class="col text">Dark Mode</div>
                             <div class="col-2 form-check form-switch">
                                 <input type="checkbox" class="form-check-input" role="switch" id="darkModeSwitch" aria-label="Dark Mode" onclick="darkMode()">
                             </div>
                         </div>
                         <div class="row mt-1">
-                            <div class="col">Text Size</div>
+                            <div class="col text">Text Size</div>
                             <div class="col-4 btn-group btn-group-sm" role="group" aria-label="Increase or decrease text size">
-                                <button type="button" class="btn btn-outline-dark btnResize" onclick="increaseFontSize()">+</button>
-                                <button type="button" class="btn btn-outline-dark btnResize" onclick="decreaseFontSize()">-</button>
+                                <button type="button" class="btn btn-outline-dark btnResize text" onclick="increaseFontSize()">+</button>
+                                <button type="button" class="btn btn-outline-dark btnResize text" onclick="decreaseFontSize()">-</button>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-orangeRed" aria-label="Save changes" onclick="resetSettings()">Reset</button>
-                        <button type="button" class="btn btn-orangeRed" data-bs-dismiss="modal" aria-label="Save changes">Save changes</button>
+                        <button type="button" class="btn btn-orangeRed text" aria-label="Save changes" onclick="resetSettings()">Reset</button>
+                        <button type="button" class="btn btn-orangeRed text" data-bs-dismiss="modal" aria-label="Save changes">Save changes</button>
                     </div>
                 </div>
             </div>
@@ -104,20 +104,20 @@
         <!-- Inputs -->
         <div class="offcanvas offcanvas-start customInputs" data-bs-backdrop="static" tabindex="-1" id="inputs" aria-labelledby="offcanvasExampleLabel">
             <div class="offcanvas-header">
-                <h2>Input</h2>
+                <h2 class="text">Input</h2>
                 <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close""></button>
             </div>
             <div class="offcanvas-body position-relative" style="margin: 10px;">
                 <div class="row">
-                    <p>Type in your custom input.</p>
-                    <p><i>Ex. "1, 2, 3, 4"</i></p>
-                    <input id="input" class="col" type="text" value="32, 24, 10, 22, 18, 40, 4, 43, 2, 25" style="margin-bottom: 10px;">
+                    <p class="text">Type in your custom input.</p>
+                    <p class="text"><i>Ex. "1, 2, 3, 4"</i></p>
+                    <input id="input" class="col text" type="text" value="32, 24, 10, 22, 18, 40, 4, 43, 2, 25" style="margin-bottom: 10px;">
                 </div>
                 <div class="row justify-content-end">
-                    <div id="getNewInput" data-bs-dismiss="offcanvas" class="col-auto btn btn-orangeRed">Generate</div>
+                    <div id="getNewInput" data-bs-dismiss="offcanvas" class="col-auto btn btn-orangeRed text">Generate</div>
                 </div>
                 <div class="row justify-content-center">
-                    <div id="randomNumbers" data-bs-dismiss="offcanvas" class="col-auto btn btn-orangeRed" onclick="randomInput()">Random</div>
+                    <div id="randomNumbers" data-bs-dismiss="offcanvas" class="col-auto btn btn-orangeRed text" onclick="randomInput()">Random</div>
                 </div>
             </div>
         </div>
@@ -125,13 +125,13 @@
         <!-- Draggable DIV -->
         <div class="card draggable" id="pseudocode">
             <div class="card-body card-body-draggable">
-                <h4 class="card-title">Pseudocode</h4>
+                <h4 class="card-title text">Pseudocode</h4>
                 <p></p>
             </div>
         </div>
         <div class="card draggable" id="annotation">
             <div class="card-body card-body-draggable">
-                <h4 class="card-title">Details</h4>
+                <h4 class="card-title text">Details</h4>
                 <p></p>
             </div>
         </div>
@@ -150,9 +150,9 @@
         <div class="bottom-bar container-fluid px-1">
             <div class="row justify-content-center" style="margin: 0;">
                 <div class="d-flex col-auto gx-1 justify-content-end align-items-center">
-                    <button id="start" class="btn btn-orangeRed" aria-label="Go">Go</button>
-                    <button id="reset" class="btn btn-orangeRed" style="display: none;" aria-label="Reset">Reset</button>
-                    <button id="AnimSpeed" class="btn btn-orangeRed" aria-label="Speed">1x</button>
+                    <button id="start" class="btn btn-orangeRed text" aria-label="Go">Go</button>
+                    <button id="reset" class="btn btn-orangeRed text" style="display: none;" aria-label="Reset">Reset</button>
+                    <button id="AnimSpeed" class="btn btn-orangeRed text" aria-label="Speed">1x</button>
                     <button id="PlayPause" class="controls gx-0" aria-label="Play/Pause"><img height=40 src="../Assets/pause-fill.svg"/></button>
                 </div>
                 <div class="progress col align-self-center gx-0">
@@ -161,31 +161,31 @@
 
                 <!-- Sorting Dropdown -->
                 <div class="btn-group dropup col-auto gx-0">
-                    <button type="button" class="btn btn-menu dropdown-toggle d-none d-sm-block d-sm-none d-md-block" data-bs-toggle="dropdown" aria-expanded="false">Sorting</button>
+                    <button type="button" class="btn btn-menu dropdown-toggle d-none d-sm-block d-sm-none d-md-block text" data-bs-toggle="dropdown" aria-expanded="false">Sorting</button>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" onclick="changeAlgo('insertionsort')">Insertion Sort</a></li>
-                        <li><a class="dropdown-item" onclick="changeAlgo('selectionsort')">Selection Sort</a></li>
+                        <li><a class="dropdown-item text" onclick="changeAlgo('insertionsort')">Insertion Sort</a></li>
+                        <li><a class="dropdown-item text" onclick="changeAlgo('selectionsort')">Selection Sort</a></li>
                         <!-- <li><a class="dropdown-item" onclick="">Merge Sort</a></li> -->
-                        <li><a class="dropdown-item" onclick="changeAlgo('bubblesort')">Bubble Sort</a></li>
-                        <li><a class="dropdown-item" onclick="changeAlgo('quicksort')">Quick Sort</a></li>
+                        <li><a class="dropdown-item text" onclick="changeAlgo('bubblesort')">Bubble Sort</a></li>
+                        <li><a class="dropdown-item text" onclick="changeAlgo('quicksort')">Quick Sort</a></li>
                     </ul>
                 </div>
 
                 <!-- Searching dropdown -->
                 <div class="btn-group dropup col-auto gx-0">
-                    <button type="button" class="btn btn-menu dropdown-toggle d-none d-sm-block d-sm-none d-md-block" data-bs-toggle="dropdown" aria-expanded="false">Searching</button>
+                    <button type="button" class="btn btn-menu dropdown-toggle d-none d-sm-block d-sm-none d-md-block text" data-bs-toggle="dropdown" aria-expanded="false">Searching</button>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="../Searching/searching.html?func=linearsearch">Linear Search</a></li>
-                        <li><a class="dropdown-item" href="../Searching/searching.html?func=binarysearch">Binary Search</a></li>
+                        <li><a class="dropdown-item text" href="../Searching/searching.html?func=linearsearch">Linear Search</a></li>
+                        <li><a class="dropdown-item text" href="../Searching/searching.html?func=binarysearch">Binary Search</a></li>
                     </ul>
                 </div>
 
                 <!-- Pathfinding Dropdown -->
                 <div class="btn-group dropup col-auto gx-0">
-                    <button type="button" class="btn btn-menu dropdown-toggle d-none d-sm-block d-sm-none d-md-block" data-bs-toggle="dropdown" aria-expanded="false">Pathfinding</button>
+                    <button type="button" class="btn btn-menu dropdown-toggle d-none d-sm-block d-sm-none d-md-block text" data-bs-toggle="dropdown" aria-expanded="false">Pathfinding</button>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="../pathfinding/pathfind.html?func=a*">A* Pathfinding</a></li>
-                        <li><a class="dropdown-item" href="../pathfinding/pathfind.html?func=djikstra">Djikstra's</a></li>
+                        <li><a class="dropdown-item text" href="../pathfinding/pathfind.html?func=a*">A* Pathfinding</a></li>
+                        <li><a class="dropdown-item text" href="../pathfinding/pathfind.html?func=djikstra">Djikstra's</a></li>
                         <!-- <li><a class="dropdown-item" >BFS</a></li> -->
                     </ul>
                 </div>
