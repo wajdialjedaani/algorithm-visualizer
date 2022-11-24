@@ -21,13 +21,13 @@ td {
 }
 
 body {
-    height: calc(var(--vh, 1vh) * 100 - 60px);
+    height: calc(var(--vh, 1vh) * 100);
     background-color: var(--ashGray);
     overscroll-behavior: contain;
 }
 
 #grid-container {
-    height: calc(100%);
+    height: calc(100% - 116px);
     width: 100%;
     position: relative;
     display: grid;
