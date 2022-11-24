@@ -21,7 +21,7 @@ td {
 }
 
 body {
-    height: calc(100vh - 116px);
+    height: calc(var(--vh, 1vh) * 100 - 60px);
     background-color: var(--ashGray);
     overscroll-behavior: contain;
 }

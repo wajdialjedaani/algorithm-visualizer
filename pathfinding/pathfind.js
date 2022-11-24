@@ -136,7 +136,11 @@ function generateTable() {
 
 window.onload = generateTable
 
-window.onresize = generateTable
+window.onresize = () => {
+    let vh = window.innerHeight * 0.01
+    document.body.style.setProperty('--vh', `${vh}px`)
+    generateTable()
+}
 
 //dragElement(document.querySelector(".draggable"));
 document.querySelectorAll(".draggable").forEach((element) => {dragElement(element)})
