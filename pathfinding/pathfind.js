@@ -134,7 +134,11 @@ function generateTable() {
     }
 }
 
-window.onload = generateTable
+window.onload = () => {
+    let vh = window.innerHeight * 0.01
+    document.body.style.setProperty('--vh', `${vh}px`)
+    generateTable()
+}
 
 window.onresize = () => {
     let vh = window.innerHeight * 0.01
