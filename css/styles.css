@@ -66,7 +66,7 @@ img {
 }
 
 .btn-orangeRed {
-     --bs-btn-color: white;
+     --bs-btn-color: black;
      --bs-btn-bg: var(--orangeRed);
      --bs-btn-border-color: var(--bs-btn-bg);
      --bs-btn-hover-color: var(--bs-btn-color);
