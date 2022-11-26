@@ -5,6 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title class="text">Algorithm Visualizer</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+        <!-- <link rel="stylesheet" href="bootstrap-5.2.3/dist/css/"> -->
         <link rel="stylesheet" href="css/styles.css">
     </head>
 
@@ -13,13 +14,13 @@
         <div class="container-fluid">
             <div class="row top-bar align-items-center">
                 <!-- Logo -->
-                <div class="col-auto text-start text"><a href="index.html"><img class="" src="Assets/icon.png" width="50" aria-label="Logo"></a></div>
+                <div class="col-auto text-start text"><a href="index.html"><img class="" src="Assets/icon.png" width="50" aria-label="Logo" alt="Logo"></a></div>
 
                 <!-- Title -->
                 <h1 class="col d-none d-sm-inline text" id="Header">Algorithm Visualizer</h1>
 
                 <!-- intro button -->
-                <img src="Assets/info-circle.svg" height=30 width=30 class="col-auto gx-0 navbar-image ms-auto" data-bs-toggle="modal" data-bs-target="#introModal" aria-label="Info"/>
+                <img src="Assets/info-circle.svg" height=30 width=30 class="col-auto gx-0 navbar-image ms-auto" data-bs-toggle="modal" data-bs-target="#introModal" aria-label="Info" alt="Info"/>
 
                 <!-- Settings Button -->
                 <div class="col-auto text-end">
@@ -41,7 +42,9 @@
                     </div>
                     <div class="modal-body">
                         <div class="row mt-1">
-                            <div class="col text">Dark Mode</div>
+                            <div class="col text">
+                                <label class="form-check-label" for="darkModeSwitch">Dark Mode</label>
+                            </div>
                             <div class="col-2 form-check form-switch">
                                 <input type="checkbox" class="form-check-input" role="switch" id="darkModeSwitch" aria-label="Dark Mode" onclick="darkMode()">
                             </div>
@@ -93,7 +96,7 @@
                                 <p id="sortDesc" class="text">A sorting algorithm is an algorithm that puts elements of a list into an order.</p>
                             </div>
                             <div class="card-footer">
-                                <button class="btn menu-button btn-orangeRed text" role="button" onclick="sortingGo()"><b>Go</b></button>
+                                <button class="btn menu-button btn-orangeRed text" role="button" onclick="sortingGo()"><strong>Go</strong></button>
                             </div>
                         </div>
                     </div>
@@ -104,7 +107,7 @@
                                 <p class="text">Searching Algorithms are designed to check for an element or retrieve an element from any data structure where it is stored.</p>
                             </div>
                             <div class="card-footer">
-                                <button class="btn menu-button btn-orangeRed justify-content-end text" role="button" onclick="searchingGo()"><b>Go</b></button>
+                                <button class="btn menu-button btn-orangeRed justify-content-end text" role="button" onclick="searchingGo()"><strong>Go</strong></button>
                             </div>
                         </div>
                     </div>
@@ -115,7 +118,7 @@
                                 <p class="text">Pathfinding is the plotting of the shortest route between two points.</p>
                             </div>
                             <div class="card-footer">
-                                <button class="btn menu-button btn-orangeRed justify-content-end text" role="button" onclick="pathfindingGo()"><b>Go</b></button>
+                                <button class="btn menu-button btn-orangeRed justify-content-end text" role="button" onclick="pathfindingGo()"><strong>Go</strong></button>
                             </div>
                         </div>
                     </div>
@@ -138,10 +141,10 @@
                         <div class="card menu-card card-algorithm mx-auto">
                             <div class="card-body">
                                 <h4 class="card-title text">Insertion Sort</h4>
-                                <p class="text">Insertion sort is a sorting algorithm that places an <b>unsorted element</b> at its suitable place in each iteration.</p>
+                                <p class="text">Insertion sort is a sorting algorithm that places an <strong>unsorted element</strong> at its suitable place in each iteration.</p>
                             </div>
                             <div class="card-footer">
-                                <button onclick="window.location.href='Sorting/sorting.html?func=insertionsort'" class="btn text menu-button btn-navajoWhite justify-content-end" role="button"><b>Go</b></button>                               
+                                <button onclick="window.location.href='Sorting/sorting.html?func=insertionsort'" class="btn text menu-button btn-navajoWhite justify-content-end" role="button"><strong>Go</strong></button>                               
                             </div>
                         </div> 
                     </div>
@@ -149,10 +152,10 @@
                         <div class="card menu-card card-algorithm mx-auto">
                             <div class="card-body">
                                 <h4 class="card-title text">Selection Sort</h4>
-                                <p class="text">The selection sort algorithm sorts an array by <b>repeatedly finding the minimum element</b> (considering ascending order) from the unsorted part and putting it at the beginning.</p>
+                                <p class="text">The selection sort algorithm sorts an array by <strong>repeatedly finding the minimum element</strong> (considering ascending order) from the unsorted part and putting it at the beginning.</p>
                             </div>
                             <div class="card-footer">
-                                <button onclick="window.location.href='Sorting/sorting.html?func=selectionsort'" class="btn text menu-button btn-navajoWhite justify-content-end" role="button"><b>Go</b></button>
+                                <button onclick="window.location.href='Sorting/sorting.html?func=selectionsort'" class="btn text menu-button btn-navajoWhite justify-content-end" role="button"><strong>Go</strong></button>
                             </div>
                         </div>
                     </div>
@@ -160,10 +163,10 @@
                         <div class="card menu-card card-algorithm mx-auto">
                             <div class="card-body">
                                 <h4 class="card-title text">Bubble Sort</h4>
-                                <p class="text">Bubble Sort is the <b>simplest</b> sorting algorithm that works by repeatedly swapping the adjacent elements if they are in the wrong order.</p>
+                                <p class="text">Bubble Sort is the <strong>simplest</strong> sorting algorithm that works by repeatedly swapping the adjacent elements if they are in the wrong order.</p>
                             </div>
                             <div class="card-footer">
-                                <button onclick="window.location.href='Sorting/sorting.html?func=bubblesort'" class="btn text menu-button btn-navajoWhite justify-content-end" role="button"><b>Go</b></button>                               
+                                <button onclick="window.location.href='Sorting/sorting.html?func=bubblesort'" class="btn text menu-button btn-navajoWhite justify-content-end" role="button"><strong>Go</strong></button>                               
                             </div>
                         </div>
                     </div>
@@ -171,10 +174,10 @@
                         <div class="card menu-card card-algorithm mx-auto">
                             <div class="card-body">
                                 <h4 class="card-title text">Quick Sort</h4>
-                                <p class="text">QuickSort is a <b>Divide and Conquer algorithm</b>. It picks an element as a pivot and partitions the given array around the picked pivot.</p>
+                                <p class="text">QuickSort is a <strong>Divide and Conquer algorithm</strong>. It picks an element as a pivot and partitions the given array around the picked pivot.</p>
                             </div>
                             <div class="card-footer">
-                                <button onclick="window.location.href='Sorting/sorting.html?func=quicksort'" class="btn text menu-button btn-navajoWhite justify-content-end" role="button"><b>Go</b></button>
+                                <button onclick="window.location.href='Sorting/sorting.html?func=quicksort'" class="btn text menu-button btn-navajoWhite justify-content-end" role="button"><strong>Go</strong></button>
                             </div>
                         </div> 
                     </div>
@@ -197,10 +200,10 @@
                         <div class="card menu-card card-algorithm mx-auto">
                             <div class="card-body">
                                 <h4 class="card-title text">Linear Search</h4>
-                                <p class="text">Linear Search is a <b>sequential</b> search algorithm that starts at one end and goes through each element of a list until the desired element is found.</p>
+                                <p class="text">Linear Search is a <strong>sequential</strong> search algorithm that starts at one end and goes through each element of a list until the desired element is found.</p>
                             </div>
                             <div class="card-footer">
-                                <button onclick="window.location.href='Searching/searching.html?func=linearsearch'" class="btn text menu-button btn-navajoWhite justify-content-end" role="button"><b>Go</b></button>
+                                <button onclick="window.location.href='Searching/searching.html?func=linearsearch'" class="btn text menu-button btn-navajoWhite justify-content-end" role="button"><strong>Go</strong></button>
                             </div>
                         </div>  
                     </div>
@@ -208,10 +211,10 @@
                         <div class="card menu-card card-algorithm mx-auto">
                             <div class="card-body">
                                 <h4 class="card-title text">Binary Search</h4>
-                                <p class="text">Binary Search is a searching algorithm used in a sorted array by <b>repeatedly dividing the search interval in half</b>.</p>
+                                <p class="text">Binary Search is a searching algorithm used in a sorted array by <strong>repeatedly dividing the search interval in half</strong>.</p>
                             </div>
                             <div class="card-footer">
-                                <button onclick="window.location.href='Searching/searching.html?func=binarysearch'" class="btn text menu-button btn-navajoWhite justify-content-end" role="button"><b>Go</b></button>
+                                <button onclick="window.location.href='Searching/searching.html?func=binarysearch'" class="btn text menu-button btn-navajoWhite justify-content-end" role="button"><strong>Go</strong></button>
                             </div>
                         </div>
                     </div>
@@ -235,10 +238,10 @@
                         <div class="card menu-card card-algorithm mx-auto">
                             <div class="card-body">
                                 <h4 class="card-title text">A* Pathfinding</h4>
-                                <p class="text">A* is <b>more efficient</b> than Djikstra's and guarantees the shortest path between two points.</p>
+                                <p class="text">A* is <strong>more efficient</strong> than Djikstra's and guarantees the shortest path between two points.</p>
                             </div>
                             <div class="card-footer">
-                                <button onclick="window.location.href='pathfinding/pathfind.html?func=a*'" class="btn text menu-button btn-navajoWhite justify-content-end" role="button"><b>Go</b></button>
+                                <button onclick="window.location.href='pathfinding/pathfind.html?func=a*'" class="btn text menu-button btn-navajoWhite justify-content-end" role="button"><strong>Go</strong></button>
                             </div>
                         </div>
                     </div>
@@ -246,10 +249,10 @@
                         <div class="card menu-card card-algorithm mx-auto">
                             <div class="card-body">
                                 <h4 class="card-title text">Djikstra's Algorithm</h4>
-                                <p class="text">Djikstra's is <b>unweighted</b> and finds the shortest path between one point and the <b>rest of the map.</b></p>
+                                <p class="text">Djikstra's is <strong>unweighted</strong> and finds the shortest path between one point and the <strong>rest of the map.</strong></p>
                             </div>
                             <div class="card-footer">
-                                <button onclick="window.location.href='pathfinding/pathfind.html?func=djikstra'" class="btn text menu-button btn-navajoWhite justify-content-end" role="button"><b>Go</b></button>
+                                <button onclick="window.location.href='pathfinding/pathfind.html?func=djikstra'" class="btn text menu-button btn-navajoWhite justify-content-end" role="button"><strong>Go</strong></button>
                             </div>
                         </div>
                     </div>
