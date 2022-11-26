@@ -78,7 +78,9 @@ function changeAlgo(func) {
 changeAlgo(selectedFunction)
 
 // gets input and splits it into an array
-function getInput() {    
+function getInput() {
+    let max = window.innerWidth < 768 ? 15 : 25
+    max = window.innerWidth < 300 ? 10 : max
     var inputString = document.getElementById('input').value
     input = inputString.split(", ")
     input.forEach((val, i, arr) => {
@@ -89,7 +91,7 @@ function getInput() {
         value: Number(val),
         id: `#arrBar${i}`
     }})
-    return input
+    return input.length > max ? input.slice(0, max) : input
 }
 
 function getRandomIntInclusive(min, max) {
