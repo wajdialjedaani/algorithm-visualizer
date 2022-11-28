@@ -39,6 +39,54 @@
             </div>
         </div>
 
+        <!-- Mobile menu -->
+        <div class="containerfluid d-md-none">
+            <div class="row menu-bar">
+                <div class="btn" type="button" data-bs-toggle="collapse" data-bs-target="#menuExpand" aria-expanded="false" aria-controls="menuExpand">
+                    Menu
+                </div>
+                <div class="collapse" id="menuExpand">
+                    <div class="row">
+                        <div class="btn collapse-type-btn-menu" type="button" data-bs-toggle="collapse" data-bs-target="#sortingExpand" aria-expanded="false" aria-controls="Sorting Expand">
+                            Sorting
+                        </div>
+                        <div class="collapse" id="sortingExpand">
+                            <div class="row">
+                               <div class="btn-group-vertical" role="group" aria-label="Sorting button group" style="padding: 0;">
+                                    <button type="button" class="btn collapse-algo-btn-menu"><a class="dropdown-item text" onclick="changeAlgo('insertionsort')">Insertion Sort</a></button>
+                                    <button type="button" class="btn collapse-algo-btn-menu"><a class="dropdown-item text" onclick="changeAlgo('selectionsort')">Selection Sort</a></button>
+                                    <button type="button" class="btn collapse-algo-btn-menu"><a class="dropdown-item text" onclick="changeAlgo('bubblesort')">Bubble Sort</a></button>
+                                    <button type="button" class="btn collapse-algo-btn-menu"><a class="dropdown-item text" onclick="changeAlgo('quicksort')">Quick Sort</a></button>
+                                </div> 
+                            </div>
+                        </div>
+                        <div class="btn collapse-type-btn-menu" type="button" data-bs-toggle="collapse" data-bs-target="#searchingExpand" aria-expanded="false" aria-controls="Searching Expand">
+                            Searching
+                        </div>
+                        <div class="collapse" id="searchingExpand">
+                            <div class="row">
+                               <div class="btn-group-vertical" role="group" aria-label="Searching button group" style="padding: 0;">
+                                    <button type="button" class="btn collapse-algo-btn-menu"><a class="dropdown-item text" href="../Searching/searching.html?func=linearsearch">Linear Search</a></button>
+                                    <button type="button" class="btn collapse-algo-btn-menu"><a class="dropdown-item text" href="../Searching/searching.html?func=binarysearch"">Binary Search</a></button>
+                                </div> 
+                            </div>
+                        </div>
+                        <div class="btn collapse-type-btn-menu" type="button" data-bs-toggle="collapse" data-bs-target="#pathfindingExpand" aria-expanded="false" aria-controls="Pathfinding Expand">
+                            Pathfinding
+                        </div>
+                        <div class="collapse" id="pathfindingExpand">
+                            <div class="row">
+                               <div class="btn-group-vertical" role="group" aria-label="Pathfinding button group" style="padding: 0;">
+                                    <button type="button" class="btn collapse-algo-btn-menu"><a class="dropdown-item text" href="../pathfinding/pathfind.html?func=a*">A* Pathfinding</a></button>
+                                    <button type="button" class="btn collapse-algo-btn-menu"><a class="dropdown-item text" href="../pathfinding/pathfind.html?func=djikstra">Djikstra's</a></button>
+                                </div> 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Inputs button -->
         <div class="container-fluid">
             <div class="row align-items-center">
