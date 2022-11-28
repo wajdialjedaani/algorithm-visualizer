@@ -253,4 +253,14 @@ button.btn-menu {
 .card-body-draggable {
     overflow-y: scroll;
 }
+
+.resizer {
+    background-color: rgb(16, 16, 16, 0.5);
+    border-top-left-radius: 50%;
+    position: absolute;
+    height: 15px;
+    width: 20px;
+    bottom: 0%;
+    right: 0%;
+}
 /* ---------------------------------------------------- */

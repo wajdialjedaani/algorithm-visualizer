@@ -7,6 +7,8 @@ let playing = false
 let inProgress = false
 let currentAnim = undefined
 
+document.querySelectorAll(".draggable").forEach((element) => {dragElement(element)})
+document.querySelectorAll(".resizer").forEach((element) => {ResizeHandler(element)})
 
 if(!Cookies.get('pathVisited')) {
     $('#introModal').modal('show')
@@ -63,6 +65,85 @@ changeAlgo(selectedFunction)
 
 let drag = false
 
+function ResizeHandler(element) {
+    var x =0; var y = 0; var w = 0; var h = 0;
+    const parent = element.parentNode
+
+    element.addEventListener('mousedown', ResizeMouseDown)
+    function ResizeMouseDown(event) {
+        event.stopPropagation()
+        event.preventDefault()
+        x = event.clientX
+        y = event.clientY
+
+        w = parent.getBoundingClientRect().width
+        h = parent.getBoundingClientRect().height
+
+        document.addEventListener('mousemove', ResizeMouseMove)
+        document.addEventListener('mouseup', ResizeMouseUp)
+    }
+
+    function ResizeMouseMove(event) {
+        event.stopPropagation()
+        event.preventDefault()
+        const dx = event.clientX - x
+        const dy = event.clientY - y
+
+        x = event.clientX
+        y = event.clientY
+
+        w = parent.getBoundingClientRect().width
+        h = parent.getBoundingClientRect().height
+
+        parent.style.width = `${w + dx}px`
+        parent.style.height = `${h + dy}px`
+    }
+
+    function ResizeMouseUp() {
+        document.removeEventListener('mousemove', ResizeMouseMove)
+        document.removeEventListener('mouseup', ResizeMouseUp)
+    }
+}
+
+function dragElement(elmnt) {
+    var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+      elmnt.onmousedown = dragMouseDown;
+  
+      while(elmnt.offsetWidth + elmnt.offsetLeft > window.innerWidth - 20) {
+          elmnt.style.left = ((elmnt.offsetLeft - 10) / window.innerWidth * 100) + "%"
+      }
+  
+    function dragMouseDown(e) {
+      e = e || window.event;
+      e.preventDefault();
+      // get the mouse cursor position at startup:
+      pos3 = e.clientX;
+      pos4 = e.clientY;
+      elmnt.onmouseup = closeDragElement;
+      // call a function whenever the cursor moves:
+      elmnt.onmousemove = elementDrag;
+    }
+  
+    function elementDrag(e) {
+      e = e || window.event;
+      e.preventDefault();
+      // calculate the new cursor position:
+      pos1 = pos3 - e.clientX;
+      pos2 = pos4 - e.clientY;
+      pos3 = e.clientX;
+      pos4 = e.clientY;
+      // set the element's new position:
+      elmnt.style.top = ((elmnt.offsetTop - pos2) / window.innerHeight * 100) + "%"
+      elmnt.style.left = ((elmnt.offsetLeft - pos1) / window.innerWidth * 100) + "%"
+  }
+  
+    function closeDragElement() {
+      // stop moving when mouse button is released:
+      elmnt.onmouseup = null;
+      elmnt.onmousemove = null;
+    }
+}
+
 function cellDrag(e) {
     drag = true
     if(e.type == "mousemove") {
@@ -118,8 +199,8 @@ function generateTable() {
     table.style.setProperty("--columns", columns);
     table.style.setProperty("--rows", rows);
 
-    width = window.innerWidth / columns
-    height = window.innerHeight / rows
+    let width = window.innerWidth / columns
+    let height = window.innerHeight / rows
 
     for(let y=0; y<rows; y++) {
         for(let x=0; x<columns; x++) {
@@ -144,44 +225,6 @@ window.onresize = () => {
     let vh = window.innerHeight * 0.01
     document.body.style.setProperty('--vh', `${vh}px`)
     generateTable()
-}
-
-//dragElement(document.querySelector(".draggable"));
-document.querySelectorAll(".draggable").forEach((element) => {dragElement(element)})
-
-function dragElement(elmnt) {
-  var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
-    elmnt.onmousedown = dragMouseDown;
-
-  function dragMouseDown(e) {
-    e = e || window.event;
-    e.preventDefault();
-    // get the mouse cursor position at startup:
-    pos3 = e.clientX;
-    pos4 = e.clientY;
-    document.onmouseup = closeDragElement;
-    // call a function whenever the cursor moves:
-    document.onmousemove = elementDrag;
-  }
-
-  function elementDrag(e) {
-    e = e || window.event;
-    e.preventDefault();
-    // calculate the new cursor position:
-    pos1 = pos3 - e.clientX;
-    pos2 = pos4 - e.clientY;
-    pos3 = e.clientX;
-    pos4 = e.clientY;
-    // set the element's new position:
-    elmnt.style.top = ((elmnt.offsetTop - pos2) / window.innerHeight * 100) + "%";
-    elmnt.style.right = ((window.innerWidth - parseFloat(window.getComputedStyle(elmnt, null).getPropertyValue("width")) - elmnt.offsetLeft + pos1) / window.innerWidth * 100) + "%";
-  }
-
-  function closeDragElement() {
-    // stop moving when mouse button is released:
-    document.onmouseup = null;
-    document.onmousemove = null;
-  }
 }
 
 class Vertex {
@@ -224,7 +267,7 @@ async function FindPath(table)
             if(cell.nodeName !== "TD"){
                 return
             }
-            coords = cell.id.split(",")
+            const coords = cell.id.split(",")
             let vertex
             if(cell.className == "wall") {
                 vertex = new Vertex(coords[1], coords[0], false)
@@ -259,8 +302,8 @@ async function FindPath(table)
 }
 
 async function animateResults(actions) {
-    progress = document.querySelector("#Progress-Bar");
-    for(action of actions)
+    const progress = document.querySelector("#Progress-Bar");
+    for(let action of actions)
     {
         DisplayAnnotation(action.annotation, document.querySelector("#annotation>.card-body>p"))
         action.AnimatePseudocode()
@@ -308,13 +351,13 @@ function AStar(graph, start, end) {
 
         let children = []
         //get list of neighbors
-        for (neighbor of graph.adjList.get(current)) {
+        for (let neighbor of graph.adjList.get(current)) {
             children.push(neighbor)
         }
 
         //for each child
         let newChildren = []
-        for (child of children) { //Continue if child has already been searched
+        for (let child of children) { //Continue if child has already been searched
             if(closed.some((element) => {return element === child})) {
                 continue
             }
@@ -386,13 +429,13 @@ function Djikstra(graph, start, end) {
 
         let children = []
         //get list of neighbors
-        for (neighbor of graph.adjList.get(current)) {
+        for (let neighbor of graph.adjList.get(current)) {
             children.push(neighbor)
         }
 
         //for each child
         let newChildren = []
-        for (child of children) { //Continue if child has already been searched
+        for (let child of children) { //Continue if child has already been searched
 
             let g = current.g+1
 
@@ -488,9 +531,8 @@ class Action {
     }
 
     AnimatePseudocode() {
-        console.log(this.line)
         anime({
-            targets: action.line,
+            targets: this.line,
             backgroundColor: [{value: "#000000", duration: this.duration-1},
                 {value: anime.get(document.querySelector(`${this.line}`), "backgroundColor"), duration: 1}],
             color: [{value: "#FFFFFF", duration: this.duration-1},

@@ -60,12 +60,12 @@ body {
 
 #pseudocode {
     top: 25%;
-    right: 1%;
+    left: 100%;
 }
 
 #annotation {
     top: 50%;
-    right: 1%;
+    left: 100%;
 }
 
 #AnimSpeed {

@@ -56,10 +56,10 @@
 
 #pseudocode {
     top: 70%;
-    right: 50%;
+    left: 25%;
 }
 
 #annotation {
     top: 70%;
-    right: 25%;
+    left: 50%;
 }

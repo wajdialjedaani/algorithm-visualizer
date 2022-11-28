@@ -28,12 +28,12 @@
 
 #pseudocode {
     top: 50%;
-    right: 50%;
+    left: 25%;
 }
 
 #annotation {
     top: 50%;
-    right: 25%;
+    left: 50%;
 }
 
 .arrBox {
