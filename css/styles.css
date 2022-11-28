@@ -40,6 +40,34 @@ img {
     height: 60px;
 }
 
+.menu-bar {
+    background-color: var(--charcoal);
+}
+
+.menu-bar > .btn {
+    --bs-btn-color: white;
+    --bs-btn-hover-color: var(--bs-btn-color);
+    --bs-btn-active-color: var(--bs-btn-color);
+}
+
+.collapse-type-btn-menu {
+    --bs-btn-color: white;
+    --bs-btn-hover-color: var(--bs-btn-color);
+    --bs-btn-active-color: var(--bs-btn-color);
+    --bs-btn-hover-bg: var(--orangeRed);
+}
+
+.collapse-algo-btn-menu {
+    --bs-btn-bg: var(--darkSeaGreen);
+    --bs-btn-hover-bg: var(--charcoal);
+    --bs-btn-active-bg: var(--darkSeaGreen);
+    --bs-btn-color: white;
+    --bs-btn-hover-color: white;
+    --bs-btn-active-color: black;
+    --bs-btn-active-border-color: var(--darkSeaGreen);
+    --bs-btn-border-radius: 0;
+}
+
 /* ---------------------------------------------------- */
 /* CARDS */
 /* ---------------------------------------------------- */
@@ -154,7 +182,7 @@ img {
     margin: 0;
 }
 
-button.btn-menu {
+.btn-menu {
     --bs-btn-bg: var(--charcoal);
     --bs-btn-hover-bg: var(--darkSeaGreen);
     --bs-btn-active-bg: var(--darkSeaGreen);
