@@ -359,6 +359,8 @@ function getRangeToEliminate(range, start, end) {
 
 // gets input and splits it into an array
 function getInput() {    
+    let max = window.innerWidth < 768 ? 15 : 25
+    max = window.innerWidth < 300 ? 10 : max
     var inputString = document.getElementById('input').value
     input = inputString.split(", ")
 
@@ -369,7 +371,7 @@ function getInput() {
     input.sort((a,b) => a.value - b.value)
     let unique = [...new Map(input.map((m) => [m.id, m])).values()]
     console.log(unique);
-    return unique
+    return unique.length > max ? unique.slice(0, max) : unique
 }
 
 function getRandomIntInclusive(min, max) {
