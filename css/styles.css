@@ -55,6 +55,7 @@ img {
     --bs-btn-hover-color: var(--bs-btn-color);
     --bs-btn-active-color: var(--bs-btn-color);
     --bs-btn-hover-bg: var(--orangeRed);
+    --bs-btn-border-radius: 0;
 }
 
 .collapse-algo-btn-menu {
