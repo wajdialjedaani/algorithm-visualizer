@@ -14,8 +14,12 @@ let inProgress = false
 let currentAnim = undefined
 const alertContainer = document.getElementById('alertContainer')
 
+//Initialize the card listeners
 document.querySelectorAll(".draggable").forEach((element) => {dragElement(element)})
 document.querySelectorAll(".resizer").forEach((element) => {ResizeHandler(element)})
+//Initialize the dropdown menus
+document.getElementById("a*").onclick = changeAlgo.bind(document.getElementById("a*"))
+document.getElementById("djikstra").onclick = changeAlgo.bind(document.getElementById("djikstra"))
 
 CheckFirstVisit('pathVisited')
 
@@ -25,6 +29,9 @@ document.querySelector("#AnimSpeed").addEventListener("click", function() {
 })
 
 function changeAlgo(func) {
+    if(typeof func !== "string" && typeof this !== "undefined") {
+        func = this.id
+    }
     let text
     let pseudo
     if(func == "a*") {

@@ -15,6 +15,9 @@ let playing = false
 
 window.onload = generateBox
 window.onresize = generateBox
+//Initialize the dropdown menu buttons
+document.getElementById("linearsearch").onclick = changeAlgo.bind(document.getElementById("linearsearch"))
+document.getElementById("binarysearch").onclick = changeAlgo.bind(document.getElementById("binarysearch"))
 
 CheckFirstVisit('searchVisited')
 
@@ -24,6 +27,9 @@ document.querySelector("#AnimSpeed").addEventListener("click", function() {
 })
 
 function changeAlgo(func) {
+    if(typeof func !== "string" && typeof this !== "undefined") {
+        func = this.id
+    }
     let pseudocode
     let text
     if(func == "binarysearch") {
