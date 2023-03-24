@@ -1,35 +1,57 @@
-function dragElement(elmnt) {
-    var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
-      elmnt.onmousedown = dragMouseDown;
+function dragElement(element) {
+    var deltaX = 0, deltaY = 0, startingX = 0, startingY = 0;
+      element.onmousedown = dragMouseDown;
   
-      while(elmnt.offsetWidth + elmnt.offsetLeft > window.innerWidth - 20) {
-          elmnt.style.left = ((elmnt.offsetLeft - 10) / window.innerWidth * 100) + "%"
+      while(element.offsetWidth + element.offsetLeft > window.innerWidth - 20) {
+          element.style.left = ((element.offsetLeft - 10) / window.innerWidth * 100) + "%"
       }
   
     function dragMouseDown(e) {
       e = e || window.event;
       e.preventDefault();
       // get the mouse cursor position at startup:
-      pos3 = e.clientX;
-      pos4 = e.clientY;
-      //elmnt.onmouseup = closeDragElement;
+      startingX = e.clientX;
+      startingY = e.clientY;
       document.addEventListener('mouseup', closeDragElement)
-      document.addEventListener('mousemove', elementDrag)
       // call a function whenever the cursor moves:
-      //elmnt.onmousemove = elementDrag;
+      document.addEventListener('mousemove', elementDrag)
     }
   
     function elementDrag(e) {
       e = e || window.event;
       e.preventDefault();
       // calculate the new cursor position:
-      pos1 = pos3 - e.clientX;
-      pos2 = pos4 - e.clientY;
-      pos3 = e.clientX;
-      pos4 = e.clientY;
+      deltaX = startingX - e.clientX;
+      deltaY = startingY - e.clientY;
+      startingX = e.clientX;
+      startingY = e.clientY;
       // set the element's new position:
-      elmnt.style.top = ((elmnt.offsetTop - pos2) / window.innerHeight * 100) + "%"
-      elmnt.style.left = ((elmnt.offsetLeft - pos1) / window.innerWidth * 100) + "%"
+      //If deltaX is negative (moving right) & the card is about to move offscreen, cap it at the edge
+      if(deltaX < 0 && element.offsetWidth + element.offsetLeft - deltaX > window.innerWidth)
+      { 
+          element.style.left = ((window.innerWidth - element.offsetWidth) / window.innerWidth * 100) + "%"
+      }
+      else if(deltaX > 0 && element.offsetLeft - deltaX < 0)
+      {
+        element.style.left = 0 + "%"
+      }
+      else //If deltaX is positive (moving left):
+      {
+        element.style.left = ((element.offsetLeft - deltaX) / window.innerWidth * 100) + "%"
+      }
+      //If deltaY is negative (moving down):
+      if(deltaY < 0 && element.offsetHeight + element.offsetTop - deltaY > window.innerHeight)
+      {
+        element.style.top = ((window.innerHeight - element.offsetHeight) / window.innerHeight * 100) + "%"
+      }
+      else if(deltaY > 0 && element.offsetTop - deltaY < 0)
+      {
+        element.style.top = 0 + "%"
+      }
+      else //If deltaY is positive (moving up):
+      {
+        element.style.top = ((element.offsetTop - deltaY) / window.innerHeight * 100) + "%"
+      }
   }
   
     function closeDragElement() {
