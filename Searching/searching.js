@@ -1,7 +1,7 @@
 import { dragElement, ResizeHandler } from "../js/draggableCard.js"
 import { Action } from "../js/Action.js"
 import { Alert } from "../js/Alert.js"
-
+import { CheckFirstVisit } from "../js/Cookies.js"
 let selectedFunction = (new URLSearchParams(window.location.search)).get("func")
 let input = []
 let actions = []
@@ -14,11 +14,7 @@ let playing = false
 window.onload = generateBox
 window.onresize = generateBox
 
-// instruction modal cookies
-if(!Cookies.get('searchVisited')) {
-    $('#introModal').modal('show')
-    Cookies.set('searchVisited', '1', {expires: 999})
-}
+CheckFirstVisit('searchVisited')
 
 document.querySelector("#AnimSpeed").addEventListener("click", function() {
     speed = speeds[(speeds.indexOf(speed)+1)%speeds.length]

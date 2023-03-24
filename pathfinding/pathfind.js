@@ -1,6 +1,7 @@
 import { dragElement, ResizeHandler } from "../js/draggableCard.js";
 import { Action } from "../js/Action.js";
 import { Alert } from "../js/Alert.js"
+import { CheckFirstVisit } from "../js/Cookies.js";
 
 const speeds = [1, 2, 4]
 let selectedFunction = (new URLSearchParams(window.location.search)).get("func") || AStar
@@ -15,10 +16,7 @@ const alertContainer = document.getElementById('alertContainer')
 document.querySelectorAll(".draggable").forEach((element) => {dragElement(element)})
 document.querySelectorAll(".resizer").forEach((element) => {ResizeHandler(element)})
 
-if(!Cookies.get('pathVisited')) {
-    $('#introModal').modal('show')
-    Cookies.set('pathVisited', '1', {expires: 999})
-}
+CheckFirstVisit('pathVisited')
 
 document.querySelector("#AnimSpeed").addEventListener("click", function() {
     speed = speeds[(speeds.indexOf(speed)+1)%speeds.length]

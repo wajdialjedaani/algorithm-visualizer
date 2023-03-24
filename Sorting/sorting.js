@@ -1,6 +1,7 @@
 import { dragElement, ResizeHandler } from "../js/draggableCard.js"
 import { Action } from "../js/Action.js"
 import { Alert } from "../js/Alert.js"
+import { CheckFirstVisit } from "../js/Cookies.js"
 
 let input = []
 let actions = []
@@ -14,10 +15,7 @@ const alertContainer = document.getElementById('alertContainer')
 window.onload = generateBars
 window.onresize = generateBars
 
-if(!Cookies.get('sortVisited')) {
-    $('#introModal').modal('show')
-    Cookies.set('sortVisited', '1', {expires: 999})
-}
+CheckFirstVisit('sortVisited')
 
 // TODO: implement pseudocode change; refer pathfind.js
 function changeAlgo(func) {
