@@ -1,3 +1,5 @@
+import { default as anime } from "./anime.es.js"
+
 class Action {
     constructor(targets, line) {
         this.targets = targets
