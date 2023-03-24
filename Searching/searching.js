@@ -106,6 +106,7 @@ function linearSearch(arr, x) {
 // Animation ----------------------------------------------------------------
 async function compareAnimation(actions) {
     let progress = document.querySelector("#Progress-Bar");
+    let tl
     document.querySelector("#PlayPause").onclick = function() {
         if(typeof tl === "undefined" || !inProgress) {
             console.log("No animation playing")
@@ -128,7 +129,7 @@ async function compareAnimation(actions) {
     playing = true
 
     for(let action of actions) {
-        let tl = anime.timeline()
+        tl = anime.timeline()
         DisplayAnnotation(action.annotation, document.querySelector("#annotation>.card-body>p"))
         action.AnimatePseudocode()
         action.AddToTimeline(tl)
@@ -418,11 +419,11 @@ function printArr(arr) {
 }
 
 function start() {
-    generateBox()
     if(inProgress) {
         console.log("Animation in progress, can't play")
         return
     }
+    generateBox()
     inProgress = true
     actions = []
     getFindValue()
@@ -437,7 +438,6 @@ function start() {
         inProgress = false
     })
 }
-
 
 document.querySelectorAll(".draggable").forEach((element) => {dragElement(element)})
 document.querySelectorAll(".resizer").forEach((element) => {ResizeHandler(element)})

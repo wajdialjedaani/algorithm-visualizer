@@ -273,7 +273,8 @@ function Partition(arr, low, high, actions) {
 
 // highlights and swaps bars
 async function swapAnimation(actions) {
-    progress = document.querySelector("#Progress-Bar")
+    let progress = document.querySelector("#Progress-Bar")
+    let tl
     document.querySelector("#PlayPause").onclick = function() {
         if(typeof tl === "undefined" || !inProgress) {
             console.log("No animation playing")
@@ -294,7 +295,7 @@ async function swapAnimation(actions) {
     }
 
     playing = true
-    for (action of actions) {
+    for (let action of actions) {
         tl = anime.timeline()
         DisplayAnnotation(action.annotation, document.querySelector("#annotation>.card-body>p"))
         action.AnimatePseudocode()
