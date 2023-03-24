@@ -21,36 +21,36 @@ function dragElement(element) {
       e = e || window.event;
       e.preventDefault();
       // calculate the new cursor position:
-      deltaX = startingX - e.clientX;
-      deltaY = startingY - e.clientY;
+      deltaX = e.clientX - startingX;
+      deltaY = e.clientY - startingY;
       startingX = e.clientX;
       startingY = e.clientY;
       // set the element's new position:
       //If deltaX is negative (moving right) & the card is about to move offscreen, cap it at the edge
-      if(deltaX < 0 && element.offsetWidth + element.offsetLeft - deltaX > window.innerWidth)
+      if(deltaX > 0 && element.offsetWidth + element.offsetLeft + deltaX > window.innerWidth)
       { 
           element.style.left = ((window.innerWidth - element.offsetWidth) / window.innerWidth * 100) + "%"
       }
-      else if(deltaX > 0 && element.offsetLeft - deltaX < 0)
+      else if(deltaX < 0 && element.offsetLeft + deltaX < 0)
       {
         element.style.left = 0 + "%"
       }
       else //If deltaX is positive (moving left):
       {
-        element.style.left = ((element.offsetLeft - deltaX) / window.innerWidth * 100) + "%"
+        element.style.left = ((element.offsetLeft + deltaX) / window.innerWidth * 100) + "%"
       }
       //If deltaY is negative (moving down):
-      if(deltaY < 0 && element.offsetHeight + element.offsetTop - deltaY > window.innerHeight)
+      if(deltaY > 0 && element.offsetHeight + element.offsetTop + deltaY > window.innerHeight)
       {
         element.style.top = ((window.innerHeight - element.offsetHeight) / window.innerHeight * 100) + "%"
       }
-      else if(deltaY > 0 && element.offsetTop - deltaY < 0)
+      else if(deltaY < 0 && element.offsetTop + deltaY < 0)
       {
         element.style.top = 0 + "%"
       }
       else //If deltaY is positive (moving up):
       {
-        element.style.top = ((element.offsetTop - deltaY) / window.innerHeight * 100) + "%"
+        element.style.top = ((element.offsetTop + deltaY) / window.innerHeight * 100) + "%"
       }
   }
   
@@ -76,9 +76,6 @@ function ResizeHandler(element) {
     x = event.clientX
     y = event.clientY
 
-    //w = parent.getBoundingClientRect().width
-    //h = parent.getBoundingClientRect().height
-
     document.addEventListener('mousemove', ResizeMouseMove)
     document.addEventListener('mouseup', ResizeMouseUp)
   }
@@ -92,8 +89,6 @@ function ResizeHandler(element) {
     x = event.clientX
     y = event.clientY
 
-    //w = parent.getBoundingClientRect().width
-    //h = parent.getBoundingClientRect().height
     w = parent.offsetWidth
     h = parent.offsetHeight
 
