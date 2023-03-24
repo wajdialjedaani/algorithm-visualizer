@@ -15,11 +15,19 @@ const alertContainer = document.getElementById('alertContainer')
 
 window.onload = generateBars
 window.onresize = generateBars
+//Initialize dropdown menu buttons
+document.getElementById("insertionsort").onclick = changeAlgo.bind(document.getElementById("insertionsort"))
+document.getElementById("selectionsort").onclick = changeAlgo.bind(document.getElementById("selectionsort"))
+document.getElementById("bubblesort").onclick = changeAlgo.bind(document.getElementById("bubblesort"))
+document.getElementById("quicksort").onclick = changeAlgo.bind(document.getElementById("quicksort"))
 
 CheckFirstVisit('sortVisited')
 
 // TODO: implement pseudocode change; refer pathfind.js
 function changeAlgo(func) {
+    if(typeof func !== "string" && typeof this !== "undefined") {
+        func = this.id
+    }
     let text
     let pseudo
     if(func == "insertionsort") {
