@@ -1,4 +1,8 @@
 import { dragElement, ResizeHandler } from "../js/draggableCard.js";
+import { Action } from "../js/Action.js";
+import { Alert } from "../js/Alert.js"
+import { CheckFirstVisit } from "../js/Cookies.js";
+import anime from "../js/anime.es.js"
 
 const speeds = [1, 2, 4]
 let selectedFunction = (new URLSearchParams(window.location.search)).get("func") || AStar
@@ -8,14 +12,12 @@ let speed = 1
 let playing = false
 let inProgress = false
 let currentAnim = undefined
+const alertContainer = document.getElementById('alertContainer')
 
 document.querySelectorAll(".draggable").forEach((element) => {dragElement(element)})
 document.querySelectorAll(".resizer").forEach((element) => {ResizeHandler(element)})
 
-if(!Cookies.get('pathVisited')) {
-    $('#introModal').modal('show')
-    Cookies.set('pathVisited', '1', {expires: 999})
-}
+CheckFirstVisit('pathVisited')
 
 document.querySelector("#AnimSpeed").addEventListener("click", function() {
     speed = speeds[(speeds.indexOf(speed)+1)%speeds.length]
@@ -406,7 +408,7 @@ document.querySelector("#generate").addEventListener("click", () => {
     })
     .catch(
         function(error) {
-            Alert(error.message, 'danger')
+            Alert(alertContainer, error.message, 'danger')
     })
     .finally(
         () => {
@@ -440,27 +442,6 @@ document.querySelector("#PlayPause").onclick = function() {
         playing = true
         currentAnim.play()
         this.firstChild.setAttribute("src", "../Assets/pause-fill.svg")
-    }
-}
-
-class Action {
-    constructor(targets, line) {
-        this.targets = targets
-        this.line = `#pseudo${line}`
-    }
-
-    get duration() {
-        return 1000
-    }
-
-    AnimatePseudocode() {
-        anime({
-            targets: this.line,
-            backgroundColor: [{value: "#000000", duration: this.duration-1},
-                {value: anime.get(document.querySelector(`${this.line}`), "backgroundColor"), duration: 1}],
-            color: [{value: "#FFFFFF", duration: this.duration-1},
-                {value: anime.get(document.querySelector(`${this.line}`), "color"), duration: 1}]
-        })
     }
 }
 
@@ -550,19 +531,3 @@ class NewChildren extends Action {
         return currentAnim.finished
     }
 }
-
-const alertContainer = document.getElementById('alertContainer')
-
-function Alert(msg, type) {
-    console.log("erroring")
-    const wrapper = document.createElement('div')
-    wrapper.innerHTML = [
-        `<div class="alert alert-${type} alert-dismissible position-absolute start-50 translate-middle-x" style="z-index: 999;" role="alert">`,
-        `   <div>${msg}</div>`,
-        '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
-        '</div>'
-      ].join('')
-      console.log(wrapper.innerHTML)
-      alertContainer.append(wrapper)
-}
-

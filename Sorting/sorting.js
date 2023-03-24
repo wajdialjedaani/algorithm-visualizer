@@ -1,4 +1,8 @@
 import { dragElement, ResizeHandler } from "../js/draggableCard.js"
+import { Action } from "../js/Action.js"
+import { Alert } from "../js/Alert.js"
+import { CheckFirstVisit } from "../js/Cookies.js"
+import anime from "../js/anime.es.js"
 
 let input = []
 let actions = []
@@ -7,14 +11,12 @@ const speeds = [1, 2, 4]
 let speed = 1
 let inProgress = false
 let playing = false
+const alertContainer = document.getElementById('alertContainer')
 
 window.onload = generateBars
 window.onresize = generateBars
 
-if(!Cookies.get('sortVisited')) {
-    $('#introModal').modal('show')
-    Cookies.set('sortVisited', '1', {expires: 999})
-}
+CheckFirstVisit('sortVisited')
 
 // TODO: implement pseudocode change; refer pathfind.js
 function changeAlgo(func) {
@@ -77,6 +79,7 @@ function changeAlgo(func) {
     DisplayAnnotation(text, document.querySelector("#annotation>.card-body>p"))
     DisplayAnnotation(pseudo, document.querySelector("#pseudocode>.card-body>p"))
 }
+
 changeAlgo(selectedFunction)
 
 // gets input and splits it into an array
@@ -272,7 +275,8 @@ function Partition(arr, low, high, actions) {
 
 // highlights and swaps bars
 async function swapAnimation(actions) {
-    progress = document.querySelector("#Progress-Bar")
+    let progress = document.querySelector("#Progress-Bar")
+    let tl
     document.querySelector("#PlayPause").onclick = function() {
         if(typeof tl === "undefined" || !inProgress) {
             console.log("No animation playing")
@@ -293,7 +297,7 @@ async function swapAnimation(actions) {
     }
 
     playing = true
-    for (action of actions) {
+    for (let action of actions) {
         tl = anime.timeline()
         DisplayAnnotation(action.annotation, document.querySelector("#annotation>.card-body>p"))
         action.AnimatePseudocode()
@@ -335,28 +339,6 @@ function start() {
     .finally( function() {
         inProgress = false
     })
-}
-
-class Action {
-    constructor(targets, line) {
-        this.targets = targets
-        this.line = `#pseudo${line}`
-    }
-
-    get duration() {
-        return 1000
-    }
-
-    AnimatePseudocode() {
-        console.log(this.line)
-        anime({
-            targets: action.line,
-            backgroundColor: [{value: "#000000", duration: this.duration-1},
-                {value: anime.get(document.querySelector(`${this.line}`), "backgroundColor"), duration: 1}],
-            color: [{value: "#FFFFFF", duration: this.duration-1},
-                {value: anime.get(document.querySelector(`${this.line}`), "color"), duration: 1}]
-        })
-    }
 }
 
 class Swap extends Action {
@@ -553,7 +535,7 @@ document.querySelector('#getNewInput').addEventListener('click', function() {
     generateBars()
     }
     catch(error) {
-        Alert(error.message, 'danger')
+        Alert(alertContainer, error.message, 'danger')
     }
 })
 document.querySelector('#input').addEventListener('keypress', function(e) {
@@ -577,18 +559,3 @@ document.querySelector("#reset").addEventListener("click", function() {
     document.querySelector("#start").style.display = "inline"
     inProgress = false;
 })
-
-
-const alertContainer = document.getElementById('alertContainer')
-function Alert(msg, type) {
-    console.log("erroring")
-    const wrapper = document.createElement('div')
-    wrapper.innerHTML = [
-        `<div class="alert alert-${type} alert-dismissible position-absolute start-50 translate-middle-x" style="z-index: 999;" role="alert">`,
-        `   <div>${msg}</div>`,
-        '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
-        '</div>'
-      ].join('')
-      console.log(wrapper.innerHTML)
-      alertContainer.append(wrapper)
-}
