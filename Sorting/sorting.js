@@ -2,6 +2,7 @@ import { dragElement, ResizeHandler } from "../js/draggableCard.js"
 import { Action } from "../js/Action.js"
 import { Alert } from "../js/Alert.js"
 import { CheckFirstVisit } from "../js/Cookies.js"
+import anime from "../js/anime.es.js"
 
 let input = []
 let actions = []
@@ -78,6 +79,7 @@ function changeAlgo(func) {
     DisplayAnnotation(text, document.querySelector("#annotation>.card-body>p"))
     DisplayAnnotation(pseudo, document.querySelector("#pseudocode>.card-body>p"))
 }
+
 changeAlgo(selectedFunction)
 
 // gets input and splits it into an array

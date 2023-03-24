@@ -2,6 +2,7 @@ import { dragElement, ResizeHandler } from "../js/draggableCard.js";
 import { Action } from "../js/Action.js";
 import { Alert } from "../js/Alert.js"
 import { CheckFirstVisit } from "../js/Cookies.js";
+import anime from "../js/anime.es.js"
 
 const speeds = [1, 2, 4]
 let selectedFunction = (new URLSearchParams(window.location.search)).get("func") || AStar
