@@ -1,4 +1,5 @@
 import { dragElement, ResizeHandler } from "../js/draggableCard.js"
+import { Action } from "../js/Action.js"
 
 let input = []
 let actions = []
@@ -335,28 +336,6 @@ function start() {
     .finally( function() {
         inProgress = false
     })
-}
-
-class Action {
-    constructor(targets, line) {
-        this.targets = targets
-        this.line = `#pseudo${line}`
-    }
-
-    get duration() {
-        return 1000
-    }
-
-    AnimatePseudocode() {
-        console.log(this.line)
-        anime({
-            targets: action.line,
-            backgroundColor: [{value: "#000000", duration: this.duration-1},
-                {value: anime.get(document.querySelector(`${this.line}`), "backgroundColor"), duration: 1}],
-            color: [{value: "#FFFFFF", duration: this.duration-1},
-                {value: anime.get(document.querySelector(`${this.line}`), "color"), duration: 1}]
-        })
-    }
 }
 
 class Swap extends Action {

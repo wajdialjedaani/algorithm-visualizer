@@ -1,4 +1,5 @@
 import { dragElement, ResizeHandler } from "../js/draggableCard.js"
+import { Action } from "../js/Action.js"
 
 let selectedFunction = (new URLSearchParams(window.location.search)).get("func")
 let input = []
@@ -33,12 +34,12 @@ function changeAlgo(func) {
         pseudocode = `binarySearch(arr, x, low, high) <br>
         &emsp;repeat till low = high <br>
         &emsp;&emsp;mid = (low + high)/2 <br>
-        <span class="pseudo1">&emsp;&emsp;if (x == arr[mid])</span><br>
-        <span class="pseudo2">&emsp;&emsp;&emsp;return mid</span><br>
-        <span class="pseudo1">&emsp;&emsp;else if (x > arr[mid])</span><br>
-        <span class="pseudo4">&emsp;&emsp;&emsp;low = mid + 1</span><br>
-        <span class="pseudo1">&emsp;&emsp;else</span><br>
-        <span class="pseudo5">&emsp;&emsp;&emsp;high = mid - 1</span><br>`
+        <span id="pseudo1">&emsp;&emsp;if (x == arr[mid])</span><br>
+        <span id="pseudo2">&emsp;&emsp;&emsp;return mid</span><br>
+        <span id="pseudo1">&emsp;&emsp;else if (x > arr[mid])</span><br>
+        <span id="pseudo4">&emsp;&emsp;&emsp;low = mid + 1</span><br>
+        <span id="pseudo1">&emsp;&emsp;else</span><br>
+        <span id="pseudo5">&emsp;&emsp;&emsp;high = mid - 1</span><br>`
         selectedFunction = binarySearch
         document.querySelector("#Header").textContent = "Binary Search"
     }
@@ -46,10 +47,10 @@ function changeAlgo(func) {
         text = `Linear Search <b>sequentially</b> checks each element of the list until a <b>match is found</b> or until the <b>entire list has been searched</b>.`
         pseudocode = `linearSearch(arr, x) <br>
         &emsp;loop till end of array <br>
-        <span class="pseudo1">&emsp;&emsp;if (x[i] == current value)</span><br>
-        <span class="pseudo2">&emsp;&emsp;&emsp;return i</span><br>
+        <span id="pseudo1">&emsp;&emsp;if (x[i] == current value)</span><br>
+        <span id="pseudo2">&emsp;&emsp;&emsp;return i</span><br>
         &emsp;&emsp;else<br>
-        <span class="pseudo3">&emsp;&emsp;&emsp;eliminate</span><br>`
+        <span id="pseudo3">&emsp;&emsp;&emsp;eliminate</span><br>`
         selectedFunction = linearSearch
         document.querySelector("#Header").textContent = "Linear Search"
     }
@@ -104,7 +105,7 @@ function linearSearch(arr, x) {
 
 // Animation ----------------------------------------------------------------
 async function compareAnimation(actions) {
-    progress = document.querySelector("#Progress-Bar");
+    let progress = document.querySelector("#Progress-Bar");
     document.querySelector("#PlayPause").onclick = function() {
         if(typeof tl === "undefined" || !inProgress) {
             console.log("No animation playing")
@@ -126,8 +127,8 @@ async function compareAnimation(actions) {
 
     playing = true
 
-    for(action of actions) {
-        tl = anime.timeline()
+    for(let action of actions) {
+        let tl = anime.timeline()
         DisplayAnnotation(action.annotation, document.querySelector("#annotation>.card-body>p"))
         action.AnimatePseudocode()
         action.AddToTimeline(tl)
@@ -140,30 +141,6 @@ async function compareAnimation(actions) {
 }
 
 // Action ----------------------------------------------------------------
-class Action {
-    constructor(targets, line) {
-        this.targets = targets
-        this.line = `.pseudo${line}`
-    }
-
-    get duration() {
-        return 1000
-    }
-
-    AnimatePseudocode() {
-        anime({
-            targets: action.line,
-            backgroundColor: [
-                {value: "#000000", duration: this.duration - 1,},
-                {value: anime.get(document.querySelector(`${this.line}`), "backgroundColor"), duration: 1}
-            ],
-            color: [
-                {value: "#FFFFFF", duration: this.duration - 1}, 
-                {value: anime.get(document.querySelector(`${this.line}`), "color"), duration: 1}
-            ]
-        })
-    }
-}
 
 class Comparison extends Action {
     constructor(targets, line = 1) {
