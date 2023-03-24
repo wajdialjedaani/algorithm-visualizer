@@ -1,5 +1,6 @@
 import { dragElement, ResizeHandler } from "../js/draggableCard.js"
 import { Action } from "../js/Action.js"
+import { Alert } from "../js/Alert.js"
 
 let selectedFunction = (new URLSearchParams(window.location.search)).get("func")
 let input = []

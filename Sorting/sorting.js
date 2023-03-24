@@ -1,5 +1,6 @@
 import { dragElement, ResizeHandler } from "../js/draggableCard.js"
 import { Action } from "../js/Action.js"
+import { Alert } from "../js/Alert.js"
 
 let input = []
 let actions = []
@@ -8,6 +9,7 @@ const speeds = [1, 2, 4]
 let speed = 1
 let inProgress = false
 let playing = false
+const alertContainer = document.getElementById('alertContainer')
 
 window.onload = generateBars
 window.onresize = generateBars
@@ -533,7 +535,7 @@ document.querySelector('#getNewInput').addEventListener('click', function() {
     generateBars()
     }
     catch(error) {
-        Alert(error.message, 'danger')
+        Alert(alertContainer, error.message, 'danger')
     }
 })
 document.querySelector('#input').addEventListener('keypress', function(e) {
@@ -557,18 +559,3 @@ document.querySelector("#reset").addEventListener("click", function() {
     document.querySelector("#start").style.display = "inline"
     inProgress = false;
 })
-
-
-const alertContainer = document.getElementById('alertContainer')
-function Alert(msg, type) {
-    console.log("erroring")
-    const wrapper = document.createElement('div')
-    wrapper.innerHTML = [
-        `<div class="alert alert-${type} alert-dismissible position-absolute start-50 translate-middle-x" style="z-index: 999;" role="alert">`,
-        `   <div>${msg}</div>`,
-        '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
-        '</div>'
-      ].join('')
-      console.log(wrapper.innerHTML)
-      alertContainer.append(wrapper)
-}

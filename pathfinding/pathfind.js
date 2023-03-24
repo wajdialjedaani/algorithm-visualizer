@@ -1,5 +1,6 @@
 import { dragElement, ResizeHandler } from "../js/draggableCard.js";
 import { Action } from "../js/Action.js";
+import { Alert } from "../js/Alert.js"
 
 const speeds = [1, 2, 4]
 let selectedFunction = (new URLSearchParams(window.location.search)).get("func") || AStar
@@ -9,6 +10,7 @@ let speed = 1
 let playing = false
 let inProgress = false
 let currentAnim = undefined
+const alertContainer = document.getElementById('alertContainer')
 
 document.querySelectorAll(".draggable").forEach((element) => {dragElement(element)})
 document.querySelectorAll(".resizer").forEach((element) => {ResizeHandler(element)})
@@ -407,7 +409,7 @@ document.querySelector("#generate").addEventListener("click", () => {
     })
     .catch(
         function(error) {
-            Alert(error.message, 'danger')
+            Alert(alertContainer, error.message, 'danger')
     })
     .finally(
         () => {
@@ -530,19 +532,3 @@ class NewChildren extends Action {
         return currentAnim.finished
     }
 }
-
-const alertContainer = document.getElementById('alertContainer')
-
-function Alert(msg, type) {
-    console.log("erroring")
-    const wrapper = document.createElement('div')
-    wrapper.innerHTML = [
-        `<div class="alert alert-${type} alert-dismissible position-absolute start-50 translate-middle-x" style="z-index: 999;" role="alert">`,
-        `   <div>${msg}</div>`,
-        '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
-        '</div>'
-      ].join('')
-      console.log(wrapper.innerHTML)
-      alertContainer.append(wrapper)
-}
-
