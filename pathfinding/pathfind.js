@@ -3,76 +3,32 @@ import { Action } from "../js/Action.js";
 import { Alert } from "../js/Alert.js"
 import { CheckFirstVisit } from "../js/Cookies.js";
 import anime from "../js/anime.es.js"
+import { PageAlgorithm, DisplayAnnotation } from "../js/SetAlgorithm.js";
+import { AnimationController } from "../js/AnimationController.js";
 
-const speeds = [1, 2, 4]
-let selectedFunction = (new URLSearchParams(window.location.search)).get("func") || AStar
 let columns = Math.floor((document.body.clientWidth / 30));
 let rows = Math.floor((document.body.clientHeight / 30));
-let speed = 1
 let playing = false
 let inProgress = false
-let currentAnim = undefined
 const alertContainer = document.getElementById('alertContainer')
+
+const animationController = new AnimationController()
 
 //Initialize the card listeners
 document.querySelectorAll(".draggable").forEach((element) => {dragElement(element)})
 document.querySelectorAll(".resizer").forEach((element) => {ResizeHandler(element)})
 //Initialize the dropdown menus
-document.getElementById("a*").onclick = changeAlgo.bind(document.getElementById("a*"))
-document.getElementById("djikstra").onclick = changeAlgo.bind(document.getElementById("djikstra"))
+document.getElementById("astar").onclick = PageAlgorithm.changeAlgo.bind(document.getElementById("astar"))
+document.getElementById("djikstra").onclick = PageAlgorithm.changeAlgo.bind(document.getElementById("djikstra"))
 
 CheckFirstVisit('pathVisited')
 
 document.querySelector("#AnimSpeed").addEventListener("click", function() {
-    speed = speeds[(speeds.indexOf(speed)+1)%speeds.length]
-    this.innerHTML = `${speed}x`
+    AnimationController.animationSpeed = AnimationController.speeds[(AnimationController.speeds.indexOf(AnimationController.animationSpeed)+1)%AnimationController.speeds.length]
+    this.innerHTML = `${AnimationController.animationSpeed}x`
 })
 
-function changeAlgo(func) {
-    if(typeof func !== "string" && typeof this !== "undefined") {
-        func = this.id
-    }
-    let text
-    let pseudo
-    if(func == "a*") {
-        text = `A* knows where the end is, but it <b>doesn't know about the walls in between.</b> <br>
-        For every tile that it searches, it will track how long it took to get there (g) and how much longer it will take to reach the end if there's no walls in the way (h).<br>
-        This is how A* decides where to search next - it adds (g) and (h) to calculate a 'cost', and searches the <b>'cheapest' tile.</b>`
-        pseudo = `while Open is not empty<br>
-        &emsp;Sort Open by node.f<br>
-        <span id="pseudo1">&emsp;current = Open[0]<br></span>
-        <span id="pseudo2">&emsp;if current == end<br>
-        &emsp;&emsp;return path<br></span>
-        &emsp;for each in current.neighbors<br>
-        &emsp;&emsp;Calculate neighbor.g<br>
-        &emsp;&emsp;Calculate neighbor.h<br>
-        &emsp;&emsp;Calculate neighbor.f<br>
-        <span id="pseudo3">&emsp;&emsp;Push neighbor to Open<br></span>
-        `
-        selectedFunction = AStar
-        document.querySelector("#Header").textContent = "A* Pathfinding"
-    }
-    else if(func == "djikstra") {
-        text = `Djikstra's is a <b>blind algorithm</b> - it doesn't know where the end is until it reaches it.<br>
-        It loops, each time choosing the closest tile to the start that <b>hasn't already been searched</b> and adding all the tiles around it to the queue.`
-        pseudo = `
-        while Open is not empty<br>
-        &emsp;Sort Open by cost<br>
-        <span id="pseudo1">&emsp;current = Open[0]<br></span>
-        <span id="pseudo2">&emsp;if current == end<br>
-        &emsp;&emsp;return path<br></span>
-        &emsp;for each in current.neighbors<br>
-        &emsp;&emsp;Calculate neighbor cost<br>
-        <span id="pseudo3">&emsp;&emsp;Push neighbor to Open<br></span>
-        `
-        selectedFunction = Djikstra
-        document.querySelector("#Header").textContent = "Djikstra's Pathfinding"
-    }
-    DisplayAnnotation(text, document.querySelector("#annotation>.card-body>p"))
-    DisplayAnnotation(pseudo, document.querySelector("#pseudocode>.card-body>p"))
-}
-
-changeAlgo(selectedFunction)
+PageAlgorithm.changeAlgo((new URLSearchParams(window.location.search)).get("func") || "astar")
 
 let drag = false
 
@@ -225,7 +181,7 @@ async function FindPath(table)
     } else if (typeof end == "undefined") {
         throw new Error("Please place an end node.")
     }
-    const actions = selectedFunction(graph, start, end)
+    const actions = PageAlgorithm.selectedFunction(graph, start, end)
     if(typeof actions === "undefined") {
         throw new Error("No path was found.")
     }
@@ -243,162 +199,6 @@ async function animateResults(actions) {
         progress.style.width = `${(actions.indexOf(action) + 1) / actions.length * 100}%`
     }
     playing = false
-}
-
-function AStar(graph, start, end) {
-    const open = []
-    const closed = []
-    const actions = []
-
-    open.push(start)
-    start.g = 0
-    
-    while (open.length != 0) {
-        open.sort((a, b) => {
-            if(a.f-b.f !== 0) {
-                return a.f-b.f
-            }
-            else {
-                return a.g >= b.g ? -1 : 1
-            }}) //Sort ascending by cost
-
-        let current = open.shift()
-        closed.push(current)
-        let path = []
-        for(let parent = current; parent; parent = parent.parent) {
-            path.push(document.getElementById(`${parent.y},${parent.x}`))
-        }
-        actions.push(new SearchedPath(path))
-        if (current === end) {//If the current node is the end node
-            const pathArr = []
-            const pathCells = []
-            while(current) {
-                pathArr.push(current)
-                pathCells.push(document.getElementById(`${current.y},${current.x}`))
-                current = current.parent
-            }
-            actions.push(new FinalPath(pathCells.reverse()))
-            return actions
-        }
-
-        let children = []
-        //get list of neighbors
-        for (let neighbor of graph.adjList.get(current)) {
-            children.push(neighbor)
-        }
-
-        //for each child
-        let newChildren = []
-        for (let child of children) { //Continue if child has already been searched
-            if(closed.some((element) => {return element === child})) {
-                continue
-            }
-
-            let g = current.g+1
-            let h = Math.abs(child.x - end.x) + Math.abs(child.y - end.y)
-            let f = g + h
-
-            //Continue if better path has already been found
-            if(open.some(element => {return element.x == child.x && element.y == child.y}) && child.g < g) {
-                continue
-            }
-            //Dont add child to search list if its a wall
-            if(!child.walkable) {
-                continue
-            }
-
-            child.g = g
-            child.h = h
-            child.f = f
-            child.parent = current
-            
-            //If node isn't already in seearch list, add it
-            if(!open.some((element) => {return element === child})) {
-                open.push(child)
-                newChildren.push(child)
-            }
-        }
-        if(newChildren != []) {
-            actions.push(new NewChildren(newChildren.map((element) => {return document.getElementById(`${element.y},${element.x}`)})))
-        }
-    }
-    //Only executed upon failure to find end
-    return undefined
-}
-
-function Djikstra(graph, start, end) {
-    const open = []
-    const closed = []
-    const actions = []
-    open.push(start)
-    start.g = 0
-    
-    while (open.length != 0) {
-        console.log("outer loop")
-        open.sort((a, b) => {return a.g - b.g}) //Sort ascending by cost
-
-        let current = open.shift()
-        closed.push(current)
-
-        let path = []
-        for(let parent = current; parent; parent = parent.parent) {
-            path.push(document.getElementById(`${parent.y},${parent.x}`))
-        }
-        actions.push(new SearchedPath(path))
-
-        if (current === end) {//If the current node is the end node
-            const pathArr = []
-            const pathCells = []
-            while(current) {
-                console.log(`${current.y},${current.x}`)
-                pathArr.push(current)
-                pathCells.push(document.getElementById(`${current.y},${current.x}`))
-                current = current.parent
-            }
-            actions.push(new FinalPath(pathCells.reverse()))
-            return actions
-        }
-
-        let children = []
-        //get list of neighbors
-        for (let neighbor of graph.adjList.get(current)) {
-            children.push(neighbor)
-        }
-
-        //for each child
-        let newChildren = []
-        for (let child of children) { //Continue if child has already been searched
-
-            let g = current.g+1
-
-            //Continue if better path has already been found
-            if(child.g < g) {
-                continue
-            }
-            //Dont add child to search list if its a wall
-            if(!child.walkable) {
-                continue
-            }
-
-            child.g = g
-            child.parent = current
-            
-            //If node isn't already in seearch list, add it
-            if(!open.some((element) => {return element === child})) {
-                open.push(child)
-                newChildren.push(child)
-            }
-        }
-        if(newChildren != []) {
-            actions.push(new NewChildren(newChildren.map((element) => {return document.getElementById(`${element.y},${element.x}`)})))
-        }
-    }
-    //Only executed upon failure to find end
-    return undefined
-}
-
-function DisplayAnnotation(msg, element) {
-    element.innerHTML = msg
 }
 
 document.querySelector("#generate").addEventListener("click", () => {
@@ -434,107 +234,20 @@ document.querySelector("#reset").addEventListener("click", () => {
 })
 
 document.querySelector("#PlayPause").onclick = function() {
-    if(typeof currentAnim === "undefined" || !inProgress) {
+    if(typeof AnimationController.currentAnim === "undefined" || !inProgress) {
         console.log("No animation playing")
         return
     }
     if(playing) {
         console.log("first")
         playing = false
-        currentAnim.pause()
+        AnimationController.currentAnim.pause()
         this.firstChild.setAttribute("src", "../Assets/play-fill.svg")
     }
     else {
         console.log("second")
         playing = true
-        currentAnim.play()
+        AnimationController.currentAnim.play()
         this.firstChild.setAttribute("src", "../Assets/pause-fill.svg")
-    }
-}
-
-class FinalPath extends Action {
-    constructor(targets, line=2) {
-        super(targets, line)
-        FinalPath.duration = 1000
-    }
-
-    get duration() {
-        return FinalPath.duration / speed
-    }
-
-    get annotation() {
-        return `The algorithm found the end. To find the path, it backtracks to the parent of the end node, then continues backtracking until the start.`
-    }
-
-    get animation() {
-        return {
-            targets: this.targets,
-            delay: anime.stagger(50),
-            duration: 500,
-            backgroundColor: '#FEDC97',
-        }
-    }
-
-    async Animate() {
-        currentAnim = anime(this.animation)
-        return currentAnim.finished
-    }
-}
-
-class SearchedPath extends Action {
-    constructor(targets, line=1) {
-        super(targets, line)
-        SearchedPath.duration = 500
-    }
-
-    get duration() {
-        return SearchedPath.duration / speed
-    }
-
-    get annotation() {
-        return `This was the best available path, but it did not reach the end. The algorithm will add any new neighbors and pick the next best path.`
-    }
-
-    get animation() {
-        return {
-            targets: this.targets,
-            backgroundColor: [
-                { value: "#F26419", duration: 0 },
-                { value: "#28666E", delay: this.duration/speed, duration: 1 } //Small wait, then zap the whole line purple
-            ]
-        }
-    }
-
-    async Animate() {
-        currentAnim = anime(this.animation)
-        return currentAnim.finished
-    }
-}
-
-class NewChildren extends Action {
-    constructor(targets, line=3) {
-        super(targets, line)
-        NewChildren.duration = 100
-    }
-
-    get duration() {
-        return NewChildren.duration / speed
-    }
-
-    get annotation() {
-        return `Adding any new neighbors to the list of potential paths.`
-    }
-
-    get animation() {
-        return {
-            targets: this.targets,
-            duration: this.duration,
-            backgroundColor: "#696464"
-        }
-    }
-
-    async Animate() {
-        currentAnim = anime(this.animation)
-        return currentAnim.finished
     }
 }
