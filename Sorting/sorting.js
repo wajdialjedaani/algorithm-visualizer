@@ -10,14 +10,15 @@ let input = []
 let inProgress = false
 let playing = false
 const alertContainer = document.getElementById('alertContainer')
+const pageAlgorithm = new PageAlgorithm()
 
 window.onload = generateBars
 window.onresize = generateBars
 //Initialize dropdown menu buttons
-document.getElementById("insertionsort").onclick = PageAlgorithm.changeAlgo.bind(document.getElementById("insertionsort"))
-document.getElementById("selectionsort").onclick = PageAlgorithm.changeAlgo.bind(document.getElementById("selectionsort"))
-document.getElementById("bubblesort").onclick = PageAlgorithm.changeAlgo.bind(document.getElementById("bubblesort"))
-document.getElementById("quicksort").onclick = PageAlgorithm.changeAlgo.bind(document.getElementById("quicksort"))
+document.getElementById("insertionsort").onclick = pageAlgorithm.changeAlgo.bind(pageAlgorithm)
+document.getElementById("selectionsort").onclick = pageAlgorithm.changeAlgo.bind(pageAlgorithm)
+document.getElementById("bubblesort").onclick = pageAlgorithm.changeAlgo.bind(pageAlgorithm)
+document.getElementById("quicksort").onclick = pageAlgorithm.changeAlgo.bind(pageAlgorithm)
 
 CheckFirstVisit('sortVisited')
 /*
@@ -85,7 +86,7 @@ function changeAlgo(func) {
     DisplayAnnotation(pseudo, document.querySelector("#pseudocode>.card-body>p"))
 }*/
 
-PageAlgorithm.changeAlgo((new URLSearchParams(window.location.search)).get("func") || "insertionsort")
+pageAlgorithm.changeAlgo((new URLSearchParams(window.location.search)).get("func") || "insertionsort")
 
 // gets input and splits it into an array
 function getInput() {
@@ -222,7 +223,7 @@ function start() {
         return
     }
     inProgress = true
-    let swaps = PageAlgorithm.selectedFunction(input, 0, input.length - 1);
+    let swaps = pageAlgorithm.selectedFunction(input, 0, input.length - 1);
     swapAnimation(swaps)
     .then(function(value) {
         document.querySelector("#start").style.display = "none"

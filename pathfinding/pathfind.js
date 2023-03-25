@@ -13,13 +13,14 @@ let inProgress = false
 const alertContainer = document.getElementById('alertContainer')
 
 const animationController = new AnimationController()
+const pageAlgorithm = new PageAlgorithm()
 
 //Initialize the card listeners
 document.querySelectorAll(".draggable").forEach((element) => {dragElement(element)})
 document.querySelectorAll(".resizer").forEach((element) => {ResizeHandler(element)})
 //Initialize the dropdown menus
-document.getElementById("astar").onclick = PageAlgorithm.changeAlgo.bind(document.getElementById("astar"))
-document.getElementById("djikstra").onclick = PageAlgorithm.changeAlgo.bind(document.getElementById("djikstra"))
+document.getElementById("astar").onclick = pageAlgorithm.changeAlgo.bind(pageAlgorithm)
+document.getElementById("djikstra").onclick = pageAlgorithm.changeAlgo.bind(pageAlgorithm)
 
 CheckFirstVisit('pathVisited')
 
@@ -28,7 +29,7 @@ document.querySelector("#AnimSpeed").addEventListener("click", function() {
     this.innerHTML = `${AnimationController.animationSpeed}x`
 })
 
-PageAlgorithm.changeAlgo((new URLSearchParams(window.location.search)).get("func") || "astar")
+pageAlgorithm.changeAlgo((new URLSearchParams(window.location.search)).get("func") || "astar")
 
 let drag = false
 
@@ -181,7 +182,7 @@ async function FindPath(table)
     } else if (typeof end == "undefined") {
         throw new Error("Please place an end node.")
     }
-    const actions = PageAlgorithm.selectedFunction(graph, start, end)
+    const actions = pageAlgorithm.selectedFunction(graph, start, end)
     if(typeof actions === "undefined") {
         throw new Error("No path was found.")
     }
