@@ -26,8 +26,7 @@ class FinalPath extends Action {
     }
 
     async Animate() {
-        AnimationController.currentAnim = anime(this.animation)
-        return AnimationController.currentAnim.finished
+        return super.Animate.call(this)
     }
 }
 
@@ -35,10 +34,11 @@ class SearchedPath extends Action {
     constructor(targets, line=1) {
         super(targets, line)
         SearchedPath.duration = 500
+        this.speed = 1
     }
 
     get duration() {
-        return SearchedPath.duration / AnimationController.animationSpeed
+        return SearchedPath.duration / this.speed
     }
 
     get annotation() {
@@ -50,14 +50,14 @@ class SearchedPath extends Action {
             targets: this.targets,
             backgroundColor: [
                 { value: "#F26419", duration: 0 },
-                { value: "#28666E", delay: this.duration/AnimationController.animationSpeed, duration: 1 } //Small wait, then zap the whole line purple
+                { value: "#28666E", delay: this.duration/this.speed, duration: 1 } //Small wait, then zap the whole line purple
             ]
         }
     }
 
-    async Animate() {
-        AnimationController.currentAnim = anime(this.animation)
-        return AnimationController.currentAnim.finished
+    async Animate(speed) {
+        console.log("path animation")
+        return super.Animate.call(this, speed)
     }
 }
 
@@ -84,8 +84,8 @@ class NewChildren extends Action {
     }
 
     async Animate() {
-        AnimationController.currentAnim = anime(this.animation)
-        return AnimationController.currentAnim.finished
+        console.log("child animating")
+        return super.Animate.call(this)
     }
 }
 

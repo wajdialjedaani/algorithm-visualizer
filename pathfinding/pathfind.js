@@ -8,12 +8,12 @@ import { AnimationController } from "../js/AnimationController.js";
 
 let columns = Math.floor((document.body.clientWidth / 30));
 let rows = Math.floor((document.body.clientHeight / 30));
-let playing = false
 let inProgress = false
 const alertContainer = document.getElementById('alertContainer')
 
 const animationController = new AnimationController()
 const pageAlgorithm = new PageAlgorithm()
+
 
 //Initialize the card listeners
 document.querySelectorAll(".draggable").forEach((element) => {dragElement(element)})
@@ -25,8 +25,8 @@ document.querySelectorAll(".Djikstra").forEach(element => element.onclick=pageAl
 CheckFirstVisit('pathVisited')
 
 document.querySelector("#AnimSpeed").addEventListener("click", function() {
-    AnimationController.animationSpeed = AnimationController.speeds[(AnimationController.speeds.indexOf(AnimationController.animationSpeed)+1)%AnimationController.speeds.length]
-    this.innerHTML = `${AnimationController.animationSpeed}x`
+    animationController.speed = animationController.speeds[(animationController.speeds.indexOf(animationController.speed)+1)%animationController.speeds.length]
+    this.innerHTML = `${animationController.speed}x`
 })
 
 pageAlgorithm.changeAlgo((new URLSearchParams(window.location.search)).get("func") || "astar")
@@ -146,7 +146,7 @@ class Graph {
     }
 }
 
-async function FindPath(table)
+function FindPath(table)
 {
     let start = undefined
     let end = undefined
@@ -186,20 +186,29 @@ async function FindPath(table)
     if(typeof actions === "undefined") {
         throw new Error("No path was found.")
     }
-    playing = true
-    await animateResults(actions);
+    return actions
 }
 
 async function animateResults(actions) {
-    const progress = document.querySelector("#Progress-Bar");
-    for(let action of actions)
-    {
-        DisplayAnnotation(action.annotation, document.querySelector("#annotation>.card-body>p"))
-        action.AnimatePseudocode()
-        await action.Animate()
-        progress.style.width = `${(actions.indexOf(action) + 1) / actions.length * 100}%`
-    }
-    playing = false
+    //const progress = document.querySelector("#Progress-Bar");
+    //for(let action of actions)
+    //{
+    //    DisplayAnnotation(action.annotation, document.querySelector("#annotation>.card-body>p"))
+    //    action.AnimatePseudocode()
+    //    await action.Animate()
+    //    progress.style.width = `${(actions.indexOf(action) + 1) / actions.length * 100}%`
+    //}
+
+    //animationController.playing = true
+    //const animationGen = animationController.StepThroughAll()
+    //let currentStep = animationGen.next()
+    //while(!currentStep.done) {
+    //    await Promise.all(currentStep.value)
+    //    currentStep = animationGen.next()
+    //}
+    //animationController.playing = false
+
+    animationController.PlayAllAnimations()
 }
 
 document.querySelector("#generate").addEventListener("click", () => {
@@ -208,7 +217,8 @@ document.querySelector("#generate").addEventListener("click", () => {
         return
     }
     inProgress = true
-    FindPath(document.querySelector("#grid-container"))
+    animationController.animation = FindPath(document.querySelector("#grid-container"))
+    animateResults(animationController.animation)
     .then(
         function(value) {
             document.querySelector("#generate").style.display = "none"
@@ -235,20 +245,20 @@ document.querySelector("#reset").addEventListener("click", () => {
 })
 
 document.querySelector("#PlayPause").onclick = function() {
-    if(typeof AnimationController.currentAnim === "undefined" || !inProgress) {
+    if(typeof animationController.currentAnim === "undefined" || !inProgress) {
         console.log("No animation playing")
         return
     }
-    if(playing) {
+    if(animationController.playing) {
         console.log("first")
-        playing = false
-        AnimationController.currentAnim.pause()
+        animationController.playing = false
+        animationController.currentAnim.pause()
         this.firstChild.setAttribute("src", "../Assets/play-fill.svg")
     }
     else {
         console.log("second")
-        playing = true
-        AnimationController.currentAnim.play()
+        animationController.playing = true
+        animationController.currentAnim.play()
         this.firstChild.setAttribute("src", "../Assets/pause-fill.svg")
     }
 }
