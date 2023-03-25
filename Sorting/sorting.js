@@ -15,10 +15,13 @@ const pageAlgorithm = new PageAlgorithm()
 window.onload = generateBars
 window.onresize = generateBars
 //Initialize dropdown menu buttons
-document.getElementById("insertionsort").onclick = pageAlgorithm.changeAlgo.bind(pageAlgorithm)
-document.getElementById("selectionsort").onclick = pageAlgorithm.changeAlgo.bind(pageAlgorithm)
-document.getElementById("bubblesort").onclick = pageAlgorithm.changeAlgo.bind(pageAlgorithm)
-document.getElementById("quicksort").onclick = pageAlgorithm.changeAlgo.bind(pageAlgorithm)
+document.querySelectorAll(".InsertionSort").forEach(element => element.onclick=pageAlgorithm.changeAlgo.bind(pageAlgorithm))
+document.querySelectorAll(".SelectionSort").forEach(element => element.onclick=pageAlgorithm.changeAlgo.bind(pageAlgorithm))
+document.querySelectorAll(".BubbleSort").forEach(element => element.onclick=pageAlgorithm.changeAlgo.bind(pageAlgorithm))
+document.querySelectorAll(".QuickSort").forEach(element => element.onclick=pageAlgorithm.changeAlgo.bind(pageAlgorithm))
+
+//Initialize sorting-specific buttons
+document.querySelector("#randomNumbers").addEventListener('click', randomInput)
 
 CheckFirstVisit('sortVisited')
 /*

@@ -12,7 +12,12 @@ class PageAlgorithm{
     //If called as callback: func should be an Event object, assign func as the id of the HTML element that triggered it.
     async changeAlgo(func) {
         if(func instanceof Event) {
-            func = func.target.id
+            for(let elementClass of func.target.classList) {
+                if(typeof this.fm[elementClass] !== "undefined") {
+                    func = elementClass
+                    break
+                }
+            }
         }
         //Parse JSON associated with func name
         let file = await fetch(`../Assets/HTML/${func}.json`)

@@ -19,8 +19,8 @@ const pageAlgorithm = new PageAlgorithm()
 document.querySelectorAll(".draggable").forEach((element) => {dragElement(element)})
 document.querySelectorAll(".resizer").forEach((element) => {ResizeHandler(element)})
 //Initialize the dropdown menus
-document.getElementById("astar").onclick = pageAlgorithm.changeAlgo.bind(pageAlgorithm)
-document.getElementById("djikstra").onclick = pageAlgorithm.changeAlgo.bind(pageAlgorithm)
+document.querySelectorAll(".AStar").forEach(element => element.onclick=pageAlgorithm.changeAlgo.bind(pageAlgorithm))
+document.querySelectorAll(".Djikstra").forEach(element => element.onclick=pageAlgorithm.changeAlgo.bind(pageAlgorithm))
 
 CheckFirstVisit('pathVisited')
 

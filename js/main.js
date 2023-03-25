@@ -1,3 +1,5 @@
+import Cookies from "../js/js.cookie.min.mjs"
+
 let fontChange_px = 0
 let dark = false
 
@@ -204,3 +206,14 @@ window.addEventListener('load', function() {
         console.log('lightmode')
     }
 })
+
+document.querySelector("#fontIncrease")?.addEventListener('click', increaseFontSize)
+document.querySelector("#fontDecrease")?.addEventListener('click', decreaseFontSize)
+document.querySelector("#darkModeSwitch")?.addEventListener('click', darkMode)
+document.querySelector("#resetSettings")?.addEventListener('click', resetSettings)
+document.querySelector("#sortingGo")?.addEventListener('click', sortingGo)
+document.querySelector("#searchingGo")?.addEventListener('click', searchingGo)
+document.querySelector("#pathfindingGo")?.addEventListener('click', pathfindingGo)
+document.querySelector("#sortingBack")?.addEventListener('click', sortingBack)
+document.querySelector("#searchingBack")?.addEventListener('click', searchingBack)
+document.querySelector("#pathfindingBack")?.addEventListener('click', pathfindingBack)

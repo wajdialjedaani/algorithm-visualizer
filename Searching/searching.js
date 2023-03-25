@@ -17,8 +17,10 @@ const pageAlgorithm = new PageAlgorithm()
 window.onload = generateBox
 window.onresize = generateBox
 //Initialize the dropdown menu buttons
-document.getElementById("linearsearch").onclick = pageAlgorithm.changeAlgo.bind(pageAlgorithm)
-document.getElementById("binarysearch").onclick = pageAlgorithm.changeAlgo.bind(pageAlgorithm)
+document.querySelectorAll(".LinearSearch").forEach(element => element.onclick=pageAlgorithm.changeAlgo.bind(pageAlgorithm))
+document.querySelectorAll(".BinarySearch").forEach(element => element.onclick=pageAlgorithm.changeAlgo.bind(pageAlgorithm))
+//Initialize searching-specific buttons
+document.querySelector("#randomNumbers").addEventListener('click', randomInput)
 
 CheckFirstVisit('searchVisited')
 
