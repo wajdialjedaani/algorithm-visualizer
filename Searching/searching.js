@@ -3,29 +3,29 @@ import { Action } from "../js/Action.js"
 import { Alert } from "../js/Alert.js"
 import { CheckFirstVisit } from "../js/Cookies.js"
 import anime from "../js/anime.es.js"
+import { PageAlgorithm, DisplayAnnotation } from "../js/SetAlgorithm.js";
+import { AnimationController } from "../js/AnimationController.js";
 
-let selectedFunction = (new URLSearchParams(window.location.search)).get("func")
+//let selectedFunction = (new URLSearchParams(window.location.search)).get("func")
 let input = []
-let actions = []
 let x
-const speeds = [1, 2, 4]
-let speed = 1
 let inProgress = false
 let playing = false
 
 window.onload = generateBox
 window.onresize = generateBox
 //Initialize the dropdown menu buttons
-document.getElementById("linearsearch").onclick = changeAlgo.bind(document.getElementById("linearsearch"))
-document.getElementById("binarysearch").onclick = changeAlgo.bind(document.getElementById("binarysearch"))
+document.getElementById("linearsearch").onclick = PageAlgorithm.changeAlgo.bind(document.getElementById("linearsearch"))
+document.getElementById("binarysearch").onclick = PageAlgorithm.changeAlgo.bind(document.getElementById("binarysearch"))
 
 CheckFirstVisit('searchVisited')
 
 document.querySelector("#AnimSpeed").addEventListener("click", function() {
-    speed = speeds[(speeds.indexOf(speed)+1)%speeds.length]
-    this.innerHTML = `${speed}x`
+    AnimationController.animationSpeed = AnimationController.speeds[(AnimationController.speeds.indexOf(AnimationController.animationSpeed)+1)%AnimationController.speeds.length]
+    this.innerHTML = `${AnimationController.animationSpeed}x`
 })
 
+/*
 function changeAlgo(func) {
     if(typeof func !== "string" && typeof this !== "undefined") {
         func = this.id
@@ -61,52 +61,14 @@ function changeAlgo(func) {
     }
     DisplayAnnotation(pseudocode, document.querySelector("#pseudocode>.card-body>p"))
     DisplayAnnotation(text, document.querySelector("#annotation>.card-body>p"))
-}
+}*/
 
-changeAlgo(selectedFunction)
+PageAlgorithm.changeAlgo((new URLSearchParams(window.location.search)).get("func") || "LinearSearch")
 
 // Algorithms ----------------------------------------------------------------
 // Binary Search iterative approach
-function binarySearch(arr, x) {
-    let left = 0
-    let right = arr.length - 1
-    let mid
-    let range = []
-    while (left <= right) {
-        mid = Math.floor(left + (right - left) / 2) // get mid value of subarray
-        console.log(mid);
-        actions.push(new Comparison([x, arr[mid]]))
-        if(x.value == arr[mid].value) {
-            actions.push(new Found([arr[mid]]))
-            return actions
-        } else if(x.value > arr[mid].value) {   // x is on the right side
-            range = getRangeToEliminate(range, left, mid)
-            actions.push(new EliminateLeft(range))
-            left = mid + 1
-        } else { // x is on the left side
-            range = getRangeToEliminate(range, mid, right)
-            actions.push(new EliminateRight(range))
-            right = mid - 1
-        }
-    }
-    console.log("not found");
-    return actions
-}
 
 // linear search algorithm
-function linearSearch(arr, x) {
-    for (let i = 0; i < arr.length; i++) {
-        actions.push(new Comparison([x, arr[i]]))
-        if(arr[i].value == x.value) {
-            console.log("found")
-            actions.push(new Found([arr[i]]))
-            return actions
-        }
-        actions.push(new EliminateSingle([arr[i]]))
-    }
-    console.log("not found");
-    return actions
-}
 
 // Animation ----------------------------------------------------------------
 async function compareAnimation(actions) {
@@ -148,199 +110,8 @@ async function compareAnimation(actions) {
 
 // Action ----------------------------------------------------------------
 
-class Comparison extends Action {
-    constructor(targets, line = 1) {
-        super(targets.filter(obj => typeof obj !== "undefined"), line)
-        Comparison.duration = 999  // duration of comparison at 1x speed
-    }
-
-    get duration() {    // duration of comparison based on speed
-        return Comparison.duration / speed
-    }
-
-    get annotation() {
-        if(this.targets.length == 1) {
-            return `This is the only element in the list`
-        }
-        return `Checking if ${this.targets[0].value} is equal to ${this.targets[1].value}`
-    }
-
-    get Animation() {
-        this.target = [this.targets[1]] // get singleton in array form
-        const animations = this.target.map((element) => {
-            return {
-                targets: document.querySelector(`${element.id}`),
-                backgroundColor: "#84A98C",
-                duration: this.duration
-            }
-        })
-
-        return animations
-    }
-
-    AddToTimeline(tl) {
-        this.Animation.forEach((animation, index) => {
-            if(index == 0) {
-                tl.add(animation)
-            } else {
-                tl.add(animation, `-=${this.duration}`)
-            }
-        })
-    }
-}
-
-class Found extends Action {
-    constructor(targets, line = 2) {
-        super(targets, line)
-        Found.duration = 1
-    }
-
-    get annotation() {
-        return `${this.targets[0].value} has been found.`
-    }
-
-    get Animation() {
-        const animations = this.targets.map((element) => {
-            return {
-                targets: document.querySelector(`${element.id}`),
-                backgroundColor: "#F26419", 
-                duration: this.duration
-            }
-        })
-
-        return animations
-    }
-
-    AddToTimeline(tl) {
-        this.Animation.forEach((animation, index) => {
-            if(index == 0) {
-                tl.add(animation)
-            } else {
-                tl.add(animation, `-=${this.duration}`)
-            }
-        })
-    }
-}
-
-class EliminateSingle extends Action {
-    constructor(targets, line = 3) {
-        super(targets, line)
-        EliminateSingle.duration = 1
-    }
-
-    get annotation() {
-        return `${x.value} does not equal ${this.targets[0].value}`
-    }
-
-    get Animation() {
-        const animations = this.targets.map((element) => {
-            return {
-                targets: document.querySelector(`${element.id}`),
-                backgroundColor: "#696464",
-                color: "#FFFFFF",
-                duration: this.duration
-            }
-        })
-
-        return animations
-    }
-
-    AddToTimeline(tl) {
-        this.Animation.forEach((animation, index) => {
-            if(index == 0) {
-                tl.add(animation)
-            } else {
-                tl.add(animation, `-=${this.duration}`)
-            }
-        })
-    }
-}
-
-class EliminateLeft extends Action {
-    constructor(targets, line = 4) {
-        super(targets, line)
-        EliminateLeft.duration = 1
-    }
-
-    get annotation() {
-        return `${x.value} > ${this.targets[this.targets.length - 1].value}<br>
-        ${x.value} is in the right side.<br>
-        Elimitate the left side.<br>`
-    }
-
-    get Animation() {
-        const animations = this.targets.map((element) => {
-            return {
-                targets: document.querySelector(`${element.id}`),
-                backgroundColor: "#696464",
-                color: "#FFFFFF",
-                duration: this.duration
-            }
-        })
-
-        return animations
-    }
-
-    AddToTimeline(tl) {
-        this.Animation.forEach((animation, index) => {
-            if(index == 0) {
-                tl.add(animation)
-            } else {
-                tl.add(animation, `-=${this.duration}`)
-            }
-        })
-    }
-}
-
-class EliminateRight extends Action {
-    constructor(targets, line = 5) {
-        super(targets, line)
-        EliminateRight.duration = 1
-    }
-
-    get annotation() {
-        return `${x.value} < ${this.targets[this.targets.length - 1].value}<br>
-        ${x.value} is in the left side.<br>
-        Elimitate the right side.<br>`
-    }
-
-    get Animation() {
-        const animations = this.targets.map((element) => {
-            return {
-                targets: document.querySelector(`${element.id}`),
-                backgroundColor: "#696464",
-                color: "#FFFFFF",
-                duration: this.duration
-            }
-        })
-
-        return animations
-    }
-
-    AddToTimeline(tl) {
-        this.Animation.forEach((animation, index) => {
-            if(index == 0) {
-                tl.add(animation)
-            } else {
-                tl.add(animation, `-=${this.duration}`)
-            }
-        })
-    }
-}
 
 // Functions ----------------------------------------------------------------
-function DisplayAnnotation(msg, element) {
-    element.innerHTML = msg
-}
-
-function getRangeToEliminate(range, start, end) {
-    range = []
-    for(let i = start; i <= end; i++) {
-        range.push(input[i])
-    }
-    printArr(range)
-    return range
-}
 
 // gets input and splits it into an array
 function getInput() {    
@@ -430,10 +201,9 @@ function start() {
     }
     generateBox()
     inProgress = true
-    actions = []
     getFindValue()
-    let comparisons = selectedFunction(input, x)
-    compareAnimation(comparisons)
+    let actions = PageAlgorithm.selectedFunction(input, x)
+    compareAnimation(actions)
     .then(function(value) {
         document.querySelector("#start").style.display = "none"
         document.querySelector("#reset").style.display = "inline"

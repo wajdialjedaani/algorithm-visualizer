@@ -3,12 +3,10 @@ import { Action } from "../js/Action.js"
 import { Alert } from "../js/Alert.js"
 import { CheckFirstVisit } from "../js/Cookies.js"
 import anime from "../js/anime.es.js"
+import { PageAlgorithm, DisplayAnnotation } from "../js/SetAlgorithm.js";
+import { AnimationController } from "../js/AnimationController.js";
 
 let input = []
-let actions = []
-let selectedFunction = (new URLSearchParams(window.location.search)).get("func") || insertionSort
-const speeds = [1, 2, 4]
-let speed = 1
 let inProgress = false
 let playing = false
 const alertContainer = document.getElementById('alertContainer')
@@ -16,14 +14,13 @@ const alertContainer = document.getElementById('alertContainer')
 window.onload = generateBars
 window.onresize = generateBars
 //Initialize dropdown menu buttons
-document.getElementById("insertionsort").onclick = changeAlgo.bind(document.getElementById("insertionsort"))
-document.getElementById("selectionsort").onclick = changeAlgo.bind(document.getElementById("selectionsort"))
-document.getElementById("bubblesort").onclick = changeAlgo.bind(document.getElementById("bubblesort"))
-document.getElementById("quicksort").onclick = changeAlgo.bind(document.getElementById("quicksort"))
+document.getElementById("insertionsort").onclick = PageAlgorithm.changeAlgo.bind(document.getElementById("insertionsort"))
+document.getElementById("selectionsort").onclick = PageAlgorithm.changeAlgo.bind(document.getElementById("selectionsort"))
+document.getElementById("bubblesort").onclick = PageAlgorithm.changeAlgo.bind(document.getElementById("bubblesort"))
+document.getElementById("quicksort").onclick = PageAlgorithm.changeAlgo.bind(document.getElementById("quicksort"))
 
 CheckFirstVisit('sortVisited')
-
-// TODO: implement pseudocode change; refer pathfind.js
+/*
 function changeAlgo(func) {
     if(typeof func !== "string" && typeof this !== "undefined") {
         func = this.id
@@ -86,9 +83,9 @@ function changeAlgo(func) {
     }
     DisplayAnnotation(text, document.querySelector("#annotation>.card-body>p"))
     DisplayAnnotation(pseudo, document.querySelector("#pseudocode>.card-body>p"))
-}
+}*/
 
-changeAlgo(selectedFunction)
+PageAlgorithm.changeAlgo((new URLSearchParams(window.location.search)).get("func") || "insertionsort")
 
 // gets input and splits it into an array
 function getInput() {
@@ -170,117 +167,6 @@ function removeBars() {
     bars.forEach(element => element.remove())
 }
 
-// SORTING ALGORITHMS------------------------------------------------------------------------------------------------------------------------------------
-
-function swap(arr, i, j) {
-    let temp = arr[i];
-    arr[i] = arr[j];
-    arr[j] = temp;
-}
-
-// insertion sort algorithm
-function insertionSort(arr) {
-    let j, current, i
-    for(i = 1; i < arr.length; i++) {
-        current = arr[i]
-        j = i - 1
-        actions.push(new Sorted(arr[j]))
-        actions.push(new Comparison([arr[j], current]))
-        while(j >= 0 && arr[j].value > current.value) { // checks if j is outside of array and compares j position value with current
-            actions.push(new Swap([current, arr[j]]))
-            //actions.push(new Sorted(arr[j]))
-
-            arr[j + 1] = arr[j]
-            j--
-
-            actions.push(new Comparison([arr[j], current]))
-        }
-        arr[j + 1] = current   // once while is false, the last j position is current
-        actions.push(new Sorted(current))
-    }
-    //printArr(actions)
-    return actions
-}
-
-// BUG: swaps are not correct
-// selection sort algorithm
-function selectionSort(arr) {
-    let min_ind
-
-    for(let i = 0; i < (arr.length - 1); i++) {
-        min_ind = i
-        
-        for(let j = i + 1; j < arr.length; j++) {
-            actions.push(new Comparison([arr[j], arr[min_ind]]))
-            if(arr[j].value < arr[min_ind].value) {
-                min_ind = j
-            }
-        }
-
-        // swap
-        actions.push(new Swap([arr[min_ind], arr[i]]))
-        swap(arr, min_ind, i)
-        // temp = arr[min_ind]
-        // arr[min_ind] = arr[i]
-        // arr[i] = temp
-    }
-    printArr(actions)
-    return actions
-}
-
-// bubble sort algorithm
-function bubbleSort(arr) {
-    for(let i = 0; i < arr.length - 1; i++) {
-        for(let j = 0; j < arr.length - i - 1; j++) {
-            actions.push(new Comparison([arr[j], arr[j + 1]]))
-            if(arr[j].value > arr[j + 1].value) {
-                // swap
-                actions.push(new Swap([arr[j], arr[j + 1]]))
-                swap(arr, j, j + 1)
-                // temp = arr[j]
-                // arr[j] = arr[j + 1]
-                // arr[j + 1] = temp
-            }
-        }
-    }
-    printArr(actions)
-    return actions
-}
-
-// quick sort algorithm
-function quickSort(arr, low, high) {
-    if(low < high) {
-        let pivot = Partition(arr, low, high, actions)
-
-        quickSort(arr, low, pivot - 1)
-        quickSort(arr, pivot + 1, high)
-    }
-    printArr(actions)
-    return actions
-}
-
-function Partition(arr, low, high, actions) {
-    let pivot = arr[high].value
-    actions.push(new PivotToggle(arr[high]))
-    actions.push(new Subarray(arr.slice(low, high)))
-    let i = (low - 1)
-
-    for (let j = low; j <= high - 1; j++) {
-        actions.push(new Comparison([arr[j], arr[high]]))
-        if(arr[j].value < pivot) {
-            i++
-            actions.push(new Swap([arr[i], arr[j]], 21))
-            swap(arr, i, j)
-        }   
-    }
-    actions.push(new Swap([arr[i + 1], arr[high]], 22))
-    actions.push(new PivotToggle(arr[high]))
-    actions.push(new Subarray(arr.slice(low, high)))
-    swap(arr, i + 1, high)
-    return (i + 1)
-}
-// -----------------------------------------------------------------------------------------------------------------------------------------------------
-
 // highlights and swaps bars
 async function swapAnimation(actions) {
     let progress = document.querySelector("#Progress-Bar")
@@ -336,206 +222,22 @@ function start() {
         return
     }
     inProgress = true
-    actions = []
-    let swaps = selectedFunction(input, 0, input.length - 1);
+    let swaps = PageAlgorithm.selectedFunction(input, 0, input.length - 1);
     swapAnimation(swaps)
     .then(function(value) {
         document.querySelector("#start").style.display = "none"
         document.querySelector("#reset").style.display = "inline"
     })
-    .catch((error) => {console.log("Error in start()")})
+    .catch((error) => {console.log(error.message)})
     .finally( function() {
         inProgress = false
     })
-}
-
-class Swap extends Action {
-    constructor(targets, line=2) {
-        super(targets, line)
-        Swap.duration = 1000
-    }
-
-    get annotation() {
-        return `${this.targets[0].value < this.targets[1].value ? this.targets[0].value : this.targets[1].value} is less than 
-        ${this.targets[0].value > this.targets[1].value ? this.targets[0].value : this.targets[1].value}, so we will swap them.`
-    }
-
-    get duration() {
-        return Swap.duration / speed
-    }
-
-    get Animation() {
-        let selected1 = document.querySelector(`${this.targets[0].id}`)
-        let selected2 = document.querySelector(`${this.targets[1].id}`)
-        let currentPos1 = Number(selected1.style.getPropertyValue('--position')) + Number(selected1.style.getPropertyValue('--translation'))
-        let currentPos2 = Number(selected2.style.getPropertyValue('--position')) + Number(selected2.style.getPropertyValue('--translation'))
-        let duration = this.duration
-        return [{
-            targets: selected1,
-            translateX: Number(selected1.style.getPropertyValue('--translation')) + currentPos2 - currentPos1,
-            //backgroundColor: [
-            //    {value: "#FFFFFF", duration: duration-1},
-            //    {value: anime.get(selected1, "backgroundColor"), duration: 1}
-            //],
-            easing: 'easeOutCubic',
-            duration: duration,
-            complete: function() {selected1.style.setProperty('--translation', currentPos2 - selected1.style.getPropertyValue('--position'))}
-        },
-        {
-            targets: selected2,
-            translateX: Number(selected2.style.getPropertyValue('--translation')) + currentPos1 - currentPos2,
-            //backgroundColor: [
-            //    {value: "#000000", duration: duration-1},
-            //    {value: anime.get(selected2, "backgroundColor"), duration: 1}
-            //],
-            easing: 'easeOutCubic',
-            duration: duration,
-            complete: function() {selected2.style.setProperty('--translation', currentPos1 - selected2.style.getPropertyValue('--position'))}
-        }]
-    }
-
-    async Animate() {
-        let animations = this.Animation
-        for(let i=0; i<animations.length; i++) {
-            console.log("animating")
-            await anime(animations[i]).finished
-        }
-    }
-
-    AddToTimeline(tl) {
-        let animations = this.Animation
-        console.log("timeline")
-        tl.add(animations[0])
-        .add(animations[1], `-=${this.duration}`)
-    }
-
-}
-
-class Comparison extends Action {
-    constructor (targets, line=1) {
-        super(targets.filter(obj => typeof obj !== "undefined"), line)
-        Comparison.duration = 1000
-    }
-
-    get duration() {
-        return Comparison.duration / speed
-    }
-
-    get annotation() {
-        if(this.targets.length == 1) {
-            return `The element reached the first spot - it is the smallest in the list.`
-        }
-        return `Checking if ${this.targets[1].value} is less than ${this.targets[0].value}. If it is, then we will swap them.`
-    }
-
-    get Animation() {
-        const animations = this.targets.map((element) => {
-            return {
-            targets: document.querySelector(`${element.id}`),
-            backgroundColor: [{value: "#228C22", duration: this.duration-1},
-                {value: anime.get(document.querySelector(`${element.id}`), "backgroundColor"), duration: 1}],
-            duration: this.duration,
-        }})
-        return animations
-    }
-
-    async Animate() {
-
-    }
-
-    AddToTimeline(tl) {
-        this.Animation.forEach((animation, index) => {
-            index == 0 ? tl.add(animation) : tl.add(animation, `-=${this.duration}`)
-        })
-        //tl.add(animations[0])
-        //.add(animations[1], `-=${this.duration}`)
-    }
-
-}
-
-class Sorted extends Action {
-    constructor(targets, line=3) {
-        super(targets, line)
-        Sorted.duration = 1
-    }
-
-    get duration() {
-        return Sorted.duration / speed
-    }
-
-    get Animation() {
-        return {
-            targets: document.querySelector(`${this.targets.id}`),
-            backgroundColor: "#FFA500",
-            duration: this.duration,
-        }
-    }
-
-    AddToTimeline(tl) {
-        tl.add(this.Animation)
-    }
-}
-
-class PivotToggle extends Action {
-    constructor(targets, line=1) {
-        super(targets, line)
-        PivotToggle.duration = 500
-    }
-
-    get duration() {
-        return PivotToggle.duration / speed
-    }
-
-    get Animation() {
-        return {
-            targets: document.querySelector(`${this.targets.id}`),
-            duration: this.duration,
-            backgroundColor: anime.get(document.querySelector(`${this.targets.id}`), "backgroundColor") === "rgb(98, 144, 200)" ? "#A020F0" : "#6290C8",
-            begin: console.log(anime.get(document.querySelector(`${this.targets.id}`), "backgroundColor"))
-        }
-    }
-
-    AddToTimeline(tl) {
-        tl.add(this.Animation)
-    }
-}
-
-class Subarray extends Action {
-    constructor(targets, line=1) {
-        super(targets, line)
-        Subarray.duration = 0
-    }
-
-    get duration() {
-        return Subarray.duration / speed
-    }
-
-    get Animation() {
-        const animations = this.targets.map((element) => {
-            return {
-            targets: document.querySelector(`${element.id}`),
-            backgroundColor: anime.get(document.querySelector(`${element.id}`), "backgroundColor") === "rgb(98, 144, 200)" ? "#f68f58" : "#6290C8",
-            duration: this.duration,
-        }})
-        return animations
-    }
-
-    AddToTimeline(tl) {
-        this.Animation.forEach((animation, index) => {
-            index == 0 ? tl.add(animation) : tl.add(animation, `-=${this.duration}`)
-        })
-    }
-
 }
 
 // Draggable ----------------------------------------------------------------
 document.querySelectorAll(".draggable").forEach((element) => {dragElement(element)})
 document.querySelectorAll(".resizer").forEach((element) => {ResizeHandler(element)})
 // ----------------------------------------------------------------
-
-function DisplayAnnotation(msg, element) {
-    element.innerHTML = msg
-}
 
 document.querySelector('#start').addEventListener('click', start)
 document.querySelector('#getNewInput').addEventListener('click', function() {
@@ -557,8 +259,8 @@ document.querySelector('#input').addEventListener('keypress', function(e) {
     }
 })
 document.querySelector("#AnimSpeed").addEventListener("click", function() {
-    speed = speeds[(speeds.indexOf(speed)+1)%speeds.length]
-    this.innerHTML = `${speed}x`
+    AnimationController.animationSpeed = AnimationController.speeds[(AnimationController.speeds.indexOf(AnimationController.animationSpeed)+1)%AnimationController.speeds.length]
+    this.innerHTML = `${AnimationController.animationSpeed}x`
 })
 document.querySelector("#reset").addEventListener("click", function() {
     generateBars()
