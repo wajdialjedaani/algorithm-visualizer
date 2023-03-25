@@ -1,0 +1,9 @@
+{
+    "id":"LinearSearch"
+    ,
+    "header":"Linear Search"
+    ,
+    "desc":"Linear Search <b>sequentially</b> checks each element of the list until a <b>match is found</b> or until the <b>entire list has been searched</b>."
+    ,
+    "pseudo":"linearSearch(arr, x) <br>\n&emsp;loop till end of array <br>\n<span id='pseudo1'>&emsp;&emsp;if (x[i] == current value)</span><br>\n<span id='pseudo2'>&emsp;&emsp;&emsp;return i</span><br>\n&emsp;&emsp;else<br>\n<span id='pseudo3'>&emsp;&emsp;&emsp;eliminate</span><br>"
+}

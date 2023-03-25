@@ -1,0 +1,9 @@
+{
+        "id":"AStar"
+        ,
+        "header":"A* Pathfinding"
+        ,
+        "pseudo":"while Open is not empty<br>\n&emsp;Sort Open by node.f<br>\n<span id='pseudo1'>&emsp;current = Open[0]<br></span>\n<span id='pseudo2'>&emsp;if current == end<br>\n&emsp;&emsp;return path<br></span>\n&emsp;for each in current.neighbors<br>\n&emsp;&emsp;Calculate neighbor.g<br>\n&emsp;&emsp;Calculate neighbor.h<br>\n&emsp;&emsp;Calculate neighbor.f<br>\n<span id='pseudo3'>&emsp;&emsp;Push neighbor to Open<br></span>"
+        ,
+        "desc":"A* knows where the end is, but it <b>doesn't know about the walls in between.</b> <br>\nFor every tile that it searches, it will track how long it took to get there (g) and how much longer it will take to reach the end if there's no walls in the way (h).<br>\nThis is how A* decides where to search next - it adds (g) and (h) to calculate a 'cost', and searches the <b>'cheapest' tile.</b>"
+}

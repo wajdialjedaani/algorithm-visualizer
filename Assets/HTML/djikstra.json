@@ -1,0 +1,9 @@
+{
+    "id":"Djikstra"
+    ,
+    "header":"Djikstra's Pathfinding"
+    ,
+    "pseudo":"while Open is not empty<br>\n&emsp;Sort Open by cost<br>\n<span id='pseudo1'>&emsp;current = Open[0]<br></span>\n<span id='pseudo2'>&emsp;if current == end<br>\n&emsp;&emsp;return path<br></span>\n&emsp;for each in current.neighbors<br>\n&emsp;&emsp;Calculate neighbor cost<br>\n<span id='pseudo3'>&emsp;&emsp;Push neighbor to Open<br></span>"
+    ,
+    "desc":"Djikstra's is a <b>blind algorithm</b> - it doesn't know where the end is until it reaches it.<br>\nIt loops, each time choosing the closest tile to the start that <b>hasn't already been searched</b> and adding all the tiles around it to the queue."
+}

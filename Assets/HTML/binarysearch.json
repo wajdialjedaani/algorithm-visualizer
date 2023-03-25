@@ -1,0 +1,9 @@
+{
+    "id":"BinarySearch"
+    ,
+    "header":"Binary Search"
+    ,
+    "desc":"Binary search compares the <b>target value to the middle element</b> of the array. \nIf they are <b>not equal</b>, the half where target cannot be in is eliminated and the search continues on the remaining half repeating this until the target value is found. \nIf the search ends with the remaining half being empty, the target is <b>not</b> in the array."
+    ,
+    "pseudo":"binarySearch(arr, x, low, high) <br>\n&emsp;repeat till low = high <br>\n&emsp;&emsp;mid = (low + high)/2 <br>\n<span id='pseudo1'>&emsp;&emsp;if (x == arr[mid])</span><br>\n<span id='pseudo2'>&emsp;&emsp;&emsp;return mid</span><br>\n<span id='pseudo1'>&emsp;&emsp;else if (x > arr[mid])</span><br>\n<span id='pseudo4'>&emsp;&emsp;&emsp;low = mid + 1</span><br>\n<span id='pseudo1'>&emsp;&emsp;else</span><br>\n<span id='pseudo5'>&emsp;&emsp;&emsp;high = mid - 1</span><br>"
+}

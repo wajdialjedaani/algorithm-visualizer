@@ -1,0 +1,9 @@
+{
+    "id":"BubbleSort"
+    ,
+    "header":"Bubble Sort"
+    ,
+    "desc":"Bubble sort repeatedly iterates through a list <b>one by one</b>, comparing and swapping elements as it goes. By the end of the <b>first iteration</b>, the final element will be the largest.\nBubble sort then repeats the process, this time placing the second-largest number in the second-last spot. Repeating this process <b>n</b> (length of the list) times guarantees\na sorted array."
+    ,
+    "pseudo":"for i = 0 to length(arr)<br>\n<span id='pseudo1'>&emsp;if arr[i] > arr[i+1]<br></span>\n<span id='pseudo2'>&emsp;&emsp;swap arr[i] and arr[i+1]<br></span>"
+}

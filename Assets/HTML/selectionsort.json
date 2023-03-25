@@ -1,0 +1,9 @@
+{
+    "id":"SelectionSort"
+    ,
+    "header":"Selection Sort"
+    ,
+    "desc":"Selection sort treats an array as two subarrays: one <b>sorted</b> and one <b>unsorted.</b> The sorted subarray begins <b>empty</b>.\nThe algorithm iterates through the <b>unsorted subarray</b> and finds the <b>smallest element</b>. It then moves this element to the <b>front</b> of the unsorted array,\nnow treating the sorted subarray as though it grew."
+    ,
+    "pseudo":"for i = 1 to length(arr) - 1<br>\n&emsp;min = i<br>\n&emsp;for j = i+1 to length(arr)<br> \n<span id='pseudo1'>&emsp;&emsp;if arr[j] < arr[min]<br>\n&emsp;&emsp;min = j;<br></span>\n&emsp;if indexMin != i<br>\n<span id='pseudo2'>&emsp;&emsp;swap arr[min] and arr[i]<br></span>"
+}

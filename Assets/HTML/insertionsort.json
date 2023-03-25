@@ -1,0 +1,9 @@
+{
+    "id":"InsertionSort"
+    ,
+    "header":"Insertion Sort"
+    ,
+    "desc":"Insertion sort treats an array as two subarrays: one <b>sorted</b> and one <b>unsorted.</b> The sorted subarray begins with just the <b>first element</b>, \nso it is 'sorted' from the start. It then iterates through the list, selecting the first element of the <b>unsorted subarray</b> and 'inserting' it into the proper spot of the \nsorted subarray. Once the final element is inserted, the list is sorted."
+    ,
+    "pseudo":"i = 1<br>\nwhile i < length(arr)<br>\n&emsp;j = i<br>\n<span id='pseudo1'>&emsp;while j > 0 and arr[j-1] > arr[j]</span><br>\n<span id='pseudo2'>&emsp;&emsp;swap arr[j] and arr[j-1]</span><br>\n&emsp;&emsp;j = j - 1<br>\n<span id='pseudo3'>&emsp;i = i + 1</span>"
+}
