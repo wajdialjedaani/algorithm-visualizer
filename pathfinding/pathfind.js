@@ -198,17 +198,15 @@ async function animateResults(actions) {
     //    await action.Animate()
     //    progress.style.width = `${(actions.indexOf(action) + 1) / actions.length * 100}%`
     //}
-
-    //animationController.playing = true
-    //const animationGen = animationController.StepThroughAll()
-    //let currentStep = animationGen.next()
-    //while(!currentStep.done) {
-    //    await Promise.all(currentStep.value)
-    //    currentStep = animationGen.next()
-    //}
-    //animationController.playing = false
-
-    animationController.PlayAllAnimations()
+    animationController.playing = true
+    const animationGen = animationController.StepThroughAll()
+    let currentStep = animationGen.next()
+    while(!currentStep.done) {
+        await Promise.all([currentStep.value[0].finished, currentStep.value[1].finished])
+        currentStep = animationGen.next()
+    }
+    animationController.playing = false
+    //animationController.PlayAllAnimations()
 }
 
 document.querySelector("#generate").addEventListener("click", () => {
@@ -217,8 +215,8 @@ document.querySelector("#generate").addEventListener("click", () => {
         return
     }
     inProgress = true
-    animationController.animation = FindPath(document.querySelector("#grid-container"))
-    animateResults(animationController.animation)
+    animationController.animations = FindPath(document.querySelector("#grid-container"))
+    animateResults(animationController.animations)
     .then(
         function(value) {
             document.querySelector("#generate").style.display = "none"
@@ -246,19 +244,17 @@ document.querySelector("#reset").addEventListener("click", () => {
 
 document.querySelector("#PlayPause").onclick = function() {
     if(typeof animationController.currentAnim === "undefined" || !inProgress) {
-        console.log("No animation playing")
+        Alert(alertContainer, "No animation playing", 'warning')
         return
     }
     if(animationController.playing) {
-        console.log("first")
         animationController.playing = false
-        animationController.currentAnim.pause()
+        animationController.currentAnim.Pause()
         this.firstChild.setAttribute("src", "../Assets/play-fill.svg")
     }
     else {
-        console.log("second")
         animationController.playing = true
-        animationController.currentAnim.play()
+        animationController.currentAnim.Play()
         this.firstChild.setAttribute("src", "../Assets/pause-fill.svg")
     }
 }

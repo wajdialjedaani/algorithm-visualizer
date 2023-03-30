@@ -89,11 +89,47 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body text">
-                      <p class="text">Pathfinding Algorithms are used to help find a path between two locations - whether pixels on a screen, addresses in Google Maps, or positions in a video game.<br>
-                        <br>To get started, choose the two spots you want to travel between. Click once on a tile to create starting point,
-                        and click twice somewhere else to create your target. Then click "Go" in the bottom left to start.<br>
-                        <br>If you want to make it a little more interesting, click and drag to make walls around the map. The computer will have to find its way around the walls.<br>
-                        <br>Remember not to completely block off the start and end from each other - the computer can't find a path that doesn't exist!
+                        <div style="display: flex; height: auto; justify-content: space-around; flex-wrap: wrap;">
+                            <div class="intro-cell-div">
+                                <p class="text" style="margin-bottom: 0px;">Start</p>
+                                <div class="intro-cell startnode" style="width: 30px; height: 30px;"></div>
+                            </div>
+                            <div class="intro-cell-div">
+                                <p class="text" style="margin-bottom: 0px;">End</p>
+                                <div class="intro-cell endnode" style="width: 30px; height: 30px;"></div>
+                            </div>
+                            <div class="intro-cell-div">
+                                <p class="text" style="margin-bottom: 0px;">Wall</p>
+                                <div class="intro-cell wall" style="width: 30px; height: 30px;"></div>
+                            </div>
+                            <div class="intro-cell-div">
+                                <p class="text" style="margin-bottom: 0px;">Searching Path</p>
+                                <div class="intro-cell intro-searchpath" style="width: 30px; height: 30px;"></div>
+                            </div>
+                            <div class="intro-cell-div">
+                                <p class="text" style="margin-bottom: 0px;">Final Path</p>
+                                <div class="intro-cell intro-finalpath" style="width: 30px; height: 30px;"></div>
+                            </div>
+                            <div class="intro-cell-div">
+                                <p class="text" style="margin-bottom: 0px;">Unsearched Neighbors</p>
+                                <div class="intro-cell intro-child" style="width: 30px; height: 30px;"></div>
+                            </div>
+                        </div>
+                        <p class="text">Pathfinding Algorithms are used to help find a path between two locations - whether pixels on a screen, addresses in Google Maps, or positions in a video game.</p>
+                        <div>
+                            <video class="intro-video" autoplay loop muted>
+                                <source src="../Assets/Video/TutorialVid1.webm" type="video/webm"/>
+                            </video>
+                            <p class="text">To get started, choose the two spots you want to travel between. Click once on a tile to create starting point,
+                                and click twice somewhere else to create your target. Then click "Go" in the bottom left to start.</p>
+                        </div>
+                        <div>
+                            <video class="intro-video" autoplay loop muted>
+                                <source src="../Assets/Video/TutorialVid2.webm" type="video/webm"/>
+                            </video>
+                            <p class="text">If you want to make it a little more interesting, click and drag to make walls around the map. The computer will have to find its way around the walls.</p>
+                        </div>
+                        <p class="text">Remember not to completely block off the start and end from each other - the computer can't find a path that doesn't exist!</p>
                       </p>
                     </div>
                     </div>

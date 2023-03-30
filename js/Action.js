@@ -17,7 +17,8 @@ class Action {
         }
     }
 
-    AnimatePseudocode() {
+    AnimatePseudocode(speed) {
+        this.speed = speed || this.speed
         return anime({
             targets: this.line,
             backgroundColor: [{value: "#000000", duration: this.duration-1},
@@ -27,9 +28,9 @@ class Action {
         }).finished
     }
 
-    async Animate(speed) {
+    Animate(speed) {
         this.speed = speed || this.speed
-        return anime(this.animation).finished
+        return anime(this.animation)
     }
 }
 
