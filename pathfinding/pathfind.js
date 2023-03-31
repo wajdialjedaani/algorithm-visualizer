@@ -198,21 +198,18 @@ async function animateResults(actions) {
     //    await action.Animate()
     //    progress.style.width = `${(actions.indexOf(action) + 1) / actions.length * 100}%`
     //}
-
-    //animationController.playing = true
-    //const animationGen = animationController.StepThroughAll()
-    //let currentStep = animationGen.next()
-    //while(!currentStep.done) {
-    //    await Promise.all(currentStep.value)
-    //    currentStep = animationGen.next()
-    //}
-    //animationController.playing = false
-
-    animationController.PlayAllAnimations()
+    animationController.playing = true
+    const animationGen = animationController.StepThroughAll()
+    let currentStep = animationGen.next()
+    while(!currentStep.done) {
+        await Promise.all([currentStep.value[0].finished, currentStep.value[1].finished])
+        currentStep = animationGen.next()
+    }
+    animationController.playing = false
+    //animationController.PlayAllAnimations()
 }
 
 document.querySelector("#generate").addEventListener("click", () => {
-    //If there is already an animation, do nothing
     //If there is already an animation, do nothing
     if(inProgress) {
         Alert(alertContainer, "Animation in progress, can't play", 'warning')
@@ -228,17 +225,6 @@ document.querySelector("#generate").addEventListener("click", () => {
         Alert(alertContainer, "Animation in progress, can't play", 'warning')
         return
     }
-
-    //Find path
-    try {
-        animationController.animations = FindPath(document.querySelector("#grid-container"))
-    }
-    catch(error) {
-        Alert(alertContainer, error.message, 'danger')
-        return
-    }
-
-    //If a path was found, begin animation
 
     //If a path was found, begin animation
     inProgress = true
@@ -260,7 +246,6 @@ document.querySelector("#generate").addEventListener("click", () => {
 })
 
 //Button hidden until the animation has finished.
-//Button hidden until the animation has finished.
 document.querySelector("#reset").addEventListener("click", () => {
     generateTable()
     document.querySelector("#Progress-Bar").style.width = "0%"
@@ -270,19 +255,17 @@ document.querySelector("#reset").addEventListener("click", () => {
 
 document.querySelector("#PlayPause").onclick = function() {
     if(typeof animationController.currentAnim === "undefined" || !inProgress) {
-        console.log("No animation playing")
+        Alert(alertContainer, "No animation playing", 'warning')
         return
     }
 
     //Play or pause depending on current animation state, then toggle button state
     if(animationController.playing) {
-        console.log("first")
         animationController.playing = false
         animationController.Pause()
         this.firstChild.setAttribute("src", "../Assets/play-fill.svg")
     }
     else {
-        console.log("second")
         animationController.playing = true
         animationController.Play()
         this.firstChild.setAttribute("src", "../Assets/pause-fill.svg")

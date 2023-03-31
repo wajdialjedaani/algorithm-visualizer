@@ -9,7 +9,7 @@ class FinalPath extends Action {
     }
 
     get duration() {
-        return FinalPath.duration / AnimationController.animationSpeed
+        return FinalPath.duration / this.speed
     }
 
     get annotation() {
@@ -25,8 +25,8 @@ class FinalPath extends Action {
         }
     }
 
-    async Animate() {
-        return super.Animate.call(this)
+    Animate(speed) {
+        return super.Animate.call(this, speed)
     }
 }
 
@@ -55,7 +55,7 @@ class SearchedPath extends Action {
         }
     }
 
-    async Animate(speed) {
+    Animate(speed) {
         console.log("path animation")
         return super.Animate.call(this, speed)
     }
@@ -68,7 +68,7 @@ class NewChildren extends Action {
     }
 
     get duration() {
-        return NewChildren.duration / AnimationController.animationSpeed
+        return NewChildren.duration / this.speed
     }
 
     get annotation() {
@@ -83,9 +83,9 @@ class NewChildren extends Action {
         }
     }
 
-    async Animate() {
+    Animate(speed) {
         console.log("child animating")
-        return super.Animate.call(this)
+        return super.Animate.call(this, speed)
     }
 }
 
