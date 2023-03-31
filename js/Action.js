@@ -25,7 +25,7 @@ class Action {
                 {value: anime.get(document.querySelector(`${this.line}`), "backgroundColor"), duration: 1}],
             color: [{value: "#FFFFFF", duration: this.duration-1},
                 {value: anime.get(document.querySelector(`${this.line}`), "color"), duration: 1}]
-        }).finished
+        })
     }
 
     Animate(speed) {

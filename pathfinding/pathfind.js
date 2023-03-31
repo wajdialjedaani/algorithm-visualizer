@@ -210,12 +210,24 @@ async function animateResults(actions) {
 }
 
 document.querySelector("#generate").addEventListener("click", () => {
+    //If there is already an animation, do nothing
     if(inProgress) {
-        console.log("Animation in progress, can't play")
+        Alert(alertContainer, "Animation in progress, can't play", 'warning')
         return
     }
+
+    //Find path
+    try {
+        animationController.animations = FindPath(document.querySelector("#grid-container"))
+    }
+    catch(error) {
+        Alert(alertContainer, error.message, 'danger')
+        Alert(alertContainer, "Animation in progress, can't play", 'warning')
+        return
+    }
+
+    //If a path was found, begin animation
     inProgress = true
-    animationController.animations = FindPath(document.querySelector("#grid-container"))
     animateResults(animationController.animations)
     .then(
         function(value) {
@@ -228,18 +240,17 @@ document.querySelector("#generate").addEventListener("click", () => {
     })
     .finally(
         () => {
-            console.log("finally")
             inProgress = false
         }
     )
 })
 
+//Button hidden until the animation has finished.
 document.querySelector("#reset").addEventListener("click", () => {
     generateTable()
     document.querySelector("#Progress-Bar").style.width = "0%"
     document.querySelector("#reset").style.display = "none"
     document.querySelector("#generate").style.display = "inline"
-    inProgress = false;
 })
 
 document.querySelector("#PlayPause").onclick = function() {
@@ -247,14 +258,16 @@ document.querySelector("#PlayPause").onclick = function() {
         Alert(alertContainer, "No animation playing", 'warning')
         return
     }
+
+    //Play or pause depending on current animation state, then toggle button state
     if(animationController.playing) {
         animationController.playing = false
-        animationController.currentAnim.Pause()
+        animationController.Pause()
         this.firstChild.setAttribute("src", "../Assets/play-fill.svg")
     }
     else {
         animationController.playing = true
-        animationController.currentAnim.Play()
+        animationController.Play()
         this.firstChild.setAttribute("src", "../Assets/pause-fill.svg")
     }
 }
