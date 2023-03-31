@@ -70,8 +70,8 @@
                         <div class="collapse" id="pathfindingExpand">
                             <div class="row">
                                <div class="btn-group-vertical" role="group" aria-label="Sorting button group" style="padding: 0;">
-                                    <button type="button" class="btn collapse-algo-btn-menu"><a class="dropdown-item text" onclick="changeAlgo('a*')">A* Pathfinding</a></button>
-                                    <button type="button" class="btn collapse-algo-btn-menu"><a class="dropdown-item text" onclick="changeAlgo('djikstra')">Djikstra's</a></button>
+                                    <button type="button" class="btn collapse-algo-btn-menu"><a class="dropdown-item text AStar">A* Pathfinding</a></button>
+                                    <button type="button" class="btn collapse-algo-btn-menu"><a class="dropdown-item text Djikstra">Djikstra's</a></button>
                                 </div> 
                             </div>
                         </div>
@@ -89,11 +89,47 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body text">
-                      <p class="text">Pathfinding Algorithms are used to help find a path between two locations - whether pixels on a screen, addresses in Google Maps, or positions in a video game.<br>
-                        <br>To get started, choose the two spots you want to travel between. Click once on a tile to create starting point,
-                        and click twice somewhere else to create your target. Then click "Go" in the bottom left to start.<br>
-                        <br>If you want to make it a little more interesting, click and drag to make walls around the map. The computer will have to find its way around the walls.<br>
-                        <br>Remember not to completely block off the start and end from each other - the computer can't find a path that doesn't exist!
+                        <div style="display: flex; height: auto; justify-content: space-around; flex-wrap: wrap;">
+                            <div class="intro-cell-div">
+                                <p class="text" style="margin-bottom: 0px;">Start</p>
+                                <div class="intro-cell startnode" style="width: 30px; height: 30px;"></div>
+                            </div>
+                            <div class="intro-cell-div">
+                                <p class="text" style="margin-bottom: 0px;">End</p>
+                                <div class="intro-cell endnode" style="width: 30px; height: 30px;"></div>
+                            </div>
+                            <div class="intro-cell-div">
+                                <p class="text" style="margin-bottom: 0px;">Wall</p>
+                                <div class="intro-cell wall" style="width: 30px; height: 30px;"></div>
+                            </div>
+                            <div class="intro-cell-div">
+                                <p class="text" style="margin-bottom: 0px;">Path</p>
+                                <div class="intro-cell intro-searchpath" style="width: 30px; height: 30px;"></div>
+                            </div>
+                            <div class="intro-cell-div">
+                                <p class="text" style="margin-bottom: 0px;">Final Path</p>
+                                <div class="intro-cell intro-finalpath" style="width: 30px; height: 30px;"></div>
+                            </div>
+                            <div class="intro-cell-div">
+                                <p class="text" style="margin-bottom: 0px;">Neighbors</p>
+                                <div class="intro-cell intro-child" style="width: 30px; height: 30px;"></div>
+                            </div>
+                        </div>
+                        <p class="text">Pathfinding Algorithms are used to help find a path between two locations - whether pixels on a screen, addresses in Google Maps, or positions in a video game.</p>
+                        <div>
+                            <video class="intro-video" autoplay loop muted>
+                                <source src="../Assets/Video/TutorialVid1.webm" type="video/webm"/>
+                            </video>
+                            <p class="text">To get started, choose the two spots you want to travel between. Click once on a tile to create starting point,
+                                and click twice somewhere else to create your target. Then click "Go" in the bottom left to start.</p>
+                        </div>
+                        <div>
+                            <video class="intro-video" autoplay loop muted>
+                                <source src="../Assets/Video/TutorialVid2.webm" type="video/webm"/>
+                            </video>
+                            <p class="text">If you want to make it a little more interesting, click and drag to make walls around the map. The computer will have to find its way around the walls.</p>
+                        </div>
+                        <p class="text">Remember not to completely block off the start and end from each other - the computer can't find a path that doesn't exist!</p>
                       </p>
                     </div>
                     </div>
@@ -113,19 +149,19 @@
                         <div class="row mt-1">
                             <div class="col text">Dark Mode</div>
                             <div class="col-2 form-check form-switch">
-                                <input type="checkbox" class="form-check-input" role="switch" id="darkModeSwitch" aria-label="Dark Mode" onclick="darkMode()">
+                                <input type="checkbox" class="form-check-input" role="switch" id="darkModeSwitch" aria-label="Dark Mode">
                             </div>
                         </div>
                         <div class="row mt-1">
                             <div class="col text">Text Size</div>
                             <div class="col-4 btn-group btn-group-sm" role="group" aria-label="Increase or decrease text size">
-                                <button type="button" class="btn btn-outline-dark btnResize text" onclick="increaseFontSize()">+</button>
-                                <button type="button" class="btn btn-outline-dark btnResize text" onclick="decreaseFontSize()">-</button>
+                                <button type="button" class="btn btn-outline-dark btnResize text" id="fontIncrease">+</button>
+                                <button type="button" class="btn btn-outline-dark btnResize text" id="fontDecrease">-</button>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-orangeRed text" aria-label="Save changes" onclick="resetSettings()">Reset</button>
+                        <button type="button" class="btn btn-orangeRed text" aria-label="Save changes" id="resetSettings">Reset</button>
                         <button type="button" class="btn btn-orangeRed text" data-bs-dismiss="modal" aria-label="Save changes">Save changes</button>
                     </div>
                 </div>
@@ -196,18 +232,18 @@
                 <div class="btn-group dropup col-auto gx-0">
                     <button type="button" class="btn btn-menu dropdown-toggle d-none d-sm-block d-sm-none d-md-block text" data-bs-toggle="dropdown" aria-expanded="false">Pathfinding</button>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item text" id="astar">A* Pathfinding</a></li>
-                        <li><a class="dropdown-item text" id="djikstra">Djikstra's</a></li>
-                        <!-- <li><a class="dropdown-item" onclick="changeAlgo('bfs')">BFS</a></li> -->
+                        <li><a class="dropdown-item text AStar">A* Pathfinding</a></li>
+                        <li><a class="dropdown-item text Djikstra">Djikstra's</a></li>
+                        <!-- <li><a class="dropdown-item">BFS</a></li> -->
                     </ul>
                 </div>
             </div>
         </div>
 
-        <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js" integrity="sha256-0H3Nuz3aug3afVbUlsu12Puxva3CP4EhJtPExqs54Vg=" crossorigin="anonymous"></script>
+        <!--<script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js" integrity="sha256-0H3Nuz3aug3afVbUlsu12Puxva3CP4EhJtPExqs54Vg=" crossorigin="anonymous"></script>-->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous" defer></script>
-        <script src="../js/main.js" defer></script>
+        <script src="../js/main.js" type="module" defer></script>
         <script src="pathfind.js" type="module" defer></script>
     </body>
 </html>

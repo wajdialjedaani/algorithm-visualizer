@@ -73,3 +73,30 @@ body {
     border-radius: 50%;
     margin: 10px;
 }
+
+.intro-cell { 
+    box-sizing: border-box;
+    position: relative;
+    border: solid 2px;
+    width: 30px;
+    height: 30px;
+}
+
+.intro-searchpath {
+    background-color: var(--orangeRed);
+}
+
+.intro-finalpath {
+    background-color: var(--navajoWhite);
+}
+
+.intro-child {
+    background-color: var(--graniteGray);
+}
+
+.intro-cell-div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: auto 2rem 1rem;
+}

@@ -1,3 +1,5 @@
+import Cookies from "./js.cookie.min.mjs"
+
 function CheckFirstVisit(pageName) {
     if(!Cookies.get(pageName)) {
         $('#introModal').modal('show')

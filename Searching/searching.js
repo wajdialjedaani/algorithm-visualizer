@@ -12,11 +12,15 @@ let x
 let inProgress = false
 let playing = false
 
+const pageAlgorithm = new PageAlgorithm()
+
 window.onload = generateBox
 window.onresize = generateBox
 //Initialize the dropdown menu buttons
-document.getElementById("linearsearch").onclick = PageAlgorithm.changeAlgo.bind(document.getElementById("linearsearch"))
-document.getElementById("binarysearch").onclick = PageAlgorithm.changeAlgo.bind(document.getElementById("binarysearch"))
+document.querySelectorAll(".LinearSearch").forEach(element => element.onclick=pageAlgorithm.changeAlgo.bind(pageAlgorithm))
+document.querySelectorAll(".BinarySearch").forEach(element => element.onclick=pageAlgorithm.changeAlgo.bind(pageAlgorithm))
+//Initialize searching-specific buttons
+document.querySelector("#randomNumbers").addEventListener('click', randomInput)
 
 CheckFirstVisit('searchVisited')
 
@@ -63,7 +67,7 @@ function changeAlgo(func) {
     DisplayAnnotation(text, document.querySelector("#annotation>.card-body>p"))
 }*/
 
-PageAlgorithm.changeAlgo((new URLSearchParams(window.location.search)).get("func") || "LinearSearch")
+pageAlgorithm.changeAlgo((new URLSearchParams(window.location.search)).get("func") || "LinearSearch")
 
 // Algorithms ----------------------------------------------------------------
 // Binary Search iterative approach
@@ -202,7 +206,7 @@ function start() {
     generateBox()
     inProgress = true
     getFindValue()
-    let actions = PageAlgorithm.selectedFunction(input, x)
+    let actions = pageAlgorithm.selectedFunction(input, x)
     compareAnimation(actions)
     .then(function(value) {
         document.querySelector("#start").style.display = "none"
