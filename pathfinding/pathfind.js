@@ -213,7 +213,18 @@ async function animateResults(actions) {
 
 document.querySelector("#generate").addEventListener("click", () => {
     //If there is already an animation, do nothing
+    //If there is already an animation, do nothing
     if(inProgress) {
+        Alert(alertContainer, "Animation in progress, can't play", 'warning')
+        return
+    }
+
+    //Find path
+    try {
+        animationController.animations = FindPath(document.querySelector("#grid-container"))
+    }
+    catch(error) {
+        Alert(alertContainer, error.message, 'danger')
         Alert(alertContainer, "Animation in progress, can't play", 'warning')
         return
     }
@@ -226,6 +237,8 @@ document.querySelector("#generate").addEventListener("click", () => {
         Alert(alertContainer, error.message, 'danger')
         return
     }
+
+    //If a path was found, begin animation
 
     //If a path was found, begin animation
     inProgress = true
@@ -246,6 +259,7 @@ document.querySelector("#generate").addEventListener("click", () => {
     )
 })
 
+//Button hidden until the animation has finished.
 //Button hidden until the animation has finished.
 document.querySelector("#reset").addEventListener("click", () => {
     generateTable()
