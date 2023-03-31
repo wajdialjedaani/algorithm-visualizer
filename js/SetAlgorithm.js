@@ -3,7 +3,6 @@ import { FunctionMapper } from "./FunctionMapper.js"
 class PageAlgorithm{
     constructor() {
         this.fm = new FunctionMapper()
-        console.log(this.fm)
         this.selectedFunction = null
     }
     
@@ -24,7 +23,6 @@ class PageAlgorithm{
         file = await file.text()
         file = JSON.parse(file)
         //Initialize values from JSON data
-        console.log(file.id)
         //Modify state
         this.selectedFunction = this.fm[file.id]
         //Update page contents to match state
