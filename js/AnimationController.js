@@ -1,6 +1,5 @@
 export class AnimationController {
     constructor(params) {
-        console.log("constructing animation controller")
         this.speeds = params?.speeds || [1, 2, 4]
         this.speed = params?.speed || this.speeds[0]
         this.animation = params?.animation || undefined
