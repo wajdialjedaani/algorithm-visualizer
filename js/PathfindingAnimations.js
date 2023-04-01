@@ -33,7 +33,7 @@ class FinalPath extends Action {
 class SearchedPath extends Action {
     constructor(targets, line=1) {
         super(targets, line)
-        SearchedPath.duration = 500
+        SearchedPath.duration = 300
         this.speed = 1
     }
 
@@ -56,7 +56,6 @@ class SearchedPath extends Action {
     }
 
     Animate(speed) {
-        console.log("path animation")
         return super.Animate.call(this, speed)
     }
 }
@@ -84,7 +83,6 @@ class NewChildren extends Action {
     }
 
     Animate(speed) {
-        console.log("child animating")
         return super.Animate.call(this, speed)
     }
 }

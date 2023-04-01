@@ -14,6 +14,7 @@ const alertContainer = document.getElementById('alertContainer')
 const animationController = new AnimationController()
 const pageAlgorithm = new PageAlgorithm()
 
+document.querySelector("#cancel").addEventListener('click', CancelAnimation)
 
 //Initialize the card listeners
 document.querySelectorAll(".draggable").forEach((element) => {dragElement(element)})
@@ -32,6 +33,7 @@ document.querySelector("#AnimSpeed").addEventListener("click", function() {
 pageAlgorithm.changeAlgo((new URLSearchParams(window.location.search)).get("func") || "astar")
 
 let drag = false
+const abortController = new AbortController()
 
 function cellDrag(e) {
     drag = true
@@ -190,23 +192,14 @@ function FindPath(table)
 }
 
 async function animateResults(actions) {
-    //const progress = document.querySelector("#Progress-Bar");
-    //for(let action of actions)
-    //{
-    //    DisplayAnnotation(action.annotation, document.querySelector("#annotation>.card-body>p"))
-    //    action.AnimatePseudocode()
-    //    await action.Animate()
-    //    progress.style.width = `${(actions.indexOf(action) + 1) / actions.length * 100}%`
-    //}
     animationController.playing = true
-    const animationGen = animationController.StepThroughAll()
-    let currentStep = animationGen.next()
-    while(!currentStep.done) {
-        await Promise.all([currentStep.value[0].finished, currentStep.value[1].finished])
-        currentStep = animationGen.next()
+    try {
+        await animationController.PlayAllAnimations({progressBar: document.querySelector("#Progress-Bar"), signal: abortController.signal})
+    }
+    catch(err) {
+        Alert(alertContainer, err.message, 'danger')
     }
     animationController.playing = false
-    //animationController.PlayAllAnimations()
 }
 
 document.querySelector("#generate").addEventListener("click", () => {
@@ -270,4 +263,8 @@ document.querySelector("#PlayPause").onclick = function() {
         animationController.Play()
         this.firstChild.setAttribute("src", "../Assets/pause-fill.svg")
     }
+}
+
+function CancelAnimation() {
+    animationController.cancel = true
 }
