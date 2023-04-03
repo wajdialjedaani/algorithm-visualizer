@@ -17,9 +17,9 @@ export function BinarySearch(arr, x) {
     while (left <= right) {
         mid = Math.floor(left + (right - left) / 2) // get mid value of subarray
         console.log(mid);
-        actions.push(new Comparison([x, arr[mid]]))
+        actions.push(new Comparison(arr[mid], x))
         if(x.value == arr[mid].value) {
-            actions.push(new Found([arr[mid]]))
+            actions.push(new Found(arr[mid]))
             return actions
         } else if(x.value > arr[mid].value) {   // x is on the right side
             range = getRangeToEliminate(arr, range, left, mid)

@@ -33,7 +33,6 @@ document.querySelector("#AnimSpeed").addEventListener("click", function() {
 pageAlgorithm.changeAlgo((new URLSearchParams(window.location.search)).get("func") || "astar")
 
 let drag = false
-const abortController = new AbortController()
 
 function cellDrag(e) {
     drag = true
@@ -194,7 +193,7 @@ function FindPath(table)
 async function animateResults(actions) {
     animationController.playing = true
     try {
-        await animationController.PlayAllAnimations({progressBar: document.querySelector("#Progress-Bar"), signal: abortController.signal})
+        await animationController.PlayAllAnimations({progressBar: document.querySelector("#Progress-Bar")})
     }
     catch(err) {
         Alert(alertContainer, err.message, 'danger')

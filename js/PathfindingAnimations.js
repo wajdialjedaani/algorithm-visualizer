@@ -6,6 +6,7 @@ class FinalPath extends Action {
     constructor(targets, line=2) {
         super(targets, line)
         FinalPath.duration = 1000
+        this.speed = 1
     }
 
     get duration() {
@@ -64,6 +65,7 @@ class NewChildren extends Action {
     constructor(targets, line=3) {
         super(targets, line)
         NewChildren.duration = 100
+        this.speed = 1
     }
 
     get duration() {

@@ -3,37 +3,50 @@ import { AnimationController } from "./AnimationController.js"
 import anime from "./anime.es.js"
 
 class Comparison extends Action {
-    constructor(targets, line = 1) {
-        super(targets.filter(obj => typeof obj !== "undefined"), line)
+    constructor(targets, goal, options) {
+        super(targets, options?.line || 1)
         Comparison.duration = 999  // duration of comparison at 1x speed
+        this.speed = 1
+        this.goal = goal
     }
 
     get duration() {    // duration of comparison based on speed
-        return Comparison.duration / AnimationController.animationSpeed
+        return Comparison.duration / this.speed
     }
 
     get annotation() {
-        if(this.targets.length == 1) {
-            return `This is the only element in the list`
-        }
-        return `Checking if ${this.targets[0].value} is equal to ${this.targets[1].value}`
+        //if(this.targets.length == 1) {
+        //    return `This is the only element in the list`
+        //}
+        return `Checking if ${this.targets.value} is equal to ${this.goal.value}`
     }
 
-    get Animation() {
-        this.target = [this.targets[1]] // get singleton in array form
-        const animations = this.target.map((element) => {
-            return {
-                targets: document.querySelector(`${element.id}`),
-                backgroundColor: "#84A98C",
-                duration: this.duration
-            }
-        })
+    get animation() {
+        //this.target = [this.targets[1]] // get singleton in array form
+        //const animations = this.target.map((element) => {
+        //    return {
+        //        targets: document.querySelector(`${element.id}`),
+        //        backgroundColor: "#84A98C",
+        //        duration: this.duration
+        //    }
+        //})
 
-        return animations
+        //return animations
+
+        return {
+            targets: document.querySelector(`${this.targets.id}`),
+            backgroundColor: "#84A98C",
+            duration: this.duration
+        }
+    }
+
+    Animate(speed) {
+        //this.speed = speed || this.speed
+        return super.Animate.call(this, speed)
     }
 
     AddToTimeline(tl) {
-        this.Animation.forEach((animation, index) => {
+        this.animation.forEach((animation, index) => {
             if(index == 0) {
                 tl.add(animation)
             } else {
@@ -44,29 +57,44 @@ class Comparison extends Action {
 }
 
 class Found extends Action {
-    constructor(targets, line = 2) {
-        super(targets, line)
+    constructor(targets, options) {
+        super(targets, options?.line || 2)
         Found.duration = 1
+        this.speed = 1
+    }
+
+    get duration() {
+        return Found.duration / this.speed
     }
 
     get annotation() {
-        return `${this.targets[0].value} has been found.`
+        return `${this.targets.value} has been found.`
     }
 
-    get Animation() {
-        const animations = this.targets.map((element) => {
-            return {
-                targets: document.querySelector(`${element.id}`),
-                backgroundColor: "#F26419", 
-                duration: this.duration
-            }
-        })
+    get animation() {
+        //const animations = this.targets.map((element) => {
+        //    return {
+        //        targets: document.querySelector(`${element.id}`),
+        //        backgroundColor: "#F26419", 
+        //        duration: this.duration
+        //    }
+        //})
+        //
+        //return animations
 
-        return animations
+        return {
+            targets: document.querySelector(`${this.targets.id}`),
+            backgroundColor: "#F26419", 
+            duration: this.duration
+        }
+    }
+
+    Animate(speed) {
+        return super.Animate.call(this, speed)
     }
 
     AddToTimeline(tl) {
-        this.Animation.forEach((animation, index) => {
+        this.animation.forEach((animation, index) => {
             if(index == 0) {
                 tl.add(animation)
             } else {
@@ -77,31 +105,47 @@ class Found extends Action {
 }
 
 class EliminateSingle extends Action {
-    constructor(targets, goal, line = 3) {
-        super(targets, line)
+    constructor(targets, goal, options) {
+        super(targets, options?.line || 3)
         this.goal = goal
         EliminateSingle.duration = 1
+        this.speed = 1
+    }
+
+    get duration() {
+        return EliminateSingle.duration / this.speed
     }
 
     get annotation() {
-        return `${this.goal.value} does not equal ${this.targets[0].value}`
+        return `${this.goal.value} does not equal ${this.targets.value}`
     }
 
-    get Animation() {
-        const animations = this.targets.map((element) => {
-            return {
-                targets: document.querySelector(`${element.id}`),
-                backgroundColor: "#696464",
-                color: "#FFFFFF",
-                duration: this.duration
-            }
-        })
+    get animation() {
+        //const animations = this.targets.map((element) => {
+        //    return {
+        //        targets: document.querySelector(`${element.id}`),
+        //        backgroundColor: "#696464",
+        //        color: "#FFFFFF",
+        //        duration: this.duration
+        //    }
+        //})
+        //
+        //return animations
 
-        return animations
+        return {
+            targets: document.querySelector(`${this.targets.id}`),
+            backgroundColor: "#696464",
+            color: "#FFFFFF",
+            duration: this.duration
+        }
+    }
+
+    Animate(speed) {
+        return super.Animate.call(this, speed)
     }
 
     AddToTimeline(tl) {
-        this.Animation.forEach((animation, index) => {
+        this.animation.forEach((animation, index) => {
             if(index == 0) {
                 tl.add(animation)
             } else {
@@ -112,10 +156,15 @@ class EliminateSingle extends Action {
 }
 
 class EliminateLeft extends Action {
-    constructor(targets, goal, line = 4) {
-        super(targets, line)
+    constructor(targets, goal, options) {
+        super(targets, options?.line || 4)
         this.goal = goal
         EliminateLeft.duration = 1
+        this.speed = 1
+    }
+
+    get duration() {
+        return EliminateLeft.duration / this.speed
     }
 
     get annotation() {
@@ -125,7 +174,7 @@ class EliminateLeft extends Action {
         Elimitate the left side.<br>`
     }
 
-    get Animation() {
+    get animation() {
         const animations = this.targets.map((element) => {
             return {
                 targets: document.querySelector(`${element.id}`),
@@ -138,8 +187,28 @@ class EliminateLeft extends Action {
         return animations
     }
 
+    Animate(speed) {
+        this.speed = speed || this.speed
+        const animList = []
+        for(let anim of this.animation) {
+            animList.push(anime(anim))
+        }
+        return {
+            animations: animList,
+            finished: Promise.all(animList.map((element) => {
+                return element.finished
+            })),
+            pause: function() {
+                this.animations.forEach((animation) => {animation.pause()})
+            },
+            play: function() {
+                this.animations.forEach((animation) => {animation.play()})
+            }
+        }
+    }
+
     AddToTimeline(tl) {
-        this.Animation.forEach((animation, index) => {
+        this.animation.forEach((animation, index) => {
             if(index == 0) {
                 tl.add(animation)
             } else {
@@ -154,6 +223,11 @@ class EliminateRight extends Action {
         super(targets, line)
         this.goal = goal
         EliminateRight.duration = 1
+        this.speed = 1
+    }
+
+    get duration() {
+        return EliminateRight.duration / this.speed
     }
 
     get annotation() {
@@ -162,7 +236,7 @@ class EliminateRight extends Action {
         Elimitate the right side.<br>`
     }
 
-    get Animation() {
+    get animation() {
         const animations = this.targets.map((element) => {
             return {
                 targets: document.querySelector(`${element.id}`),
@@ -175,8 +249,28 @@ class EliminateRight extends Action {
         return animations
     }
 
+    Animate(speed) {
+        this.speed = speed || this.speed
+        const animList = []
+        for(let anim of this.animation) {
+            animList.push(anime(anim))
+        }
+        return {
+            animations: animList,
+            finished: Promise.all(animList.map((element) => {
+                return element.finished
+            })),
+            pause: function() {
+                this.animations.forEach((animation) => {animation.pause()})
+            },
+            play: function() {
+                this.animations.forEach((animation) => {animation.play()})
+            }
+        }
+    }
+
     AddToTimeline(tl) {
-        this.Animation.forEach((animation, index) => {
+        this.animation.forEach((animation, index) => {
             if(index == 0) {
                 tl.add(animation)
             } else {

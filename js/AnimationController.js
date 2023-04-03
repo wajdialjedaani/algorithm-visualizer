@@ -11,16 +11,18 @@ export class AnimationController {
 
     //Play entire list of animations from beginning to end
     async PlayAllAnimations(params) {
-        const progress = params.progressBar || document.querySelector("#Progress-Bar")
+        const progress = params?.progressBar || document.querySelector("#Progress-Bar")
         const animationGen = this.StepThroughAll()
         let currentStep = animationGen.next()
         while(!currentStep.done) {
             progress.style.width = `${this.progress}%`
+            //Check for flag to cancel before starting each step
             if(this.cancel) {
                 this.cancel = false
                 this.Pause()
                 return Promise.resolve()
             }
+            //Start animations and await their finish
             await Promise.all([currentStep.value[0].finished, currentStep.value[1].finished])
             currentStep = animationGen.next()
         }

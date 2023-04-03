@@ -6,6 +6,7 @@ class Swap extends Action {
     constructor(targets, line=2) {
         super(targets, line)
         Swap.duration = 1000
+        this.speed = 1
     }
 
     get annotation() {
@@ -14,10 +15,10 @@ class Swap extends Action {
     }
 
     get duration() {
-        return Swap.duration / AnimationController.animationSpeed
+        return Swap.duration / this.speed
     }
 
-    get Animation() {
+    get animation() {
         let selected1 = document.querySelector(`${this.targets[0].id}`)
         let selected2 = document.querySelector(`${this.targets[1].id}`)
         let currentPos1 = Number(selected1.style.getPropertyValue('--position')) + Number(selected1.style.getPropertyValue('--translation'))
@@ -47,16 +48,23 @@ class Swap extends Action {
         }]
     }
 
-    async Animate() {
-        let animations = this.Animation
-        for(let i=0; i<animations.length; i++) {
-            console.log("animating")
-            await anime(animations[i]).finished
+    Animate(speed) {
+        this.speed = speed || this.speed
+        let anims = [anime(this.animation[0]), anime(this.animation[1])]
+        return {
+            animations: anims,
+            finished: Promise.all([anims[0].finished, anims[1].finished]),
+            pause: function() {
+                this.animations.forEach((animation) => {animation.pause()})
+            },
+            play: function() {
+                this.animations.forEach((animation) => {animation.play()})
+            }
         }
     }
 
     AddToTimeline(tl) {
-        let animations = this.Animation
+        let animations = this.animation
         console.log("timeline")
         tl.add(animations[0])
         .add(animations[1], `-=${this.duration}`)
@@ -68,10 +76,11 @@ class Comparison extends Action {
     constructor (targets, line=1) {
         super(targets.filter(obj => typeof obj !== "undefined"), line)
         Comparison.duration = 1000
+        this.speed = 1
     }
 
     get duration() {
-        return Comparison.duration / AnimationController.animationSpeed
+        return Comparison.duration / this.speed
     }
 
     get annotation() {
@@ -81,7 +90,7 @@ class Comparison extends Action {
         return `Checking if ${this.targets[1].value} is less than ${this.targets[0].value}. If it is, then we will swap them.`
     }
 
-    get Animation() {
+    get animation() {
         const animations = this.targets.map((element) => {
             return {
             targets: document.querySelector(`${element.id}`),
@@ -92,12 +101,28 @@ class Comparison extends Action {
         return animations
     }
 
-    async Animate() {
-
+    Animate(speed) {
+        this.speed = speed || this.speed
+        const animList = []
+        for(let anim of this.animation) {
+            animList.push(anime(anim))
+        }
+        return {
+            animations: animList,
+            finished: Promise.all(animList.map((element) => {
+                return element.finished
+            })),
+            pause: function() {
+                this.animations.forEach((animation) => {animation.pause()})
+            },
+            play: function() {
+                this.animations.forEach((animation) => {animation.play()})
+            }
+        }
     }
 
     AddToTimeline(tl) {
-        this.Animation.forEach((animation, index) => {
+        this.animation.forEach((animation, index) => {
             index == 0 ? tl.add(animation) : tl.add(animation, `-=${this.duration}`)
         })
         //tl.add(animations[0])
@@ -110,13 +135,14 @@ class Sorted extends Action {
     constructor(targets, line=3) {
         super(targets, line)
         Sorted.duration = 1
+        this.speed = 1
     }
 
     get duration() {
-        return Sorted.duration / AnimationController.animationSpeed
+        return Sorted.duration / this.speed
     }
 
-    get Animation() {
+    get animation() {
         return {
             targets: document.querySelector(`${this.targets.id}`),
             backgroundColor: "#FFA500",
@@ -124,8 +150,12 @@ class Sorted extends Action {
         }
     }
 
+    Animate(speed) {
+        return super.Animate.call(this, speed)
+    }
+
     AddToTimeline(tl) {
-        tl.add(this.Animation)
+        tl.add(this.animation)
     }
 }
 
@@ -133,23 +163,28 @@ class PivotToggle extends Action {
     constructor(targets, line=1) {
         super(targets, line)
         PivotToggle.duration = 500
+        this.speed = 1
     }
 
     get duration() {
-        return PivotToggle.duration / AnimationController.animationSpeed
+        return PivotToggle.duration / this.speed
     }
 
-    get Animation() {
+    get animation() {
         return {
             targets: document.querySelector(`${this.targets.id}`),
             duration: this.duration,
-            backgroundColor: anime.get(document.querySelector(`${this.targets.id}`), "backgroundColor") === "rgb(98, 144, 200)" ? "#A020F0" : "#6290C8",
-            begin: console.log(anime.get(document.querySelector(`${this.targets.id}`), "backgroundColor"))
+            backgroundColor: anime.get(document.querySelector(`${this.targets.id}`), "backgroundColor") === "rgb(98, 144, 200)" ? "#A020F0" : "#6290C8"
+            //,begin: console.log(anime.get(document.querySelector(`${this.targets.id}`), "backgroundColor"))
         }
     }
 
+    Animate(speed) {
+        return super.Animate.call(this, speed)
+    }
+
     AddToTimeline(tl) {
-        tl.add(this.Animation)
+        tl.add(this.animation)
     }
 }
 
@@ -157,13 +192,14 @@ class Subarray extends Action {
     constructor(targets, line=1) {
         super(targets, line)
         Subarray.duration = 0
+        this.speed = 1
     }
 
     get duration() {
-        return Subarray.duration / AnimationController.animationSpeed
+        return Subarray.duration / this.speed
     }
 
-    get Animation() {
+    get animation() {
         const animations = this.targets.map((element) => {
             return {
             targets: document.querySelector(`${element.id}`),
@@ -173,8 +209,28 @@ class Subarray extends Action {
         return animations
     }
 
+    Animate(speed) {
+        this.speed = speed || this.speed
+        const animList = []
+        for(let anim of this.animation) {
+            animList.push(anime(anim))
+        }
+        return {
+            animations: animList,
+            finished: Promise.all(animList.map((element) => {
+                return element.finished
+            })),
+            pause: function() {
+                this.animations.forEach((animation) => {animation.pause()})
+            },
+            play: function() {
+                this.animations.forEach((animation) => {animation.play()})
+            }
+        }
+    }
+
     AddToTimeline(tl) {
-        this.Animation.forEach((animation, index) => {
+        this.animation.forEach((animation, index) => {
             index == 0 ? tl.add(animation) : tl.add(animation, `-=${this.duration}`)
         })
     }
