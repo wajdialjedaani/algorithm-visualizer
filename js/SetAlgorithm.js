@@ -19,7 +19,7 @@ class PageAlgorithm{
             }
         }
         //Parse JSON associated with func name
-        let file = await fetch(`../Assets/HTML/${func}.json`)
+        let file = await fetch(`../Assets/HTML/${func.toLowerCase()}.json`)
         file = await file.text()
         file = JSON.parse(file)
         //Initialize values from JSON data
