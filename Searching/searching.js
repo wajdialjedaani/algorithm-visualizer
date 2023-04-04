@@ -9,8 +9,6 @@ import { AnimationController } from "../js/AnimationController.js";
 //let selectedFunction = (new URLSearchParams(window.location.search)).get("func")
 let input = []
 let x
-let inProgress = false
-let playing = false
 const alertContainer = document.getElementById('alertContainer')
 
 const pageAlgorithm = new PageAlgorithm()
@@ -35,40 +33,6 @@ pageAlgorithm.changeAlgo((new URLSearchParams(window.location.search)).get("func
 
 // Animation ----------------------------------------------------------------
 async function compareAnimation(actions) {
-    //let progress = document.querySelector("#Progress-Bar");
-    //let tl
-    //document.querySelector("#PlayPause").onclick = function() {
-    //    if(typeof tl === "undefined" || !inProgress) {
-    //        console.log("No animation playing")
-    //        return
-    //    }
-    //    if(playing) {
-    //        console.log("first")
-    //        playing = false
-    //        tl.pause()
-    //        this.firstChild.setAttribute("src", "../Assets/play-fill.svg")
-    //    }
-    //    else {
-    //        console.log("second")
-    //        playing = true
-    //        tl.play()
-    //        this.firstChild.setAttribute("src", "../Assets/pause-fill.svg")
-    //    }
-    //}
-    //
-    //playing = true
-    //
-    //for(let action of actions) {
-    //    tl = anime.timeline()
-    //    DisplayAnnotation(action.annotation, document.querySelector("#annotation>.card-body>p"))
-    //    action.AnimatePseudocode()
-    //    action.AddToTimeline(tl)
-    //    await tl.finished
-    //
-    //    progress.style.width = `${(actions.indexOf(action) + 1) / actions.length * 100}%`
-    //}
-    //
-    //playing = false    
     animationController.playing = true
     await animationController.PlayAllAnimations({progressBar: document.querySelector("#Progress-Bar")})
     animationController.playing = false
@@ -161,22 +125,27 @@ function printArr(arr) {
 }
 
 function start() {
-    if(inProgress) {
-        console.log("Animation in progress, can't play")
+    if(animationController.inProgress) {
+        Alert(alertContainer, "Animation in progress, can't play", "warning")
         return
     }
     generateBox()
-    inProgress = true
+    animationController.inProgress = true
     getFindValue()
+
+    //Change Go button to Cancel button
+    document.querySelector("#start").style.display = "none"
+    document.querySelector("#cancel").style.display = "inline"
+
     animationController.animations = pageAlgorithm.selectedFunction(input, x)
     compareAnimation(animationController.animations)
     .then(function(value) {
-        document.querySelector("#start").style.display = "none"
+        document.querySelector("#cancel").style.display = "none"
         document.querySelector("#reset").style.display = "inline"
     })
     // .catch((error) => {console.log("Error in start()")})
     .finally( function() {
-        inProgress = false
+        animationController.inProgress = false
     })
 }
 
@@ -223,10 +192,17 @@ document.querySelector("#reset").addEventListener("click", function() {
     document.querySelector("#Progress-Bar").style.width = "0%"
     document.querySelector("#reset").style.display = "none"
     document.querySelector("#start").style.display = "inline"
-    inProgress = false;
+    animationController.inProgress = false;
+})
+document.querySelector("#cancel").addEventListener("click", () => {
+    if(!animationController.inProgress) {
+        Alert(alertContainer, "No in-progress animation to cancel.", "warning")
+        return
+    }
+    animationController.CancelAnimation()
 })
 document.querySelector("#PlayPause").onclick = function() {
-    if(typeof animationController.currentAnim === "undefined" || !inProgress) {
+    if(typeof animationController.currentAnim === "undefined" || !animationController.inProgress) {
         Alert(alertContainer, "No animation playing", 'warning')
         return
     }

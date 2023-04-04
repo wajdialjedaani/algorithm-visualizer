@@ -7,7 +7,6 @@ import { PageAlgorithm, DisplayAnnotation } from "../js/SetAlgorithm.js";
 import { AnimationController } from "../js/AnimationController.js";
 
 let input = []
-let inProgress = false
 const alertContainer = document.getElementById('alertContainer')
 
 const pageAlgorithm = new PageAlgorithm()
@@ -16,10 +15,11 @@ const animationController = new AnimationController()
 window.onload = generateBars
 window.onresize = generateBars
 //Initialize dropdown menu buttons
-document.querySelectorAll(".InsertionSort").forEach(element => element.onclick=pageAlgorithm.changeAlgo.bind(pageAlgorithm))
-document.querySelectorAll(".SelectionSort").forEach(element => element.onclick=pageAlgorithm.changeAlgo.bind(pageAlgorithm))
-document.querySelectorAll(".BubbleSort").forEach(element => element.onclick=pageAlgorithm.changeAlgo.bind(pageAlgorithm))
-document.querySelectorAll(".QuickSort").forEach(element => element.onclick=pageAlgorithm.changeAlgo.bind(pageAlgorithm))
+
+document.querySelectorAll(".InsertionSort").forEach((element) => {element.onclick=pageAlgorithm.changeAlgo.bind(pageAlgorithm)})
+document.querySelectorAll(".SelectionSort").forEach((element) => {element.onclick=pageAlgorithm.changeAlgo.bind(pageAlgorithm)})
+document.querySelectorAll(".BubbleSort").forEach((element) => {element.onclick=pageAlgorithm.changeAlgo.bind(pageAlgorithm)})
+document.querySelectorAll(".QuickSort").forEach((element) => {element.onclick=pageAlgorithm.changeAlgo.bind(pageAlgorithm)})
 
 //Initialize sorting-specific buttons
 document.querySelector("#randomNumbers").addEventListener('click', randomInput)
@@ -131,20 +131,25 @@ function printArr(arr) {
 */
 
 function start() {
-    if(inProgress) {
+    if(animationController.inProgress) {
         Alert(alertContainer, "Animation in progress, can't play", 'warning')
         return
     }
-    inProgress = true
+    animationController.inProgress = true
+
+    //Change Go button to Cancel button
+    document.querySelector("#start").style.display = "none"
+    document.querySelector("#cancel").style.display = "inline"
+
     animationController.animations = pageAlgorithm.selectedFunction(input, 0, input.length - 1);
     swapAnimation(animationController.animations)
     .then(function(value) {
-        document.querySelector("#start").style.display = "none"
+        document.querySelector("#cancel").style.display = "none"
         document.querySelector("#reset").style.display = "inline"
     })
     .catch((error) => {console.log(error.message)})
     .finally( function() {
-        inProgress = false
+        animationController.inProgress = false
     })
 }
 
@@ -153,6 +158,8 @@ document.querySelectorAll(".draggable").forEach((element) => {dragElement(elemen
 document.querySelectorAll(".resizer").forEach((element) => {ResizeHandler(element)})
 // ----------------------------------------------------------------
 
+
+// Bottom Bar Elements --------------------------------------------
 document.querySelector('#start').addEventListener('click', start)
 document.querySelector('#getNewInput').addEventListener('click', function() {
     try {
@@ -181,10 +188,17 @@ document.querySelector("#reset").addEventListener("click", function() {
     document.querySelector("#Progress-Bar").style.width = "0%"
     document.querySelector("#reset").style.display = "none"
     document.querySelector("#start").style.display = "inline"
-    inProgress = false;
+    animationController.inProgress = false;
+})
+document.querySelector("#cancel").addEventListener("click", () => {
+    if(!animationController.inProgress) {
+        Alert(alertContainer, "No in-progress animation to cancel.", "warning")
+        return
+    }
+    animationController.CancelAnimation()
 })
 document.querySelector("#PlayPause").onclick = function() {
-    if(typeof animationController.currentAnim === "undefined" || !inProgress) {
+    if(typeof animationController.currentAnim === "undefined" || !animationController.inProgress) {
         Alert(alertContainer, "No animation playing", 'warning')
         return
     }
@@ -201,3 +215,4 @@ document.querySelector("#PlayPause").onclick = function() {
         this.firstChild.setAttribute("src", "../Assets/pause-fill.svg")
     }
 }
+// ----------------------------------------------------------------

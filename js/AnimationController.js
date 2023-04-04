@@ -7,6 +7,7 @@ export class AnimationController {
         this.currentAnim = []
         this.progress = 0
         this.cancel = false
+        this.inProgress = false
     }
 
     //Play entire list of animations from beginning to end
@@ -66,5 +67,12 @@ export class AnimationController {
         for(let animation of this.currentAnim) {
             animation.pause()
         }
+    }
+
+    CancelAnimation() {
+        this.cancel = true
+        this.playing = false
+        this.inProgress = false
+        this.progress = 0
     }
 }

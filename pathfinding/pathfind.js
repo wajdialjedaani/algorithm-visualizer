@@ -8,13 +8,10 @@ import { AnimationController } from "../js/AnimationController.js";
 
 let columns = Math.floor((document.body.clientWidth / 30));
 let rows = Math.floor((document.body.clientHeight / 30));
-let inProgress = false
 const alertContainer = document.getElementById('alertContainer')
 
 const animationController = new AnimationController()
 const pageAlgorithm = new PageAlgorithm()
-
-document.querySelector("#cancel").addEventListener('click', CancelAnimation)
 
 //Initialize the card listeners
 document.querySelectorAll(".draggable").forEach((element) => {dragElement(element)})
@@ -203,7 +200,7 @@ async function animateResults(actions) {
 
 document.querySelector("#generate").addEventListener("click", () => {
     //If there is already an animation, do nothing
-    if(inProgress) {
+    if(animationController.inProgress) {
         Alert(alertContainer, "Animation in progress, can't play", 'warning')
         return
     }
@@ -214,16 +211,18 @@ document.querySelector("#generate").addEventListener("click", () => {
     }
     catch(error) {
         Alert(alertContainer, error.message, 'danger')
-        Alert(alertContainer, "Animation in progress, can't play", 'warning')
         return
     }
 
     //If a path was found, begin animation
-    inProgress = true
+    animationController.inProgress = true
+    //Change Go button to Cancel button
+    document.querySelector("#generate").style.display = "none"
+    document.querySelector("#cancel").style.display = "inline"
     animateResults(animationController.animations)
     .then(
         function(value) {
-            document.querySelector("#generate").style.display = "none"
+            document.querySelector("#cancel").style.display = "none"
             document.querySelector("#reset").style.display = "inline"
     })
     .catch(
@@ -232,7 +231,7 @@ document.querySelector("#generate").addEventListener("click", () => {
     })
     .finally(
         () => {
-            inProgress = false
+            animationController.inProgress = false
         }
     )
 })
@@ -245,8 +244,16 @@ document.querySelector("#reset").addEventListener("click", () => {
     document.querySelector("#generate").style.display = "inline"
 })
 
+document.querySelector("#cancel").addEventListener("click", () => {
+    if(!animationController.inProgress) {
+        Alert(alertContainer, "No in-progress animation to cancel.", "warning")
+        return
+    }
+    animationController.CancelAnimation()
+})
+
 document.querySelector("#PlayPause").onclick = function() {
-    if(typeof animationController.currentAnim === "undefined" || !inProgress) {
+    if(typeof animationController.currentAnim === "undefined" || !animationController.inProgress) {
         Alert(alertContainer, "No animation playing", 'warning')
         return
     }
@@ -262,8 +269,4 @@ document.querySelector("#PlayPause").onclick = function() {
         animationController.Play()
         this.firstChild.setAttribute("src", "../Assets/pause-fill.svg")
     }
-}
-
-function CancelAnimation() {
-    animationController.cancel = true
 }
