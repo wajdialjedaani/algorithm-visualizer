@@ -190,7 +190,7 @@ function FindPath(table)
 async function animateResults(actions) {
     animationController.playing = true
     try {
-        await animationController.PlayAllAnimations({progressBar: document.querySelector("#Progress-Bar")})
+        await animationController.PlayAllAnimations({progressBar: document.querySelector("#Progress-Bar"), cancel: document.querySelector("#cancel")})
     }
     catch(err) {
         Alert(alertContainer, err.message, 'danger')
@@ -244,13 +244,13 @@ document.querySelector("#reset").addEventListener("click", () => {
     document.querySelector("#generate").style.display = "inline"
 })
 
-document.querySelector("#cancel").addEventListener("click", () => {
-    if(!animationController.inProgress) {
-        Alert(alertContainer, "No in-progress animation to cancel.", "warning")
-        return
-    }
-    animationController.CancelAnimation()
-})
+//document.querySelector("#cancel").addEventListener("click", () => {
+//    if(!animationController.inProgress) {
+//        Alert(alertContainer, "No in-progress animation to cancel.", "warning")
+//        return
+//    }
+//    animationController.CancelAnimation()
+//})
 
 document.querySelector("#PlayPause").onclick = function() {
     if(typeof animationController.currentAnim === "undefined" || !animationController.inProgress) {

@@ -111,7 +111,7 @@ function removeBars() {
 // highlights and swaps bars
 async function swapAnimation(actions) {
     animationController.playing = true
-    await animationController.PlayAllAnimations({progressBar: document.querySelector("#Progress-Bar")})
+    await animationController.PlayAllAnimations({progressBar: document.querySelector("#Progress-Bar"), cancel: document.querySelector("#cancel")})
     animationController.playing = false
 }
 
@@ -190,13 +190,13 @@ document.querySelector("#reset").addEventListener("click", function() {
     document.querySelector("#start").style.display = "inline"
     animationController.inProgress = false;
 })
-document.querySelector("#cancel").addEventListener("click", () => {
-    if(!animationController.inProgress) {
-        Alert(alertContainer, "No in-progress animation to cancel.", "warning")
-        return
-    }
-    animationController.CancelAnimation()
-})
+//document.querySelector("#cancel").addEventListener("click", () => {
+//    if(!animationController.inProgress) {
+//        Alert(alertContainer, "No in-progress animation to cancel.", "warning")
+//        return
+//    }
+//    animationController.CancelAnimation()
+//})
 document.querySelector("#PlayPause").onclick = function() {
     if(typeof animationController.currentAnim === "undefined" || !animationController.inProgress) {
         Alert(alertContainer, "No animation playing", 'warning')

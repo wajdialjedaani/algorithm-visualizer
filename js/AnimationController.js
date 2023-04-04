@@ -11,20 +11,38 @@ export class AnimationController {
     }
 
     //Play entire list of animations from beginning to end
-    async PlayAllAnimations(params) {
-        const progress = params?.progressBar || document.querySelector("#Progress-Bar")
+    async PlayAllAnimations(options) {
+        const progress = options?.progressBar || document.querySelector("#Progress-Bar")
         const animationGen = this.StepThroughAll()
         let currentStep = animationGen.next()
         while(!currentStep.done) {
             progress.style.width = `${this.progress}%`
-            //Check for flag to cancel before starting each step
-            if(this.cancel) {
-                this.cancel = false
+
+            //Custom promise to handle animation interrupts
+            const animationController = this
+            const shortCircuit = new Promise(async (resolve, reject) => {
+                //Called when cancel is pressed, rejects the promise short circuiting the promise.all
+                function handler() {
+                    animationController.CancelAnimation(reject)
+                    options?.cancel?.removeEventListener('click', handler)
+                }
+                options?.cancel?.addEventListener('click', handler, {once: true})
+
+                //Wait for animation to finish normally. Will resolve if animation is not cancelled
+                await Promise.all([currentStep.value[0].finished, currentStep.value[1].finished])
+                options?.cancel?.removeEventListener('click', handler)
+                resolve()
+            })
+
+            //Start animations and await their finish.
+            try {
+                await Promise.all([currentStep.value[0].finished, currentStep.value[1].finished, shortCircuit])
+            } catch(error) {
+                //Runs in the case of the animation being cancelled.
+                
                 this.Pause()
-                return Promise.resolve()
+                return
             }
-            //Start animations and await their finish
-            await Promise.all([currentStep.value[0].finished, currentStep.value[1].finished])
             currentStep = animationGen.next()
         }
         this.currentAnim = []
@@ -69,10 +87,10 @@ export class AnimationController {
         }
     }
 
-    CancelAnimation() {
+    CancelAnimation(reject) {
         this.cancel = true
-        this.playing = false
-        this.inProgress = false
         this.progress = 0
+
+        reject("Animation cancelled")
     }
 }
