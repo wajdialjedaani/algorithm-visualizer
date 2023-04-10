@@ -8,6 +8,7 @@ export class AnimationController {
         this.progress = 0
         this.cancel = false
         this.inProgress = false
+        this.shortCircuitFunc = undefined
     }
 
     //Play entire list of animations from beginning to end
@@ -21,9 +22,10 @@ export class AnimationController {
             //Custom promise to handle animation interrupts
             const animationController = this
             const shortCircuit = new Promise(async (resolve, reject) => {
+                this.shortCircuitFunc = reject
                 //Called when cancel is pressed, rejects the promise short circuiting the promise.all
                 function handler() {
-                    animationController.CancelAnimation(reject)
+                    animationController.CancelAnimation()
                     options?.cancel?.removeEventListener('click', handler)
                 }
                 options?.cancel?.addEventListener('click', handler, {once: true})
@@ -41,11 +43,13 @@ export class AnimationController {
                 //Runs in the case of the animation being cancelled.
                 
                 this.Pause()
+                this.inProgress = false
                 return
             }
             currentStep = animationGen.next()
         }
         this.currentAnim = []
+        this.inProgress = false
     }
     //Play given animation
     async PlayAnimation(anim) {
@@ -87,10 +91,9 @@ export class AnimationController {
         }
     }
 
-    CancelAnimation(reject) {
+    CancelAnimation() {
         this.cancel = true
         this.progress = 0
-
-        reject("Animation cancelled")
+        this.shortCircuitFunc("Animation cancelled")
     }
 }

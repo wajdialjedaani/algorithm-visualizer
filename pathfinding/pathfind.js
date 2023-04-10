@@ -17,8 +17,18 @@ const pageAlgorithm = new PageAlgorithm()
 document.querySelectorAll(".draggable").forEach((element) => {dragElement(element)})
 document.querySelectorAll(".resizer").forEach((element) => {ResizeHandler(element)})
 //Initialize the dropdown menus
-document.querySelectorAll(".AStar").forEach(element => element.onclick=pageAlgorithm.changeAlgo.bind(pageAlgorithm))
-document.querySelectorAll(".Djikstra").forEach(element => element.onclick=pageAlgorithm.changeAlgo.bind(pageAlgorithm))
+document.querySelectorAll(".AStar").forEach(element => element.onclick=element.onclick=ChangeAlgorithm)
+document.querySelectorAll(".Djikstra").forEach(element => element.onclick=element.onclick=ChangeAlgorithm)
+
+function ChangeAlgorithm(event) {
+    if(animationController.inProgress) {
+        animationController.CancelAnimation()
+    }
+    pageAlgorithm.changeAlgo.call(pageAlgorithm, event)
+
+    //Reset call is done after a 0ms timeout to ensure it runs AFTER all promises relating to the animation resolve.
+    setTimeout(()=>{Reset()}, 0)
+}
 
 CheckFirstVisit('pathVisited')
 
@@ -198,6 +208,13 @@ async function animateResults(actions) {
     animationController.playing = false
 }
 
+function Reset() {
+    generateTable()
+    document.querySelector("#Progress-Bar").style.width = "0%"
+    document.querySelector("#reset").style.display = "none"
+    document.querySelector("#generate").style.display = "inline"
+}
+
 document.querySelector("#generate").addEventListener("click", () => {
     //If there is already an animation, do nothing
     if(animationController.inProgress) {
@@ -237,12 +254,7 @@ document.querySelector("#generate").addEventListener("click", () => {
 })
 
 //Button hidden until the animation has finished.
-document.querySelector("#reset").addEventListener("click", () => {
-    generateTable()
-    document.querySelector("#Progress-Bar").style.width = "0%"
-    document.querySelector("#reset").style.display = "none"
-    document.querySelector("#generate").style.display = "inline"
-})
+document.querySelector("#reset").addEventListener("click", Reset)
 
 //document.querySelector("#cancel").addEventListener("click", () => {
 //    if(!animationController.inProgress) {

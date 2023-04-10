@@ -16,10 +16,21 @@ window.onload = generateBars
 window.onresize = generateBars
 //Initialize dropdown menu buttons
 
-document.querySelectorAll(".InsertionSort").forEach((element) => {element.onclick=pageAlgorithm.changeAlgo.bind(pageAlgorithm)})
-document.querySelectorAll(".SelectionSort").forEach((element) => {element.onclick=pageAlgorithm.changeAlgo.bind(pageAlgorithm)})
-document.querySelectorAll(".BubbleSort").forEach((element) => {element.onclick=pageAlgorithm.changeAlgo.bind(pageAlgorithm)})
-document.querySelectorAll(".QuickSort").forEach((element) => {element.onclick=pageAlgorithm.changeAlgo.bind(pageAlgorithm)})
+document.querySelectorAll(".InsertionSort").forEach((element) => {element.onclick=ChangeAlgorithm})
+document.querySelectorAll(".SelectionSort").forEach((element) => {element.onclick=ChangeAlgorithm})
+document.querySelectorAll(".BubbleSort").forEach((element) => {element.onclick=ChangeAlgorithm})
+document.querySelectorAll(".QuickSort").forEach((element) => {element.onclick=ChangeAlgorithm})
+
+function ChangeAlgorithm(event) {
+    if(animationController.inProgress) {
+        animationController.CancelAnimation()
+    }
+    pageAlgorithm.changeAlgo.call(pageAlgorithm, event)
+
+    //Reset call is done after a 0ms timeout to ensure it runs AFTER all promises relating to the animation resolve.
+    setTimeout(()=>{Reset()}, 0)
+}
+
 
 //Initialize sorting-specific buttons
 document.querySelector("#randomNumbers").addEventListener('click', randomInput)
@@ -153,6 +164,14 @@ function start() {
     })
 }
 
+function Reset() {
+    generateBars()
+    document.querySelector("#Progress-Bar").style.width = "0%"
+    document.querySelector("#reset").style.display = "none"
+    document.querySelector("#start").style.display = "inline"
+    animationController.inProgress = false;
+}
+
 // Draggable ----------------------------------------------------------------
 document.querySelectorAll(".draggable").forEach((element) => {dragElement(element)})
 document.querySelectorAll(".resizer").forEach((element) => {ResizeHandler(element)})
@@ -183,13 +202,7 @@ document.querySelector("#AnimSpeed").addEventListener("click", function() {
     animationController.speed = animationController.speeds[(animationController.speeds.indexOf(animationController.speed)+1)%animationController.speeds.length]
     this.innerHTML = `${animationController.speed}x`
 })
-document.querySelector("#reset").addEventListener("click", function() {
-    generateBars()
-    document.querySelector("#Progress-Bar").style.width = "0%"
-    document.querySelector("#reset").style.display = "none"
-    document.querySelector("#start").style.display = "inline"
-    animationController.inProgress = false;
-})
+document.querySelector("#reset").addEventListener("click", Reset)
 //document.querySelector("#cancel").addEventListener("click", () => {
 //    if(!animationController.inProgress) {
 //        Alert(alertContainer, "No in-progress animation to cancel.", "warning")

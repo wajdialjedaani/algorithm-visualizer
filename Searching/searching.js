@@ -17,8 +17,19 @@ const animationController = new AnimationController()
 window.onload = generateBox
 window.onresize = generateBox
 //Initialize the dropdown menu buttons
-document.querySelectorAll(".LinearSearch").forEach(element => element.onclick=pageAlgorithm.changeAlgo.bind(pageAlgorithm))
-document.querySelectorAll(".BinarySearch").forEach(element => element.onclick=pageAlgorithm.changeAlgo.bind(pageAlgorithm))
+document.querySelectorAll(".LinearSearch").forEach(element => element.onclick=element.onclick=ChangeAlgorithm)
+document.querySelectorAll(".BinarySearch").forEach(element => element.onclick=element.onclick=ChangeAlgorithm)
+
+function ChangeAlgorithm(event) {
+    if(animationController.inProgress) {
+        animationController.CancelAnimation()
+    }
+    pageAlgorithm.changeAlgo.call(pageAlgorithm, event)
+
+    //Reset call is done after a 0ms timeout to ensure it runs AFTER all promises relating to the animation resolve.
+    setTimeout(()=>{Reset()}, 0)
+}
+
 //Initialize searching-specific buttons
 document.querySelector("#randomNumbers").addEventListener('click', randomInput)
 
@@ -149,6 +160,14 @@ function start() {
     })
 }
 
+function Reset() {
+    generateBox()
+    document.querySelector("#Progress-Bar").style.width = "0%"
+    document.querySelector("#reset").style.display = "none"
+    document.querySelector("#start").style.display = "inline"
+    animationController.inProgress = false;
+}
+
 document.querySelectorAll(".draggable").forEach((element) => {dragElement(element)})
 document.querySelectorAll(".resizer").forEach((element) => {ResizeHandler(element)})
 
@@ -187,13 +206,7 @@ document.querySelector('#input').addEventListener('keypress', function(e) {
         }
     }
 })
-document.querySelector("#reset").addEventListener("click", function() {
-    generateBox()
-    document.querySelector("#Progress-Bar").style.width = "0%"
-    document.querySelector("#reset").style.display = "none"
-    document.querySelector("#start").style.display = "inline"
-    animationController.inProgress = false;
-})
+document.querySelector("#reset").addEventListener("click", Reset)
 //document.querySelector("#cancel").addEventListener("click", () => {
 //    if(!animationController.inProgress) {
 //        Alert(alertContainer, "No in-progress animation to cancel.", "warning")
