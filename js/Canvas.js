@@ -1,0 +1,273 @@
+"use strict";
+
+/*
+Holds the TD elements displayed in the canvas.
+*/
+class Table {
+    constructor() {
+        this.elementTable = []
+        this.cellSize = 30
+    }
+
+    //generates a table based on the specs of the page
+    CreateTable() {
+        //Clear existing table data
+        this.elementTable = []
+
+        //Calculate new table dimensions
+        let columns = Math.floor((window.innerWidth / this.cellSize));
+        let rows = Math.floor((window.innerHeight / this.cellSize));
+
+        let width = window.innerWidth / columns
+        let height = window.innerHeight / rows
+
+        for(let y=0; y<rows; y++) {
+            //Create new row
+            this.elementTable.push([])
+            for(let x=0; x<columns; x++) {
+                //Fill in the newly created row
+                let node = document.createElement("td")
+                node.id = (`${y},${x}`)
+                node.addEventListener('ontouchstart' in document.documentElement === true ? 'touchstart' : 'mousedown', cellHandler.bind(this), {passive: false})
+                node.style.setProperty("--width", width)
+                node.style.setProperty("--height", height)
+                this.elementTable[y].push(node)
+            }
+        }
+        this.DisplayTable()
+    }
+
+    //Modify the current elementTable when changes are made to the page
+    UpdateTable() {
+        let newColumns = Math.floor((window.innerWidth / this.cellSize));
+        let newRows = Math.floor((window.innerHeight / this.cellSize));
+
+        let width = window.innerWidth / newColumns
+        let height = window.innerHeight / newRows
+        //Adjust rows to match change in page dimensions
+        //Remove excess rows
+        for(let rowDiff = newRows - this.elementTable.length; rowDiff < 0; rowDiff++) {
+            this.elementTable.pop()
+        }
+        //Add new rows
+        for(let rowDiff = newRows - this.elementTable.length; rowDiff > 0; rowDiff--) {
+            //Create a new row filled with default nodes
+            let x = 0 //Used to track coordinates when filling new row
+            this.elementTable.push(Array.from(Array(this.elementTable.length), ()=>{
+                let node = document.createElement("td")
+                node.id = (`${this.elementTable.length},${x}`)
+                x = x+1
+                node.addEventListener('ontouchstart' in document.documentElement === true ? 'touchstart' : 'mousedown', cellHandler.bind(this), {passive: false})
+                node.style.setProperty("--width", width)
+                node.style.setProperty("--height", height)
+                return node
+            }))
+        }
+        //Remove excess columns
+        for(let columnDiff = newColumns - this.elementTable[0].length; columnDiff < 0; columnDiff++) {
+            //Pop 1 element off each row
+            for(let row of this.elementTable) {
+                row.pop()
+            }
+        }
+        //Add new columns
+        for(let columnDiff = newColumns - this.elementTable[0].length; columnDiff > 0; columnDiff--) {
+            //Iterate through each row, add 1 element each time
+            let y=0
+            for(let row of this.elementTable) {
+                row.push((()=>{
+                    let node = document.createElement("td")
+                    node.id = (`${y},${row.length}`)
+                    y = y+1
+                    node.addEventListener('ontouchstart' in document.documentElement === true ? 'touchstart' : 'mousedown', cellHandler, {passive: false})
+                    node.style.setProperty("--width", width)
+                    node.style.setProperty("--height", height)
+                    return node
+                }).call(this))
+            }
+        }
+        this.DisplayTable()
+    }
+
+    DisplayTable() {
+        //Clear existing table
+        let displayArea = document.querySelector("#grid-container")
+        displayArea.innerHTML = ""
+
+        //Set new table dimensions
+        displayArea.style.setProperty("--columns", this.elementTable[0].length);
+        displayArea.style.setProperty("--rows", this.elementTable.length);
+
+        //Populate page with data held in elementTable
+        for(let y=0; y<this.elementTable.length; y++) {
+            for(let x=0; x<this.elementTable[y].length; x++) {
+                displayArea.appendChild(this.elementTable[y][x])
+            }
+        }
+    }
+    //Grabs a Element from the elementTable, modifies it, and updates the DOM
+    EditNode(y, x, func) {
+        let node = this.elementTable[y][x]
+        func(node)
+        document.getElementById(`${y},${x}`).replaceWith(node)
+    }
+
+}
+
+class Graph {
+    constructor(table) {
+        this.adjList = new Map()
+        this.vertices = []
+
+        //Make graph from an HTML table if provided
+        if(table instanceof Element) {
+            other = ParseTable(table)
+            this.adjList = other.adjList
+            this.vertices = other.vertices
+        }
+    }
+
+    get start() {
+        return this.vertices.find((element)=>{return element.start})
+    }
+
+    get end() {
+        return this.vertices.find((element)=>{return element.end})
+    }
+
+    addVertex(vertex) {
+        this.vertices.push(vertex)
+        this.adjList.set(vertex, [])
+    }
+
+    addEdge(a, b) {
+        this.adjList.get(a).push(b)
+        this.adjList.get(b).push(a)
+    }
+
+    //Take a DOM element table and return a graph object
+    static ParseTable(table) {
+        if(!(table instanceof Element)) {
+            throw new Error("Invalid table")
+        }
+        
+        let start = undefined
+        let end = undefined
+
+        const graph = new Graph()
+
+        //Parse each cell in the table individually
+        table.childNodes.forEach(cell => {
+                if(cell.nodeName !== "TD"){
+                    return
+                }
+                //Populate vertex with data from table
+                const coords = cell.id.split(",")
+                let isWalkable = cell.className == "wall"
+                let vertex = new Vertex(coords[1], coords[0], {walkable: isWalkable, start: cell.className=="startnode", end: cell.className=="endnode"})
+                //console.log(vertex)
+                if(vertex.start) {
+                    start = vertex
+                }
+                if(vertex.end) {
+                    end = vertex
+                }
+                
+                //Add the new node and whatever new edges the node may have
+                graph.addVertex(vertex)
+                for(const key of graph.adjList.keys()) {
+                    if (((key.x == vertex.x+1 || key.x == vertex.x-1) && key.y == vertex.y) || (key.x == vertex.x && (key.y == vertex.y+1 || key.y == vertex.y-1))) {
+                        graph.addEdge(key, vertex)
+                    }
+                }
+            })
+        return graph
+    }
+}
+
+class Vertex {
+    constructor(x, y, options) {
+        this.x = x
+        this.y = y
+        this.f = 999999999
+        this.g = 999999999
+        this.h = 0
+        this.walkable = options?.walkable || true
+        this.start = options?.start || false
+        this.end = options?.end || false
+    }
+}
+
+//This listener is always active on the nodes. Listens for inital click/touch to begin listening for further input
+function cellHandler(event) {
+    let dragFunc = cellDrag.bind(this)
+    let cleanupFunc = cleanUp.bind(this)
+    document.querySelectorAll("td").forEach((node)=>{
+        //Checks for mousedown as a way to check if the device is a touchscreen.
+        node.addEventListener(event.type == "mousedown" ? "mousemove" : "touchmove", dragFunc)
+        node.addEventListener(event.type == "mousedown" ? "mouseup" : "touchend", cleanupFunc)
+    })
+
+    let drag = false
+
+    //Handles all events after the initial click
+    function cellDrag(e) {
+        drag = true
+        //Dragging requires different handling, so check for that first. Otherwise, default to mouse inputs
+        let x = e.touches?.[0].clientX || e.clientX
+        let y = e.touches?.[0].clientY || e.clientY
+        let pageElement = document.elementFromPoint(x, y)
+
+        //Because we use elementFromPoint, we may get non-table elements. Ignore those
+        if(pageElement.tagName !== "TD") {
+            return
+        }
+        let coords = pageElement.id.split(",").map(coord => Number(coord))
+        this.EditNode(coords[0], coords[1], (element)=>{element.className = "wall"})
+
+        //if(e.type == "mousemove") {
+        //    this.EditNode(coords[0], coords[1], (element)=>{element.className = "wall"})
+        //    //e.currentTarget.className = "wall"
+        //}
+        //else {
+        //    if(pageElement.tagName === "TD") {
+        //        pageElement.className = "wall"
+        //    }
+        //}
+    }
+
+    //Called upon mouseup or end of touch.
+    function cleanUp(e) {
+        document.querySelectorAll("td").forEach((node)=>{
+            node.removeEventListener(e.type == "mouseup" ? "mousemove" : "touchmove", dragFunc)
+            node.removeEventListener(e.type == "mouseup" ? "mouseup" : "touchend", cleanupFunc)
+        })
+
+        let x = e.clientX
+        let y = e.clientY
+        let pageElement = document.elementFromPoint(x, y)
+        if(pageElement.tagName !== "TD") {
+            return
+        }
+        let coords = pageElement.id.split(",").map(coord => Number(coord))
+
+        //If input ended without dragging:
+        if(!drag) {
+            if(e.currentTarget.className == "startnode") {
+                this.EditNode(coords[0], coords[1], (element)=>{element.className = "endnode"})
+            }
+            else if(e.currentTarget.className == "endnode" || e.currentTarget.className == "wall") {
+                this.EditNode(coords[0], coords[1], (element)=>{element.className = ""})
+            }
+            else {
+                this.EditNode(coords[0], coords[1], (element)=>{element.className = "startnode"})
+            }
+        }
+        //this.elementTable[coords[0]][coords[1]] = e.currentTarget
+        //console.log(this.elementTable[coords[0]][coords[1]])
+
+        drag = false;
+    }
+}
+
+export { Table, Graph }

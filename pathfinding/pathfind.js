@@ -5,6 +5,7 @@ import { CheckFirstVisit } from "../js/Cookies.js";
 import anime from "../js/anime.es.js"
 import { PageAlgorithm, DisplayAnnotation } from "../js/SetAlgorithm.js";
 import { AnimationController } from "../js/AnimationController.js";
+import { Table, Graph } from "../js/Canvas.js";
 
 let columns = Math.floor((document.body.clientWidth / 30));
 let rows = Math.floor((document.body.clientHeight / 30));
@@ -12,6 +13,7 @@ const alertContainer = document.getElementById('alertContainer')
 
 const animationController = new AnimationController()
 const pageAlgorithm = new PageAlgorithm()
+const canvas = new Table()
 
 //Initialize the card listeners
 document.querySelectorAll(".draggable").forEach((element) => {dragElement(element)})
@@ -39,50 +41,13 @@ document.querySelector("#AnimSpeed").addEventListener("click", function() {
 
 pageAlgorithm.changeAlgo((new URLSearchParams(window.location.search)).get("func") || "astar")
 
-let drag = false
+//function cellHandler(event) {
+//    document.querySelectorAll("td").forEach((node)=>{
+//        node.addEventListener(event.type == "mousedown" ? "mousemove" : "touchmove", cellDrag)
+//        node.addEventListener(event.type == "mousedown" ? "mouseup" : "touchend", cleanUp)
+//    })
+//}
 
-function cellDrag(e) {
-    drag = true
-    if(e.type == "mousemove") {
-        this.className = "wall"
-    }
-    else {
-        let x = e.touches[0].clientX
-        let y = e.touches[0].clientY
-
-        let element = document.elementFromPoint(x, y)
-        if(element.tagName === "TD") {
-            element.className = "wall"
-        }
-    }
-}
-
-function cleanUp(e) {
-    document.querySelectorAll("td").forEach((node)=>{
-        node.removeEventListener(e.type == "mouseup" ? "mousemove" : "touchmove", cellDrag)
-        node.removeEventListener(e.type == "mouseup" ? "mouseup" : "touchend", cleanUp)
-    })
-    if(!drag) {
-        console.log("clicking")
-        if(this.className == "startnode") {
-            this.className = "endnode"
-        }
-        else if(this.className == "endnode" || this.className == "wall") {
-            this.className = ""
-        }
-        else {
-            this.className = "startnode"
-        }
-    }
-    drag = false;
-}
-
-function cellHandler(event) {
-    document.querySelectorAll("td").forEach((node)=>{
-        node.addEventListener(event.type == "mousedown" ? "mousemove" : "touchmove", cellDrag)
-        node.addEventListener(event.type == "mousedown" ? "mouseup" : "touchend", cleanUp)
-    })
-}
 
 function generateTable() {
     let table = document.querySelector("#grid-container")
@@ -115,82 +80,24 @@ function generateTable() {
 window.onload = () => {
     let vh = window.innerHeight * 0.01
     document.body.style.setProperty('--vh', `${vh}px`)
-    generateTable()
+    canvas.CreateTable()
 }
 
 window.onresize = () => {
     let vh = window.innerHeight * 0.01
     document.body.style.setProperty('--vh', `${vh}px`)
-    generateTable()
-}
-
-class Vertex {
-    constructor(x, y, walkable, start=false, end=false) {
-        this.x = x
-        this.y = y
-        this.f = 999999999
-        this.g = 999999999
-        this.h = 0
-        this.walkable = walkable
-        this.start = start
-        this.end = end
-    }
-}
-
-class Graph {
-    constructor() {
-        this.adjList = new Map()
-        this.vertices = []
-    }
-
-    addVertex(vertex) {
-        this.vertices.push(vertex)
-        this.adjList.set(vertex, [])
-    }
-
-    addEdge(a, b) {
-        this.adjList.get(a).push(b)
-        this.adjList.get(b).push(a)
-    }
+    canvas.UpdateTable()
 }
 
 function FindPath(table)
 {
-    let start = undefined
-    let end = undefined
-
-    const graph = new Graph()
-    table.childNodes.forEach(cell => {
-            if(cell.nodeName !== "TD"){
-                return
-            }
-            const coords = cell.id.split(",")
-            let vertex
-            if(cell.className == "wall") {
-                vertex = new Vertex(coords[1], coords[0], false)
-            }
-            else {
-                vertex = new Vertex(coords[1], coords[0], true, cell.className=="startnode", cell.className=='endnode')
-                if (cell.className=="startnode") {
-                    start = vertex
-                }
-                if(cell.className=="endnode") {
-                    end = vertex
-                }
-            }
-            graph.addVertex(vertex)
-            for(const key of graph.adjList.keys()) {
-                if (((key.x == vertex.x+1 || key.x == vertex.x-1) && key.y == vertex.y) || (key.x == vertex.x && (key.y == vertex.y+1 || key.y == vertex.y-1))) {
-                    graph.addEdge(key, vertex)
-                }
-            }
-        });
-    if(typeof start == "undefined") {
+    let graph = Graph.ParseTable(document.querySelector("#grid-container"))
+    if(typeof graph.start == "undefined") {
         throw new Error("Please place a start node.")
-    } else if (typeof end == "undefined") {
+    } else if (typeof graph.end == "undefined") {
         throw new Error("Please place an end node.")
     }
-    const actions = pageAlgorithm.selectedFunction(graph, start, end)
+    const actions = pageAlgorithm.selectedFunction(graph, graph.start, graph.end)
     if(typeof actions === "undefined") {
         throw new Error("No path was found.")
     }
@@ -209,7 +116,8 @@ async function animateResults(actions) {
 }
 
 function Reset() {
-    generateTable()
+    //generateTable()
+    canvas.CreateTable()
     document.querySelector("#Progress-Bar").style.width = "0%"
     document.querySelector("#reset").style.display = "none"
     document.querySelector("#generate").style.display = "inline"
