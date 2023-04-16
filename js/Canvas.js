@@ -89,6 +89,33 @@ class Table {
         this.DisplayTable()
     }
 
+    //Takes in a graph and makes it this Table's elementTable, displaying it
+    NewTable(graph) {
+        this.elementTable = []
+        let columns = Math.max(...graph.vertices.map((element)=>{return element.x})) + 1
+        let rows = Math.max(...graph.vertices.map((element)=>{return element.y})) + 1
+
+        let width = window.innerWidth / columns
+        let height = window.innerHeight / rows
+
+        graph.vertices.sort((a, b)=>{return a.y - b.y || a.x - b.x})
+        for(let y=0; y<rows; y++) {
+            this.elementTable.push([])
+            for(let x=0; x<columns; x++) {
+                let node = document.createElement("td")
+                node.id = `${y},${x}`
+                node.addEventListener('ontouchstart' in document.documentElement === true ? 'touchstart' : 'mousedown', cellHandler.bind(this), {passive: false})
+                node.style.setProperty("--width", width)
+                node.style.setProperty("--height", height)
+                graph.vertices[y*columns+x].walkable ? 0 : node.className="wall"
+                graph.vertices[y*columns+x].start ? node.className="startnode" : 0
+                graph.vertices[y*columns+x].end ? node.className="endnode" : 0
+                this.elementTable[y].push(node)
+            }
+        }
+        this.DisplayTable()
+    }
+
     DisplayTable() {
         //Clear existing table
         let displayArea = document.querySelector("#grid-container")
@@ -109,7 +136,7 @@ class Table {
     EditNode(y, x, func) {
         let node = this.elementTable[y][x]
         func(node)
-        document.getElementById(`${y},${x}`).replaceWith(node)
+        //document.getElementById(`${y},${x}`).replaceWith(node)
     }
 
 }
@@ -162,8 +189,9 @@ class Graph {
                     return
                 }
                 //Populate vertex with data from table
-                const coords = cell.id.split(",")
-                let isWalkable = cell.className == "wall"
+                const coords = cell.id.split(",").map((coord)=>{return Number(coord)})
+                let isWalkable = cell.className !== "wall"
+                //isWalkable ? console.log(coords) : 0
                 let vertex = new Vertex(coords[1], coords[0], {walkable: isWalkable, start: cell.className=="startnode", end: cell.className=="endnode"})
                 //console.log(vertex)
                 if(vertex.start) {
@@ -183,6 +211,31 @@ class Graph {
             })
         return graph
     }
+
+    //Takes in a graph and returns the graph with walls separating all nodes
+    static PartitionGraph(graph) {
+        const newGraph = new Graph()
+        const emptyNodes = []
+        //graph.adjList.clear()
+        graph.vertices.forEach((vertex)=>{
+            newGraph.addVertex(vertex)
+            //Make every other node empty, all others walls
+            if(vertex.x%2==0 && vertex.y%2==0) {
+                //newGraph.EditNode(vertex.y, vertex.x, element=>element.className="")
+                vertex.walkable = true
+                emptyNodes.push(vertex)
+                for(const node of emptyNodes) {
+                    if((Math.abs(vertex.x-node.x)==2 && vertex.y==node.y) || (Math.abs(vertex.y-node.y)==2 && vertex.x==node.x)) {
+                        newGraph.addEdge(node, vertex)
+                    }
+                }
+            } else {
+                //newGraph.EditNode(vertex.y, vertex.x, element=>element.className="wall")
+                vertex.walkable = false
+            }
+        })
+        return newGraph
+    }
 }
 
 class Vertex {
@@ -192,7 +245,7 @@ class Vertex {
         this.f = 999999999
         this.g = 999999999
         this.h = 0
-        this.walkable = options?.walkable || true
+        this.walkable = options?.walkable ?? true
         this.start = options?.start || false
         this.end = options?.end || false
     }
@@ -270,4 +323,38 @@ function cellHandler(event) {
     }
 }
 
-export { Table, Graph }
+function DFSMaze(graph) {
+    const walkableNodes = graph.vertices.filter(element=>element.walkable)
+    const visited = new Array(walkableNodes.length).fill(false) //Parallel array to the vertices made to track what's been visited
+    const stack = []
+    let cell = walkableNodes[Math.floor(Math.random() * walkableNodes.length)] //Initialize to a random starting point
+    visited[walkableNodes.indexOf(cell)] = true //Mark cell as visited
+    stack.push(cell)
+
+    while(stack.length > 0) {
+        console.log(stack.length)
+        //Pop a cell and make it current cell
+        cell = stack.pop()
+        //If current cell has unvisited neighbors,
+        let unvisited = []
+        for(let neighbor of graph.adjList.get(cell)) {
+            if(!visited[walkableNodes.indexOf(neighbor)]) {
+                unvisited.push(neighbor)
+            }
+        }
+        if(unvisited.length==0) {
+            continue
+        }
+        //Push current cell to stack
+        stack.push(cell)
+        //Choose one of unvisited neighbors
+        let neighbor = unvisited[Math.floor(Math.random() * unvisited.length)]
+        //Remove the wall between the two
+        graph.vertices.find(element => element.x == (cell.x + neighbor.x) / 2 && element.y == (cell.y + neighbor.y) / 2).walkable = true
+        //Mark chosen neighbor as visited and push to stack
+        visited[walkableNodes.indexOf(neighbor)] = true
+        stack.push(neighbor)
+    }
+}
+
+export { Table, Graph, DFSMaze }

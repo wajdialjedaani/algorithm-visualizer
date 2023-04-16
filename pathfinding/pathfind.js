@@ -5,7 +5,7 @@ import { CheckFirstVisit } from "../js/Cookies.js";
 import anime from "../js/anime.es.js"
 import { PageAlgorithm, DisplayAnnotation } from "../js/SetAlgorithm.js";
 import { AnimationController } from "../js/AnimationController.js";
-import { Table, Graph } from "../js/Canvas.js";
+import { Table, Graph, DFSMaze } from "../js/Canvas.js";
 
 let columns = Math.floor((document.body.clientWidth / 30));
 let rows = Math.floor((document.body.clientHeight / 30));
@@ -189,4 +189,11 @@ document.querySelector("#PlayPause").onclick = function() {
         animationController.Play()
         this.firstChild.setAttribute("src", "../Assets/pause-fill.svg")
     }
+}
+
+document.querySelector("#maze").onclick = function() {
+    let graph = Graph.ParseTable(document.querySelector("#grid-container"))
+    graph = Graph.PartitionGraph(graph)
+    DFSMaze(graph)
+    canvas.NewTable(graph)
 }
