@@ -6,6 +6,7 @@ import anime from "../js/anime.es.js"
 import { PageAlgorithm, DisplayAnnotation } from "../js/SetAlgorithm.js";
 import { AnimationController } from "../js/AnimationController.js";
 import { Table, Graph, DFSMaze } from "../js/Canvas.js";
+import { debounce } from "../js/Utility.js";
 
 let columns = Math.floor((document.body.clientWidth / 30));
 let rows = Math.floor((document.body.clientHeight / 30));
@@ -83,11 +84,11 @@ window.onload = () => {
     canvas.CreateTable()
 }
 
-window.onresize = () => {
+window.onresize = debounce(() => {
     let vh = window.innerHeight * 0.01
     document.body.style.setProperty('--vh', `${vh}px`)
     canvas.UpdateTable()
-}
+}, 50)
 
 function FindPath(table)
 {
