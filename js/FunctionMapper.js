@@ -6,6 +6,7 @@ import { InsertionSort } from "./Algorithms/Sorting/InsertionSort.js"
 import { QuickSort } from "./Algorithms/Sorting/QuickSort.js"
 import { LinearSearch } from "./Algorithms/Searching/LinearSearch.js"
 import { BinarySearch } from "./Algorithms/Searching/BinarySearch.js"
+import { JPS } from "./Algorithms/Pathfinding/JPS.js"
 
 class FunctionMapper {
     constructor() {
@@ -17,6 +18,7 @@ class FunctionMapper {
         this.QuickSort = QuickSort
         this.LinearSearch = LinearSearch
         this.BinarySearch = BinarySearch
+        this.JumpPointSearch = JPS
     }
 
 }

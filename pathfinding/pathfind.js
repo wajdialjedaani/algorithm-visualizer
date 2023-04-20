@@ -7,6 +7,7 @@ import { PageAlgorithm, DisplayAnnotation } from "../js/SetAlgorithm.js";
 import { AnimationController } from "../js/AnimationController.js";
 import { Table, Graph, DFSMaze } from "../js/Canvas.js";
 import { debounce } from "../js/Utility.js";
+import { JPS } from "../js/Algorithms/Pathfinding/JPS.js";
 
 let columns = Math.floor((document.body.clientWidth / 30));
 let rows = Math.floor((document.body.clientHeight / 30));
@@ -126,6 +127,11 @@ function Reset() {
 
 document.querySelector("#generate").addEventListener("click", () => {
     //If there is already an animation, do nothing
+    let graph = Graph.ParseTable(document.querySelector("#grid-container"))
+    JPS(graph, graph.start, graph.end)
+    return
+
+
     if(animationController.inProgress) {
         Alert(alertContainer, "Animation in progress, can't play", 'warning')
         return
