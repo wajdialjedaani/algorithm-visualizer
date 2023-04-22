@@ -18,7 +18,7 @@ class FunctionMapper {
         this.QuickSort = QuickSort
         this.LinearSearch = LinearSearch
         this.BinarySearch = BinarySearch
-        this.JumpPointSearch = JPS
+        this.JPS = JPS
     }
 
 }

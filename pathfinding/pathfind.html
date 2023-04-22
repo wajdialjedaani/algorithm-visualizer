@@ -15,7 +15,6 @@
             <div class="row top-bar align-items-center">
                 <!-- Logo -->
                 <div class="col-auto text-start"><a href="../index.html"><img class="" src="../Assets/icon.png" width="50" aria-label="Logo"></a></div>
-                <button id="maze" class="btn btn-orangeRed text col-auto" aria-label="Go">Maze</button>
                 <!-- Title -->
                 <h1 class="col d-none d-sm-inline text" id="Header">Algorithm Visualizer</h1>
                 <!-- intro button -->
@@ -158,6 +157,17 @@
                                 <button type="button" class="btn btn-outline-dark btnResize text" id="fontDecrease">-</button>
                             </div>
                         </div>
+                        <div class="row mt-1 justify-content-between">
+                            <div class="col-auto text">Cell Size</div>
+                            <div class="button-group-flex col-8">
+                                <button class="btn btn-outline-dark text" type="button" id="cellSizeIncrease">+</button>
+                                <input type="text" class="col-2" id="cellSizeInput">
+                                <button class="btn btn-outline-dark text" type="button" id="cellSizeDecrease">-</button>
+                            </div>
+                        </div>
+                        <div class="row mt-1 justify-content-end">
+                            <button type="button" class="btn btn-orangeRed text col-auto text-nowrap" id="maze">Generate Maze</button>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-orangeRed text" aria-label="Save changes" id="resetSettings">Reset</button>
@@ -234,7 +244,7 @@
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item text AStar">A* Pathfinding</a></li>
                         <li><a class="dropdown-item text Djikstra">Djikstra's</a></li>
-                        <!-- <li><a class="dropdown-item">BFS</a></li> -->
+                        <li><a class="dropdown-item text JPS">Jump Point Search</a></li>
                     </ul>
                 </div>
             </div>

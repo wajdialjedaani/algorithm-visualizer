@@ -10,7 +10,6 @@ function JPS(graph, start, end) {
     start.f = 0
 
     while (open.length != 0) {
-        //console.log("looping")
         open.sort((a, b) => {
             if(a.f-b.f !== 0) {
                 return a.f-b.f
@@ -22,27 +21,16 @@ function JPS(graph, start, end) {
         let current = open.shift()
         closed.push(current)
 
-        //let path = []
-        //for(let parent = current; parent; parent = parent.parent) {
-        //    path.push(document.getElementById(`${parent.y},${parent.x}`))
-        //}
-        //actions.push(new SearchedPath(path))
-
         if (current === end) {//If the current node is the end node
             const pathArr = []
             //const pathCells = []
             while(current) {
                 pathArr.push(current)
-                //pathCells.push(document.getElementById(`${current.y},${current.x}`))
-                let selector = `${current.y},${current.x}`
-                //document.getElementById(selector).style.backgroundColor = "#FF0000FF"
                 current = current.parent
             }
             ExpandPath(pathArr).forEach(element => {
                 document.getElementById(`${element.y},${element.x}`).style.backgroundColor = "#FF0000FF"
             });
-            //actions.push(new FinalPath(pathCells.reverse()))
-            console.log("success")
             return actions
         }
 
@@ -51,22 +39,13 @@ function JPS(graph, start, end) {
     //Only executed upon failure to find end
     return undefined
 
-    //Preprocess the map:
-    //Identify primary jump points by setting directional flags in each node
-    //Mark with distance all westward straight jump points and westward walls by sweeping left to right
-    //Mark all eastward straight jump points and eastward walls
-    //^^ for north
-    //^^ for south
-
     function FindSuccessors(node) {
-        console.log(`${node.x},${node.y}`)
-        //document.getElementById(`${node.y},${node.x}`).style.backgroundColor = "blue"
         const neighbors = FindNeighbors(node)
         for(let i=0, l=neighbors.length; i < l; i++) {
             let neighbor = neighbors[i]
             let jumpPoint = _jump(neighbor, node)
             if(jumpPoint) {
-                document.getElementById(`${jumpPoint.y},${jumpPoint.x}`).style.backgroundColor = "#0000FF80"
+                document.getElementById(`${jumpPoint.y},${jumpPoint.x}`).style.backgroundColor = "#00FF00A0"
                 let jx = jumpPoint.x
                 let jy = jumpPoint.y
                 if(typeof closed.find(element=>element==jumpPoint) !== "undefined") {
@@ -134,7 +113,7 @@ function JPS(graph, start, end) {
         }
         return neighborsToSearch
     }
-    
+
     function _jump(node, parent) {
         if(!node?.walkable) {
             return null
@@ -165,7 +144,7 @@ function JPS(graph, start, end) {
         else {
             throw new Error("Only cardinal directions allowed")
         }
-
+        document.getElementById(`${node.y},${node.x}`).style.backgroundColor = "#808080F0"
         return _jump(neighbors.find(element=>element.x==node.x+dx && element.y==node.y+dy), node)
     }
 

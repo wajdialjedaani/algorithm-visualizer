@@ -1,12 +1,14 @@
 "use strict";
 
+import { PathfindingCookies } from "./Cookies.js";
+
 /*
 Holds the TD elements displayed in the canvas.
 */
 class Table {
     constructor() {
         this.elementTable = []
-        this.cellSize = 30
+        this.cellSize = PathfindingCookies.GetCellSize()
     }
 
     //generates a table based on the specs of the page
@@ -53,7 +55,7 @@ class Table {
         for(let rowDiff = newRows - this.elementTable.length; rowDiff > 0; rowDiff--) {
             //Create a new row filled with default nodes
             let x = 0 //Used to track coordinates when filling new row
-            this.elementTable.push(Array.from(Array(this.elementTable.length), ()=>{
+            this.elementTable.push(Array.from(Array(newColumns), ()=>{
                 let node = document.createElement("td")
                 node.id = (`${this.elementTable.length},${x}`)
                 x = x+1
@@ -71,10 +73,10 @@ class Table {
             }
         }
         //Add new columns
-        for(let columnDiff = newColumns - this.elementTable[0].length; columnDiff > 0; columnDiff--) {
+        for(let row of this.elementTable) {
             //Iterate through each row, add 1 element each time
             let y=0
-            for(let row of this.elementTable) {
+            for(let columnDiff = newColumns - row.length; columnDiff > 0; columnDiff--) {
                 row.push((()=>{
                     let node = document.createElement("td")
                     node.id = (`${y},${row.length}`)
@@ -86,6 +88,13 @@ class Table {
                 }).call(this))
             }
         }
+
+        console.log(`Expected columns: ${newColumns}
+Actual columns: ${this.elementTable[0].length}
+
+Expected rows: ${newRows}
+Actual rows: ${this.elementTable.length}
+`)
         this.DisplayTable()
     }
 
@@ -137,6 +146,10 @@ class Table {
         let node = this.elementTable[y][x]
         func(node)
         //document.getElementById(`${y},${x}`).replaceWith(node)
+    }
+
+    UpdateCellSize() {
+        this.cellSize = PathfindingCookies.GetCellSize()
     }
 
 }

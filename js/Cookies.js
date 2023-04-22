@@ -7,4 +7,16 @@ function CheckFirstVisit(pageName) {
     }
 }
 
-export { CheckFirstVisit }
+class PathfindingCookies {
+    static SetCellSize(size) {
+        Cookies.set('cellSize', `${size}`, {expires: 999, sameSite: 'strict'})
+    }
+    static GetCellSize() {
+        if(!Cookies.get('cellSize')) {
+            this.SetCellSize(30)
+        }
+        return Cookies.get('cellSize')
+    }
+}
+
+export { CheckFirstVisit, PathfindingCookies }

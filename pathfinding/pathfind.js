@@ -1,7 +1,7 @@
 import { dragElement, ResizeHandler } from "../js/draggableCard.js";
 import { Action } from "../js/Action.js";
 import { Alert } from "../js/Alert.js"
-import { CheckFirstVisit } from "../js/Cookies.js";
+import { CheckFirstVisit, PathfindingCookies } from "../js/Cookies.js";
 import anime from "../js/anime.es.js"
 import { PageAlgorithm, DisplayAnnotation } from "../js/SetAlgorithm.js";
 import { AnimationController } from "../js/AnimationController.js";
@@ -21,8 +21,33 @@ const canvas = new Table()
 document.querySelectorAll(".draggable").forEach((element) => {dragElement(element)})
 document.querySelectorAll(".resizer").forEach((element) => {ResizeHandler(element)})
 //Initialize the dropdown menus
-document.querySelectorAll(".AStar").forEach(element => element.onclick=element.onclick=ChangeAlgorithm)
-document.querySelectorAll(".Djikstra").forEach(element => element.onclick=element.onclick=ChangeAlgorithm)
+document.querySelectorAll(".AStar").forEach(element => element.onclick=ChangeAlgorithm)
+document.querySelectorAll(".Djikstra").forEach(element => element.onclick=ChangeAlgorithm)
+document.querySelectorAll(".JPS").forEach(element => element.onclick=ChangeAlgorithm)
+
+document.querySelector("#cellSizeIncrease").addEventListener('click', ()=>{
+    let newSize = Number(PathfindingCookies.GetCellSize())+1
+    PathfindingCookies.SetCellSize(newSize)
+    document.querySelector("#cellSizeInput").value = newSize
+    canvas.UpdateCellSize()
+    canvas.UpdateTable()
+})
+document.querySelector("#cellSizeDecrease").addEventListener('click', ()=>{
+    let newSize = Number(PathfindingCookies.GetCellSize())-1
+    PathfindingCookies.SetCellSize(newSize)
+    document.querySelector("#cellSizeInput").value = newSize
+    PathfindingCookies.SetCellSize(newSize)
+    canvas.UpdateCellSize()
+    canvas.UpdateTable()
+})
+
+document.querySelector("#cellSizeInput").addEventListener('change', function(){
+    let newSize = this.value
+    PathfindingCookies.SetCellSize(newSize)
+    canvas.UpdateCellSize()
+    canvas.UpdateTable()
+})
+
 
 function ChangeAlgorithm(event) {
     if(animationController.inProgress) {
@@ -42,14 +67,6 @@ document.querySelector("#AnimSpeed").addEventListener("click", function() {
 })
 
 pageAlgorithm.changeAlgo((new URLSearchParams(window.location.search)).get("func") || "astar")
-
-//function cellHandler(event) {
-//    document.querySelectorAll("td").forEach((node)=>{
-//        node.addEventListener(event.type == "mousedown" ? "mousemove" : "touchmove", cellDrag)
-//        node.addEventListener(event.type == "mousedown" ? "mouseup" : "touchend", cleanUp)
-//    })
-//}
-
 
 function generateTable() {
     let table = document.querySelector("#grid-container")
@@ -122,14 +139,15 @@ function Reset() {
     canvas.CreateTable()
     document.querySelector("#Progress-Bar").style.width = "0%"
     document.querySelector("#reset").style.display = "none"
+    document.querySelector('#cancel').style.display = "none"
     document.querySelector("#generate").style.display = "inline"
 }
 
 document.querySelector("#generate").addEventListener("click", () => {
     //If there is already an animation, do nothing
-    let graph = Graph.ParseTable(document.querySelector("#grid-container"))
-    JPS(graph, graph.start, graph.end)
-    return
+    //let graph = Graph.ParseTable(document.querySelector("#grid-container"))
+    //JPS(graph, graph.start, graph.end)
+    //return
 
 
     if(animationController.inProgress) {
@@ -199,8 +217,14 @@ document.querySelector("#PlayPause").onclick = function() {
 }
 
 document.querySelector("#maze").onclick = function() {
+    if(animationController.inProgress) {
+        Alert(alertContainer, "Animation in progress", 'warning')
+        return
+    }
+
     let graph = Graph.ParseTable(document.querySelector("#grid-container"))
     graph = Graph.PartitionGraph(graph)
     DFSMaze(graph)
-    canvas.NewTable(graph)
+    setTimeout(()=>{Reset()}, 0)
+    setTimeout(()=>{canvas.NewTable(graph)}, 0)
 }
