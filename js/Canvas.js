@@ -187,17 +187,17 @@ class Graph {
 
     //Take a DOM element table and return a graph object
     static ParseTable(table) {
-        if(!(table instanceof Element)) {
-            throw new Error("Invalid table")
-        }
-        
-        let start = undefined
-        let end = undefined
+        //if(!(table instanceof Element)) {
+        //    throw new Error("Invalid table")
+        //}
 
         const graph = new Graph()
 
         //Parse each cell in the table individually
         table.childNodes.forEach(cell => {
+        //table.elementTable.forEach(row => {
+        //    row.forEach((cell) => {
+            //for(const cell of table.children) {
                 if(cell.nodeName !== "TD"){
                     return
                 }
@@ -206,13 +206,6 @@ class Graph {
                 let isWalkable = cell.className !== "wall"
                 //isWalkable ? console.log(coords) : 0
                 let vertex = new Vertex(coords[1], coords[0], {walkable: isWalkable, start: cell.className=="startnode", end: cell.className=="endnode"})
-                //console.log(vertex)
-                if(vertex.start) {
-                    start = vertex
-                }
-                if(vertex.end) {
-                    end = vertex
-                }
                 
                 //Add the new node and whatever new edges the node may have
                 graph.addVertex(vertex)
@@ -222,29 +215,36 @@ class Graph {
                     }
                 }
             })
+        //})
         return graph
     }
 
     //Takes in a graph and returns the graph with walls separating all nodes
     static PartitionGraph(graph) {
         const newGraph = new Graph()
-        const emptyNodes = []
-        //graph.adjList.clear()
+        //const emptyNodes = []
+        newGraph.emptyNeighbors = new Map()
+
         graph.vertices.forEach((vertex)=>{
             newGraph.addVertex(vertex)
             //Make every other node empty, all others walls
             if(vertex.x%2==0 && vertex.y%2==0) {
-                //newGraph.EditNode(vertex.y, vertex.x, element=>element.className="")
                 vertex.walkable = true
-                emptyNodes.push(vertex)
-                for(const node of emptyNodes) {
-                    if((Math.abs(vertex.x-node.x)==2 && vertex.y==node.y) || (Math.abs(vertex.y-node.y)==2 && vertex.x==node.x)) {
-                        newGraph.addEdge(node, vertex)
+                //emptyNodes.push(vertex)
+                newGraph.emptyNeighbors.set(vertex, [])
+                for(const key of newGraph.emptyNeighbors.keys()) {
+                    if((Math.abs(vertex.x-key.x)==2 && vertex.y==key.y) || (Math.abs(vertex.y-key.y)==2 && vertex.x==key.x)) {
+                        newGraph.emptyNeighbors.get(vertex).push(key)
+                        newGraph.emptyNeighbors.get(key).push(vertex)
                     }
                 }
             } else {
-                //newGraph.EditNode(vertex.y, vertex.x, element=>element.className="wall")
                 vertex.walkable = false
+            }
+            for(const key of newGraph.adjList.keys()) {
+                if (((key.x == vertex.x+1 || key.x == vertex.x-1) && key.y == vertex.y) || (key.x == vertex.x && (key.y == vertex.y+1 || key.y == vertex.y-1))) {
+                    newGraph.addEdge(key, vertex)
+                }
             }
         })
         return newGraph
@@ -337,7 +337,7 @@ function cellHandler(event) {
 }
 
 function DFSMaze(graph) {
-    const walkableNodes = graph.vertices.filter(element=>element.walkable)
+    const walkableNodes = Array.from(graph.emptyNeighbors.keys())//graph.vertices.filter(element=>element.walkable)
     const visited = new Array(walkableNodes.length).fill(false) //Parallel array to the vertices made to track what's been visited
     const stack = []
     let cell = walkableNodes[Math.floor(Math.random() * walkableNodes.length)] //Initialize to a random starting point
@@ -345,12 +345,11 @@ function DFSMaze(graph) {
     stack.push(cell)
 
     while(stack.length > 0) {
-        console.log(stack.length)
         //Pop a cell and make it current cell
         cell = stack.pop()
         //If current cell has unvisited neighbors,
         let unvisited = []
-        for(let neighbor of graph.adjList.get(cell)) {
+        for(let neighbor of graph.emptyNeighbors.get(cell)) {
             if(!visited[walkableNodes.indexOf(neighbor)]) {
                 unvisited.push(neighbor)
             }
@@ -363,10 +362,21 @@ function DFSMaze(graph) {
         //Choose one of unvisited neighbors
         let neighbor = unvisited[Math.floor(Math.random() * unvisited.length)]
         //Remove the wall between the two
-        graph.vertices.find(element => element.x == (cell.x + neighbor.x) / 2 && element.y == (cell.y + neighbor.y) / 2).walkable = true
+        //graph.vertices.find(element => element.x == (cell.x + neighbor.x) / 2 && element.y == (cell.y + neighbor.y) / 2).walkable = true
+        graph.adjList.get(cell).find(element => element.x == (cell.x + neighbor.x) / 2 && element.y == (cell.y + neighbor.y) / 2).walkable = true
         //Mark chosen neighbor as visited and push to stack
         visited[walkableNodes.indexOf(neighbor)] = true
         stack.push(neighbor)
+    }
+}
+
+class PlayBar {
+    constructor() {
+        this.startButton = document.querySelector("#generate")
+        this.cancelButton = document.querySelector('#cancel')
+        this.resetButton = document.querySelector("#reset")
+        this.playButton = document.querySelector("#PlayPause")
+        this.progressBar = document.querySelector("#Progress-Bar")
     }
 }
 
