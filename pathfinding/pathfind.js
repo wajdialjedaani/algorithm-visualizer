@@ -222,9 +222,9 @@ document.querySelector("#maze").onclick = function() {
         return
     }
 
-    let graph = Graph.ParseTable(document.querySelector("#grid-container"))
-    graph = Graph.PartitionGraph(graph)
-    DFSMaze(graph)
-    setTimeout(()=>{Reset()}, 0)
-    setTimeout(()=>{canvas.NewTable(graph)}, 0)
+    //let graph = Graph.ParseTable(document.querySelector("#grid-container"))
+    Graph.PartitionGraph(canvas)
+    DFSMaze(canvas)
+    //setTimeout(()=>{Reset()}, 0)
+    //setTimeout(()=>{canvas.NewTable(graph)}, 0)
 }

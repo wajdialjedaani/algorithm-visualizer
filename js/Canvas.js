@@ -9,6 +9,7 @@ class Table {
     constructor() {
         this.elementTable = []
         this.cellSize = PathfindingCookies.GetCellSize()
+        this.graph = new Graph()
     }
 
     //generates a table based on the specs of the page
@@ -33,12 +34,21 @@ class Table {
                 node.addEventListener('ontouchstart' in document.documentElement === true ? 'touchstart' : 'mousedown', cellHandler.bind(this), {passive: false})
                 node.style.setProperty("--width", width)
                 node.style.setProperty("--height", height)
-                this.elementTable[y].push(node)
+                let vertex = new Vertex(x, y, {walkable: true, start: false, end: false})
+                this.elementTable[y].push(new ElementVertexPair(node, vertex))
+                
+                this.graph.addVertex(vertex)
+                for(const key of this.graph.adjList.keys()) {
+                    if (((key.x == vertex.x+1 || key.x == vertex.x-1) && key.y == vertex.y) || (key.x == vertex.x && (key.y == vertex.y+1 || key.y == vertex.y-1))) {
+                        this.graph.addEdge(key, vertex)
+                    }
+                }
             }
         }
         this.DisplayTable()
     }
 
+    //TODO: Update graph to match elementTable after changes.
     //Modify the current elementTable when changes are made to the page
     UpdateTable() {
         let newColumns = Math.floor((window.innerWidth / this.cellSize));
@@ -62,7 +72,14 @@ class Table {
                 node.addEventListener('ontouchstart' in document.documentElement === true ? 'touchstart' : 'mousedown', cellHandler.bind(this), {passive: false})
                 node.style.setProperty("--width", width)
                 node.style.setProperty("--height", height)
-                return node
+                let vertex = new Vertex(node)
+                this.graph.addVertex(vertex)
+                for(const key of this.graph.adjList.keys()) {
+                    if (((key.x == vertex.x+1 || key.x == vertex.x-1) && key.y == vertex.y) || (key.x == vertex.x && (key.y == vertex.y+1 || key.y == vertex.y-1))) {
+                        this.graph.addEdge(key, vertex)
+                    }
+                }
+                return new ElementVertexPair(node, vertex)
             }))
         }
         //Remove excess columns
@@ -84,17 +101,17 @@ class Table {
                     node.addEventListener('ontouchstart' in document.documentElement === true ? 'touchstart' : 'mousedown', cellHandler, {passive: false})
                     node.style.setProperty("--width", width)
                     node.style.setProperty("--height", height)
-                    return node
+                    let vertex = new Vertex(node)
+                    this.graph.addVertex(vertex)
+                    for(const key of this.graph.adjList.keys()) {
+                        if (((key.x == vertex.x+1 || key.x == vertex.x-1) && key.y == vertex.y) || (key.x == vertex.x && (key.y == vertex.y+1 || key.y == vertex.y-1))) {
+                            this.graph.addEdge(key, vertex)
+                        }
+                    }
+                    return new ElementVertexPair(node, vertex)
                 }).call(this))
             }
         }
-
-        console.log(`Expected columns: ${newColumns}
-Actual columns: ${this.elementTable[0].length}
-
-Expected rows: ${newRows}
-Actual rows: ${this.elementTable.length}
-`)
         this.DisplayTable()
     }
 
@@ -119,7 +136,8 @@ Actual rows: ${this.elementTable.length}
                 graph.vertices[y*columns+x].walkable ? 0 : node.className="wall"
                 graph.vertices[y*columns+x].start ? node.className="startnode" : 0
                 graph.vertices[y*columns+x].end ? node.className="endnode" : 0
-                this.elementTable[y].push(node)
+                //this.elementTable[y].push(node)
+                this.elementTable[y].push(new ElementVertexPair(node, new Vertex(node)))
             }
         }
         this.DisplayTable()
@@ -137,7 +155,7 @@ Actual rows: ${this.elementTable.length}
         //Populate page with data held in elementTable
         for(let y=0; y<this.elementTable.length; y++) {
             for(let x=0; x<this.elementTable[y].length; x++) {
-                displayArea.appendChild(this.elementTable[y][x])
+                displayArea.appendChild(this.elementTable[y][x].DOMElement)
             }
         }
     }
@@ -185,6 +203,13 @@ class Graph {
         this.adjList.get(b).push(a)
     }
 
+    deleteEdge(a, b) {
+        const array1 = this.adjList.get(a)
+        const array2 = this.adjList.get(b)
+        array1.remove(array1.indexOf(b))
+        array2.remove(array2.indexOf(a))
+    }
+
     //Take a DOM element table and return a graph object
     static ParseTable(table) {
         //if(!(table instanceof Element)) {
@@ -220,39 +245,55 @@ class Graph {
     }
 
     //Takes in a graph and returns the graph with walls separating all nodes
-    static PartitionGraph(graph) {
-        const newGraph = new Graph()
+    static PartitionGraph(canvas) {
+        //const newGraph = new Graph()
         //const emptyNodes = []
-        newGraph.emptyNeighbors = new Map()
-
-        graph.vertices.forEach((vertex)=>{
-            newGraph.addVertex(vertex)
-            //Make every other node empty, all others walls
-            if(vertex.x%2==0 && vertex.y%2==0) {
-                vertex.walkable = true
-                //emptyNodes.push(vertex)
-                newGraph.emptyNeighbors.set(vertex, [])
-                for(const key of newGraph.emptyNeighbors.keys()) {
-                    if((Math.abs(vertex.x-key.x)==2 && vertex.y==key.y) || (Math.abs(vertex.y-key.y)==2 && vertex.x==key.x)) {
-                        newGraph.emptyNeighbors.get(vertex).push(key)
-                        newGraph.emptyNeighbors.get(key).push(vertex)
+        //newGraph.emptyNeighbors = new Map()
+        canvas.graph.emptyNeighbors = new Map()
+        for(let row of canvas.elementTable) {
+            row.forEach((pair)=>{
+                let vertex = pair.vertex
+                //newGraph.addVertex(vertex)
+                //Make every other node empty, all others walls
+                if(vertex.x%2==0 && vertex.y%2==0) {
+                    pair.vertexWalkable = true
+                    //emptyNodes.push(vertex)
+                    canvas.graph.emptyNeighbors.set(vertex, [])
+                    for(const key of canvas.graph.emptyNeighbors.keys()) {
+                        if((Math.abs(vertex.x-key.x)==2 && vertex.y==key.y) || (Math.abs(vertex.y-key.y)==2 && vertex.x==key.x)) {
+                            canvas.graph.emptyNeighbors.get(vertex).push(key)
+                            canvas.graph.emptyNeighbors.get(key).push(vertex)
+                        }
                     }
+                } else {
+                    pair.vertexWalkable = false
                 }
-            } else {
-                vertex.walkable = false
-            }
-            for(const key of newGraph.adjList.keys()) {
-                if (((key.x == vertex.x+1 || key.x == vertex.x-1) && key.y == vertex.y) || (key.x == vertex.x && (key.y == vertex.y+1 || key.y == vertex.y-1))) {
-                    newGraph.addEdge(key, vertex)
-                }
-            }
-        })
-        return newGraph
+                //for(const key of newGraph.adjList.keys()) {
+                //    if (((key.x == vertex.x+1 || key.x == vertex.x-1) && key.y == vertex.y) || (key.x == vertex.x && (key.y == vertex.y+1 || key.y == vertex.y-1))) {
+                //        newGraph.addEdge(key, vertex)
+                //    }
+                //}
+            })
+        }
+        //return newGraph
     }
 }
 
 class Vertex {
     constructor(x, y, options) {
+        if(x instanceof Element) {
+            const coords = x.id.split(",").map((coord)=>{return Number(coord)})
+            let isWalkable = x.className !== "wall"
+            this.x = coords[1]
+            this.y = coords[2]
+            this.walkable = isWalkable
+            this.start = x.className === "startnode"
+            this.end = x.className === "endnode"
+            this.f = 999999999
+            this.g = 999999999
+            this.h = 0
+            return
+        }
         this.x = x
         this.y = y
         this.f = 999999999
@@ -289,7 +330,8 @@ function cellHandler(event) {
             return
         }
         let coords = pageElement.id.split(",").map(coord => Number(coord))
-        this.EditNode(coords[0], coords[1], (element)=>{element.className = "wall"})
+        //this.EditNode(coords[0], coords[1], (element)=>{element.className = "wall"})
+        this.elementTable[coords[0]][coords[1]].elementClass = "wall"
 
         //if(e.type == "mousemove") {
         //    this.EditNode(coords[0], coords[1], (element)=>{element.className = "wall"})
@@ -320,13 +362,16 @@ function cellHandler(event) {
         //If input ended without dragging:
         if(!drag) {
             if(e.currentTarget.className == "startnode") {
-                this.EditNode(coords[0], coords[1], (element)=>{element.className = "endnode"})
+                //this.EditNode(coords[0], coords[1], (element)=>{element.className = "endnode"})
+                this.elementTable[coords[0]][coords[1]].elementClass = "endnode"
             }
             else if(e.currentTarget.className == "endnode" || e.currentTarget.className == "wall") {
-                this.EditNode(coords[0], coords[1], (element)=>{element.className = ""})
+                //this.EditNode(coords[0], coords[1], (element)=>{element.className = ""})
+                this.elementTable[coords[0]][coords[1]].elementClass = ""
             }
             else {
-                this.EditNode(coords[0], coords[1], (element)=>{element.className = "startnode"})
+                //this.EditNode(coords[0], coords[1], (element)=>{element.className = "startnode"})
+                this.elementTable[coords[0]][coords[1]].elementClass = "startnode"
             }
         }
         //this.elementTable[coords[0]][coords[1]] = e.currentTarget
@@ -336,7 +381,8 @@ function cellHandler(event) {
     }
 }
 
-function DFSMaze(graph) {
+function DFSMaze(canvas) {
+    const graph = canvas.graph
     const walkableNodes = Array.from(graph.emptyNeighbors.keys())//graph.vertices.filter(element=>element.walkable)
     const visited = new Array(walkableNodes.length).fill(false) //Parallel array to the vertices made to track what's been visited
     const stack = []
@@ -363,7 +409,8 @@ function DFSMaze(graph) {
         let neighbor = unvisited[Math.floor(Math.random() * unvisited.length)]
         //Remove the wall between the two
         //graph.vertices.find(element => element.x == (cell.x + neighbor.x) / 2 && element.y == (cell.y + neighbor.y) / 2).walkable = true
-        graph.adjList.get(cell).find(element => element.x == (cell.x + neighbor.x) / 2 && element.y == (cell.y + neighbor.y) / 2).walkable = true
+        //graph.adjList.get(cell).find(element => element.x == (cell.x + neighbor.x) / 2 && element.y == (cell.y + neighbor.y) / 2).walkable = true
+        canvas.elementTable[(cell.y + neighbor.y) / 2][(cell.x + neighbor.x) / 2].vertexWalkable = true
         //Mark chosen neighbor as visited and push to stack
         visited[walkableNodes.indexOf(neighbor)] = true
         stack.push(neighbor)
@@ -378,6 +425,51 @@ class PlayBar {
         this.playButton = document.querySelector("#PlayPause")
         this.progressBar = document.querySelector("#Progress-Bar")
     }
+}
+
+class ElementVertexPair {
+    constructor(element, vertex) {
+        this.DOMElement = element
+        this.vertex = vertex
+    }
+
+    get elementClass() {
+        return this.DOMElement.className
+    }
+    
+    set elementClass(value) {
+        this.DOMElement.className = value
+        
+        if(value === "wall") {
+            this.vertex.walkable = false
+            this.vertex.start = false
+            this.vertex.end = false
+        } else if(value === "startnode") {
+            this.vertex.start = true
+            this.vertex.walkable = true
+            this.vertex.end = false
+        } else if(value === "endnode") {
+            this.vertex.end = true
+            this.vertex.start = false
+            this.vertex.walkable = true
+        } else if(value === "") {
+            this.vertex.walkable = true
+            this.vertex.start = false
+            this.vertex.end = false
+        }
+    }
+
+    get vertexWalkable() {
+        return this.vertex.walkable
+    }
+    
+    set vertexWalkable(value) {
+        this.vertex.walkable = value
+
+        //If walkable, remove wall from classlist. Else add wall
+        value ? this.DOMElement.classList.remove("wall") : this.DOMElement.classList.add("wall")
+    }
+
 }
 
 export { Table, Graph, DFSMaze }
