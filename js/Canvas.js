@@ -90,14 +90,13 @@ class Table {
             }
         }
         //Add new columns
-        for(let row of this.elementTable) {
+        for(let y=0; y < this.elementTable.length; y++) {
             //Iterate through each row, add 1 element each time
-            let y=0
+            let row = this.elementTable[y]
             for(let columnDiff = newColumns - row.length; columnDiff > 0; columnDiff--) {
                 row.push((()=>{
                     let node = document.createElement("td")
                     node.id = (`${y},${row.length}`)
-                    y = y+1
                     node.addEventListener('ontouchstart' in document.documentElement === true ? 'touchstart' : 'mousedown', cellHandler, {passive: false})
                     node.style.setProperty("--width", width)
                     node.style.setProperty("--height", height)
@@ -285,7 +284,7 @@ class Vertex {
             const coords = x.id.split(",").map((coord)=>{return Number(coord)})
             let isWalkable = x.className !== "wall"
             this.x = coords[1]
-            this.y = coords[2]
+            this.y = coords[0]
             this.walkable = isWalkable
             this.start = x.className === "startnode"
             this.end = x.className === "endnode"
