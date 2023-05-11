@@ -16,6 +16,7 @@ class Table {
     CreateTable() {
         //Clear existing table data
         this.elementTable = []
+        this.graph = new Graph()
 
         //Calculate new table dimensions
         let columns = Math.floor((window.innerWidth / this.cellSize));
@@ -28,27 +29,23 @@ class Table {
             //Create new row
             this.elementTable.push([])
             for(let x=0; x<columns; x++) {
-                //Fill in the newly created row
+                //Create a new cell for the DOM
                 let node = document.createElement("td")
                 node.id = (`${y},${x}`)
-                node.addEventListener('ontouchstart' in document.documentElement === true ? 'touchstart' : 'mousedown', cellHandler.bind(this), {passive: false})
                 node.style.setProperty("--width", width)
                 node.style.setProperty("--height", height)
-                let vertex = new Vertex(x, y, {walkable: true, start: false, end: false})
-                this.elementTable[y].push(new ElementVertexPair(node, vertex))
-                
-                this.graph.addVertex(vertex)
-                for(const key of this.graph.adjList.keys()) {
-                    if (((key.x == vertex.x+1 || key.x == vertex.x-1) && key.y == vertex.y) || (key.x == vertex.x && (key.y == vertex.y+1 || key.y == vertex.y-1))) {
-                        this.graph.addEdge(key, vertex)
-                    }
-                }
+
+                //Create a new vertex for the graph
+                const vertex = new Vertex(x, y, {walkable: true, start: false, end: false})
+
+                //Add these to the canvas
+                const pair = new ElementVertexPair(node, vertex)
+                pair.addPair(this.elementTable, this.graph)
             }
         }
         this.DisplayTable()
     }
 
-    //TODO: Update graph to match elementTable after changes.
     //Modify the current elementTable when changes are made to the page
     UpdateTable() {
         let newColumns = Math.floor((window.innerWidth / this.cellSize));
@@ -59,33 +56,32 @@ class Table {
         //Adjust rows to match change in page dimensions
         //Remove excess rows
         for(let rowDiff = newRows - this.elementTable.length; rowDiff < 0; rowDiff++) {
+            for(const pair of this.elementTable[this.elementTable.length-1]) {
+                this.graph.removeVertex(pair.vertex)
+            }
             this.elementTable.pop()
         }
         //Add new rows
         for(let rowDiff = newRows - this.elementTable.length; rowDiff > 0; rowDiff--) {
-            //Create a new row filled with default nodes
-            let x = 0 //Used to track coordinates when filling new row
-            this.elementTable.push(Array.from(Array(newColumns), ()=>{
+            //Create a new row to be filled with default nodes
+            this.elementTable.push([])
+
+            //Create new pairs and fill the new row
+            for(let x=0; x<this.elementTable[0].length; x++) {
                 let node = document.createElement("td")
-                node.id = (`${this.elementTable.length},${x}`)
-                x = x+1
-                node.addEventListener('ontouchstart' in document.documentElement === true ? 'touchstart' : 'mousedown', cellHandler.bind(this), {passive: false})
+                node.id = (`${this.elementTable.length-1},${x}`)
                 node.style.setProperty("--width", width)
                 node.style.setProperty("--height", height)
-                let vertex = new Vertex(node)
-                this.graph.addVertex(vertex)
-                for(const key of this.graph.adjList.keys()) {
-                    if (((key.x == vertex.x+1 || key.x == vertex.x-1) && key.y == vertex.y) || (key.x == vertex.x && (key.y == vertex.y+1 || key.y == vertex.y-1))) {
-                        this.graph.addEdge(key, vertex)
-                    }
-                }
-                return new ElementVertexPair(node, vertex)
-            }))
+                const vertex = new Vertex(node)
+                const pair = new ElementVertexPair(node, vertex)
+                pair.addPair(this.elementTable, this.graph)
+            }
         }
         //Remove excess columns
         for(let columnDiff = newColumns - this.elementTable[0].length; columnDiff < 0; columnDiff++) {
             //Pop 1 element off each row
             for(let row of this.elementTable) {
+                this.graph.removeVertex(row[row.length-1].vertex)
                 row.pop()
             }
         }
@@ -94,21 +90,13 @@ class Table {
             //Iterate through each row, add 1 element each time
             let row = this.elementTable[y]
             for(let columnDiff = newColumns - row.length; columnDiff > 0; columnDiff--) {
-                row.push((()=>{
-                    let node = document.createElement("td")
-                    node.id = (`${y},${row.length}`)
-                    node.addEventListener('ontouchstart' in document.documentElement === true ? 'touchstart' : 'mousedown', cellHandler, {passive: false})
-                    node.style.setProperty("--width", width)
-                    node.style.setProperty("--height", height)
-                    let vertex = new Vertex(node)
-                    this.graph.addVertex(vertex)
-                    for(const key of this.graph.adjList.keys()) {
-                        if (((key.x == vertex.x+1 || key.x == vertex.x-1) && key.y == vertex.y) || (key.x == vertex.x && (key.y == vertex.y+1 || key.y == vertex.y-1))) {
-                            this.graph.addEdge(key, vertex)
-                        }
-                    }
-                    return new ElementVertexPair(node, vertex)
-                }).call(this))
+                let node = document.createElement("td")
+                node.id = (`${y},${row.length}`)
+                node.style.setProperty("--width", width)
+                node.style.setProperty("--height", height)
+                const vertex = new Vertex(node)
+                const pair = new ElementVertexPair(node, vertex)
+                pair.addPair(this.elementTable, this.graph)
             }
         }
         this.DisplayTable()
@@ -129,7 +117,6 @@ class Table {
             for(let x=0; x<columns; x++) {
                 let node = document.createElement("td")
                 node.id = `${y},${x}`
-                node.addEventListener('ontouchstart' in document.documentElement === true ? 'touchstart' : 'mousedown', cellHandler.bind(this), {passive: false})
                 node.style.setProperty("--width", width)
                 node.style.setProperty("--height", height)
                 graph.vertices[y*columns+x].walkable ? 0 : node.className="wall"
@@ -146,7 +133,6 @@ class Table {
         //Clear existing table
         let displayArea = document.querySelector("#grid-container")
         displayArea.innerHTML = ""
-
         //Set new table dimensions
         displayArea.style.setProperty("--columns", this.elementTable[0].length);
         displayArea.style.setProperty("--rows", this.elementTable.length);
@@ -197,6 +183,20 @@ class Graph {
         this.adjList.set(vertex, [])
     }
 
+    removeVertex(vertex) {
+        let neighbors = this.adjList.get(vertex)
+        
+        //Remove references to the given vertex from the entries of each of its neighbors
+        for(const neighbor of neighbors) {
+            let arr = this.adjList.get(neighbor)
+            arr.splice(arr.indexOf(vertex), 1)
+        }
+
+        //Remove the vertex's entry
+        this.adjList.delete(vertex)
+        this.vertices.splice(this.vertices.indexOf(vertex), 1)
+    }
+
     addEdge(a, b) {
         this.adjList.get(a).push(b)
         this.adjList.get(b).push(a)
@@ -211,24 +211,16 @@ class Graph {
 
     //Take a DOM element table and return a graph object
     static ParseTable(table) {
-        //if(!(table instanceof Element)) {
-        //    throw new Error("Invalid table")
-        //}
-
         const graph = new Graph()
 
         //Parse each cell in the table individually
         table.childNodes.forEach(cell => {
-        //table.elementTable.forEach(row => {
-        //    row.forEach((cell) => {
-            //for(const cell of table.children) {
                 if(cell.nodeName !== "TD"){
                     return
                 }
                 //Populate vertex with data from table
                 const coords = cell.id.split(",").map((coord)=>{return Number(coord)})
                 let isWalkable = cell.className !== "wall"
-                //isWalkable ? console.log(coords) : 0
                 let vertex = new Vertex(coords[1], coords[0], {walkable: isWalkable, start: cell.className=="startnode", end: cell.className=="endnode"})
                 
                 //Add the new node and whatever new edges the node may have
@@ -239,24 +231,24 @@ class Graph {
                     }
                 }
             })
-        //})
         return graph
     }
 
     //Takes in a graph and returns the graph with walls separating all nodes
     static PartitionGraph(canvas) {
-        //const newGraph = new Graph()
-        //const emptyNodes = []
-        //newGraph.emptyNeighbors = new Map()
+        //DFS Maze generation assumes walls between all nodes. Because our walls are nodes themselves (rather than walls between nodes), 
+        //we need to modify the table to place walls on every other node to separate the ones we will be making the maze with.
+
+        //New map to track the empty nodes that will be used in maze generation
         canvas.graph.emptyNeighbors = new Map()
+
         for(let row of canvas.elementTable) {
             row.forEach((pair)=>{
                 let vertex = pair.vertex
-                //newGraph.addVertex(vertex)
                 //Make every other node empty, all others walls
                 if(vertex.x%2==0 && vertex.y%2==0) {
                     pair.vertexWalkable = true
-                    //emptyNodes.push(vertex)
+                    //We need to track the empty nodes and their own adjacency lists.
                     canvas.graph.emptyNeighbors.set(vertex, [])
                     for(const key of canvas.graph.emptyNeighbors.keys()) {
                         if((Math.abs(vertex.x-key.x)==2 && vertex.y==key.y) || (Math.abs(vertex.y-key.y)==2 && vertex.x==key.x)) {
@@ -267,14 +259,8 @@ class Graph {
                 } else {
                     pair.vertexWalkable = false
                 }
-                //for(const key of newGraph.adjList.keys()) {
-                //    if (((key.x == vertex.x+1 || key.x == vertex.x-1) && key.y == vertex.y) || (key.x == vertex.x && (key.y == vertex.y+1 || key.y == vertex.y-1))) {
-                //        newGraph.addEdge(key, vertex)
-                //    }
-                //}
             })
         }
-        //return newGraph
     }
 }
 
@@ -304,7 +290,63 @@ class Vertex {
     }
 }
 
-//This listener is always active on the nodes. Listens for inital click/touch to begin listening for further input
+function CellHandler(event) {
+    event.preventDefault()
+    const dragFunc = cellDrag.bind(this)
+    const cleanupFunc = cleanUp.bind(this)
+    document.addEventListener(event.type == "mousedown" ? "mousemove" : "touchmove", dragFunc)
+    document.addEventListener(event.type == "mousedown" ? "mouseup" : "touchend", cleanupFunc)
+
+    let drag = false
+    const origin = [event.touches?.[0].clientX || event.clientX, event.touches?.[0].clientY || event.clientY] //Original click coordinates. Compared against to determine if mouse is dragging
+
+    //Called upon movement after clicking
+    function cellDrag(e) {
+        //Dragging requires different handling, so check for that first. Otherwise, default to mouse inputs
+        const x = e.touches?.[0].clientX || e.clientX
+        const y = e.touches?.[0].clientY || e.clientY
+        const element = document.elementFromPoint(x, y)
+        //Because we use elementFromPoint, we may get non-table elements. Ignore those
+        if(element?.tagName !== "TD") {
+            return
+        }
+        const distance = (x - origin[0]) + (y - origin[1])
+        if(Math.abs(distance) < this.cellSize/2 && !drag) {
+            return
+        }
+        drag = true
+        const coords = element.id.split(",").map(coord => Number(coord))
+        this.elementTable[coords[0]][coords[1]].elementClass = "wall"
+    }
+    function cleanUp(e) {
+        document.removeEventListener(e.type == "mouseup" ? "mousemove" : "touchmove", dragFunc)
+        document.removeEventListener(e.type == "mouseup" ? "mouseup" : "touchend", cleanupFunc)
+
+        const x = e.clientX
+        const y = e.clientY
+        const element = document.elementFromPoint(x, y)
+        if(element?.tagName !== "TD") {
+            return
+        }
+        let coords = element.id.split(",").map(coord => Number(coord))
+
+        //If input ended without dragging:
+        if(!drag) {
+            if(element.className === "startnode") {
+                this.elementTable[coords[0]][coords[1]].elementClass = "endnode"
+            }
+            else if(element.className === "endnode" || element.className === "wall") {
+                this.elementTable[coords[0]][coords[1]].elementClass = ""
+            }
+            else {
+                this.elementTable[coords[0]][coords[1]].elementClass = "startnode"
+            }
+        }
+        drag = false;
+    }
+}
+
+/*//This listener is always active on the nodes. Listens for inital click/touch to begin listening for further input
 function cellHandler(event) {
     let dragFunc = cellDrag.bind(this)
     let cleanupFunc = cleanUp.bind(this)
@@ -329,7 +371,6 @@ function cellHandler(event) {
             return
         }
         let coords = pageElement.id.split(",").map(coord => Number(coord))
-        //this.EditNode(coords[0], coords[1], (element)=>{element.className = "wall"})
         this.elementTable[coords[0]][coords[1]].elementClass = "wall"
 
         //if(e.type == "mousemove") {
@@ -378,7 +419,7 @@ function cellHandler(event) {
 
         drag = false;
     }
-}
+}*/
 
 function DFSMaze(canvas) {
     const graph = canvas.graph
@@ -469,6 +510,18 @@ class ElementVertexPair {
         value ? this.DOMElement.classList.remove("wall") : this.DOMElement.classList.add("wall")
     }
 
+    addPair(table, graph) {
+        //Update the DOM
+        table[this.vertex.y][this.vertex.x] = this
+
+        //Update the graph backing the DOM
+        graph.addVertex(this.vertex)
+        for(const key of graph.adjList.keys()) {
+            if (((key.x == this.vertex.x+1 || key.x == this.vertex.x-1) && key.y == this.vertex.y) || (key.x == this.vertex.x && (key.y == this.vertex.y+1 || key.y == this.vertex.y-1))) {
+                graph.addEdge(key, this.vertex)
+            }
+        }
+    }
 }
 
-export { Table, Graph, DFSMaze }
+export { Table, Graph, DFSMaze, CellHandler }

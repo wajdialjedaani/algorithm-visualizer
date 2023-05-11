@@ -5,7 +5,7 @@ import { CheckFirstVisit, PathfindingCookies } from "../js/Cookies.js";
 import anime from "../js/anime.es.js"
 import { PageAlgorithm, DisplayAnnotation } from "../js/SetAlgorithm.js";
 import { AnimationController } from "../js/AnimationController.js";
-import { Table, Graph, DFSMaze } from "../js/Canvas.js";
+import { Table, Graph, DFSMaze, CellHandler } from "../js/Canvas.js";
 import { debounce } from "../js/Utility.js";
 import { JPS } from "../js/Algorithms/Pathfinding/JPS.js";
 
@@ -228,3 +228,5 @@ document.querySelector("#maze").onclick = function() {
     //setTimeout(()=>{Reset()}, 0)
     //setTimeout(()=>{canvas.NewTable(graph)}, 0)
 }
+
+document.querySelector("#grid-container").addEventListener('ontouchstart' in document.documentElement === true ? 'touchstart' : 'mousedown', CellHandler.bind(canvas), {passive: false})
