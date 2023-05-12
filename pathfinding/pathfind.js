@@ -56,7 +56,7 @@ function ChangeAlgorithm(event) {
     pageAlgorithm.changeAlgo.call(pageAlgorithm, event)
 
     //Reset call is done after a 0ms timeout to ensure it runs AFTER all promises relating to the animation resolve.
-    setTimeout(()=>{Reset()}, 0)
+    setTimeout(()=>{ClearAnimation()}, 0)
 }
 
 CheckFirstVisit('pathVisited')
@@ -135,8 +135,15 @@ async function animateResults(actions) {
 }
 
 function Reset() {
-    //generateTable()
     canvas.CreateTable()
+    document.querySelector("#Progress-Bar").style.width = "0%"
+    document.querySelector("#reset").style.display = "none"
+    document.querySelector('#cancel').style.display = "none"
+    document.querySelector("#generate").style.display = "inline"
+}
+
+function ClearAnimation() {
+    canvas.ClearDOMStyles()
     document.querySelector("#Progress-Bar").style.width = "0%"
     document.querySelector("#reset").style.display = "none"
     document.querySelector('#cancel').style.display = "none"
@@ -187,7 +194,9 @@ document.querySelector("#generate").addEventListener("click", () => {
 })
 
 //Button hidden until the animation has finished.
-document.querySelector("#reset").addEventListener("click", Reset)
+document.querySelector("#reset").addEventListener("click", ClearAnimation)
+
+document.querySelector("#resetSettings").addEventListener("click", Reset)
 
 //document.querySelector("#cancel").addEventListener("click", () => {
 //    if(!animationController.inProgress) {

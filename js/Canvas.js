@@ -155,6 +155,14 @@ class Table {
         this.cellSize = PathfindingCookies.GetCellSize()
     }
 
+    ClearDOMStyles() {
+        for(const row of this.elementTable) {
+            for(const pair of row) {
+                pair.DOMElement.style = ""
+            }
+        }
+    }
+
 }
 
 class Graph {
