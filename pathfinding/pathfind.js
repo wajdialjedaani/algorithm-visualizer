@@ -9,8 +9,6 @@ import { Table, Graph, DFSMaze, CellHandler } from "../js/Canvas.js";
 import { debounce } from "../js/Utility.js";
 import { JPS } from "../js/Algorithms/Pathfinding/JPS.js";
 
-let columns = Math.floor((document.body.clientWidth / 30));
-let rows = Math.floor((document.body.clientHeight / 30));
 const alertContainer = document.getElementById('alertContainer')
 
 const animationController = new AnimationController()
@@ -59,34 +57,6 @@ document.querySelector("#AnimSpeed").addEventListener("click", function() {
 })
 
 pageAlgorithm.changeAlgo((new URLSearchParams(window.location.search)).get("func") || "astar")
-
-function generateTable() {
-    let table = document.querySelector("#grid-container")
-    table.innerHTML = ""
-  
-    let cellSize = 30
-
-    columns = Math.floor((window.innerWidth / cellSize));
-    rows = Math.floor((window.innerHeight / cellSize));
-
-    table.style.setProperty("--columns", columns);
-    table.style.setProperty("--rows", rows);
-
-    let width = window.innerWidth / columns
-    let height = window.innerHeight / rows
-
-    for(let y=0; y<rows; y++) {
-        for(let x=0; x<columns; x++) {
-            let cell = document.createElement("td")
-            cell.id = (`${y},${x}`)
-            cell.addEventListener('ontouchstart' in document.documentElement === true ? 'touchstart' : 'mousedown', cellHandler, {passive: false})
-            //cell.addEventListener('touchstart', cellHandler)
-            cell.style.setProperty("--width", width)
-            cell.style.setProperty("--height", height)
-            table.appendChild(cell)
-        }
-    }
-}
 
 window.onload = () => {
     let vh = window.innerHeight * 0.01

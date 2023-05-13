@@ -19,7 +19,7 @@ function darkMode() {   // enables dark mode
     var settingModal = document.getElementById("settingModalDialog")
     var back = document.body
     var algoCard = document.querySelectorAll(".card-algorithm-type")
-    var btnOutline = document.querySelectorAll(".btnResize")
+    var btnOutline = [].concat(...document.querySelectorAll(".btnResize")).concat(document.querySelector(".btn-left")).concat(document.querySelector(".btn-right"))
     var introModal = document.querySelector("#introModal")
     var grid = document.querySelector("#grid-container")
     var draggable = document.querySelectorAll(".draggable")
@@ -38,9 +38,9 @@ function darkMode() {   // enables dark mode
     if(introModal) {    // 
         introModal.classList.toggle("introModal-dark")
     }
-    if(grid) {
-        grid.classList.toggle("grid-dark") // grid
-    }
+    //if(grid) {
+    //    grid.classList.toggle("grid-dark") // grid
+    //}
     if(draggable) {
         draggable.forEach(element => {
             element.classList.toggle("draggable-dark")
