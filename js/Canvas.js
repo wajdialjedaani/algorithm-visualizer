@@ -19,11 +19,8 @@ class Table {
         this.graph = new Graph()
 
         //Calculate new table dimensions
-        let columns = Math.floor((window.innerWidth / this.cellSize));
-        let rows = Math.floor((window.innerHeight / this.cellSize));
-
-        let width = window.innerWidth / columns
-        let height = window.innerHeight / rows
+        let { divisions: columns, cellSize: width } = DivideArea(window.innerWidth, this.cellSize)
+        let { divisions: rows, cellSize: height } = DivideArea(window.innerHeight, this.cellSize)
 
         for(let y=0; y<rows; y++) {
             //Create new row
@@ -48,11 +45,9 @@ class Table {
 
     //Modify the current elementTable when changes are made to the page
     UpdateTable() {
-        let newColumns = Math.floor((window.innerWidth / this.cellSize));
-        let newRows = Math.floor((window.innerHeight / this.cellSize));
+        let { divisions: newColumns, cellSize: width } = DivideArea(window.innerWidth, this.cellSize)
+        let { divisions: newRows, cellSize: height } = DivideArea(window.innerHeight, this.cellSize)
 
-        let width = window.innerWidth / newColumns
-        let height = window.innerHeight / newRows
         //Adjust rows to match change in page dimensions
         //Remove excess rows
         for(let rowDiff = newRows - this.elementTable.length; rowDiff < 0; rowDiff++) {
@@ -148,7 +143,6 @@ class Table {
     EditNode(y, x, func) {
         let node = this.elementTable[y][x]
         func(node)
-        //document.getElementById(`${y},${x}`).replaceWith(node)
     }
 
     UpdateCellSize() {
@@ -354,84 +348,9 @@ function CellHandler(event) {
     }
 }
 
-/*//This listener is always active on the nodes. Listens for inital click/touch to begin listening for further input
-function cellHandler(event) {
-    let dragFunc = cellDrag.bind(this)
-    let cleanupFunc = cleanUp.bind(this)
-    document.querySelectorAll("td").forEach((node)=>{
-        //Checks for mousedown as a way to check if the device is a touchscreen.
-        node.addEventListener(event.type == "mousedown" ? "mousemove" : "touchmove", dragFunc)
-        node.addEventListener(event.type == "mousedown" ? "mouseup" : "touchend", cleanupFunc)
-    })
-
-    let drag = false
-
-    //Handles all events after the initial click
-    function cellDrag(e) {
-        drag = true
-        //Dragging requires different handling, so check for that first. Otherwise, default to mouse inputs
-        let x = e.touches?.[0].clientX || e.clientX
-        let y = e.touches?.[0].clientY || e.clientY
-        let pageElement = document.elementFromPoint(x, y)
-
-        //Because we use elementFromPoint, we may get non-table elements. Ignore those
-        if(pageElement.tagName !== "TD") {
-            return
-        }
-        let coords = pageElement.id.split(",").map(coord => Number(coord))
-        this.elementTable[coords[0]][coords[1]].elementClass = "wall"
-
-        //if(e.type == "mousemove") {
-        //    this.EditNode(coords[0], coords[1], (element)=>{element.className = "wall"})
-        //    //e.currentTarget.className = "wall"
-        //}
-        //else {
-        //    if(pageElement.tagName === "TD") {
-        //        pageElement.className = "wall"
-        //    }
-        //}
-    }
-
-    //Called upon mouseup or end of touch.
-    function cleanUp(e) {
-        document.querySelectorAll("td").forEach((node)=>{
-            node.removeEventListener(e.type == "mouseup" ? "mousemove" : "touchmove", dragFunc)
-            node.removeEventListener(e.type == "mouseup" ? "mouseup" : "touchend", cleanupFunc)
-        })
-
-        let x = e.clientX
-        let y = e.clientY
-        let pageElement = document.elementFromPoint(x, y)
-        if(pageElement.tagName !== "TD") {
-            return
-        }
-        let coords = pageElement.id.split(",").map(coord => Number(coord))
-
-        //If input ended without dragging:
-        if(!drag) {
-            if(e.currentTarget.className == "startnode") {
-                //this.EditNode(coords[0], coords[1], (element)=>{element.className = "endnode"})
-                this.elementTable[coords[0]][coords[1]].elementClass = "endnode"
-            }
-            else if(e.currentTarget.className == "endnode" || e.currentTarget.className == "wall") {
-                //this.EditNode(coords[0], coords[1], (element)=>{element.className = ""})
-                this.elementTable[coords[0]][coords[1]].elementClass = ""
-            }
-            else {
-                //this.EditNode(coords[0], coords[1], (element)=>{element.className = "startnode"})
-                this.elementTable[coords[0]][coords[1]].elementClass = "startnode"
-            }
-        }
-        //this.elementTable[coords[0]][coords[1]] = e.currentTarget
-        //console.log(this.elementTable[coords[0]][coords[1]])
-
-        drag = false;
-    }
-}*/
-
 function DFSMaze(canvas) {
     const graph = canvas.graph
-    const walkableNodes = Array.from(graph.emptyNeighbors.keys())//graph.vertices.filter(element=>element.walkable)
+    const walkableNodes = Array.from(graph.emptyNeighbors.keys())
     const visited = new Array(walkableNodes.length).fill(false) //Parallel array to the vertices made to track what's been visited
     const stack = []
     let cell = walkableNodes[Math.floor(Math.random() * walkableNodes.length)] //Initialize to a random starting point
@@ -456,8 +375,6 @@ function DFSMaze(canvas) {
         //Choose one of unvisited neighbors
         let neighbor = unvisited[Math.floor(Math.random() * unvisited.length)]
         //Remove the wall between the two
-        //graph.vertices.find(element => element.x == (cell.x + neighbor.x) / 2 && element.y == (cell.y + neighbor.y) / 2).walkable = true
-        //graph.adjList.get(cell).find(element => element.x == (cell.x + neighbor.x) / 2 && element.y == (cell.y + neighbor.y) / 2).walkable = true
         canvas.elementTable[(cell.y + neighbor.y) / 2][(cell.x + neighbor.x) / 2].vertexWalkable = true
         //Mark chosen neighbor as visited and push to stack
         visited[walkableNodes.indexOf(neighbor)] = true
@@ -530,6 +447,18 @@ class ElementVertexPair {
             }
         }
     }
+}
+
+function DivideArea(areaSize, cellSize) {
+    let divisions = Math.floor(areaSize / cellSize)
+    if(divisions < 1) {
+        divisions = 1
+    }
+
+
+    cellSize = areaSize / divisions
+
+    return { divisions, cellSize }
 }
 
 export { Table, Graph, DFSMaze, CellHandler }

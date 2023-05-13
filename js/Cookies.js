@@ -15,7 +15,7 @@ class PathfindingCookies {
         if(!Cookies.get('cellSize')) {
             this.SetCellSize(30)
         }
-        return Cookies.get('cellSize')
+        return Number(Cookies.get('cellSize'))
     }
 }
 

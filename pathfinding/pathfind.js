@@ -25,29 +25,21 @@ document.querySelectorAll(".AStar").forEach(element => element.onclick=ChangeAlg
 document.querySelectorAll(".Djikstra").forEach(element => element.onclick=ChangeAlgorithm)
 document.querySelectorAll(".JPS").forEach(element => element.onclick=ChangeAlgorithm)
 
-document.querySelector("#cellSizeIncrease").addEventListener('click', ()=>{
-    let newSize = Number(PathfindingCookies.GetCellSize())+1
+document.querySelector("#cellSizeIncrease").addEventListener('click', function(){SetCellSize(PathfindingCookies.GetCellSize()+1)})
+document.querySelector("#cellSizeDecrease").addEventListener('click', function(){SetCellSize(PathfindingCookies.GetCellSize()-1)})
+document.querySelector("#cellSizeInput").addEventListener('change', function(){SetCellSize(Number(this.value))})
+document.querySelector("#cellSizeInput").value = PathfindingCookies.GetCellSize()
+
+function SetCellSize(newSize) {
+    if(newSize < 10) {
+        Alert(alertContainer, 'Sizes less than 10 pixels will negatively affect performance', 'warning')
+        newSize = 10
+    }
     PathfindingCookies.SetCellSize(newSize)
     document.querySelector("#cellSizeInput").value = newSize
     canvas.UpdateCellSize()
     canvas.UpdateTable()
-})
-document.querySelector("#cellSizeDecrease").addEventListener('click', ()=>{
-    let newSize = Number(PathfindingCookies.GetCellSize())-1
-    PathfindingCookies.SetCellSize(newSize)
-    document.querySelector("#cellSizeInput").value = newSize
-    PathfindingCookies.SetCellSize(newSize)
-    canvas.UpdateCellSize()
-    canvas.UpdateTable()
-})
-
-document.querySelector("#cellSizeInput").addEventListener('change', function(){
-    let newSize = this.value
-    PathfindingCookies.SetCellSize(newSize)
-    canvas.UpdateCellSize()
-    canvas.UpdateTable()
-})
-
+}
 
 function ChangeAlgorithm(event) {
     if(animationController.inProgress) {

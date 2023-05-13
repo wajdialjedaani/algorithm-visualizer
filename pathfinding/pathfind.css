@@ -106,3 +106,26 @@ body {
     flex-direction: row;
     justify-content: end;
 }
+
+.button-group-flex > .btn-left {
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+    padding: 4px 8px 4px 8px;
+}
+
+#cellSizeInput {
+    border-radius: 0px;
+    outline: none;
+    border: 0px;
+}
+
+.button-group-flex > .btn-right {
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+    padding: 4px 8px 4px 8px;
+}
+
+
+
+
+
