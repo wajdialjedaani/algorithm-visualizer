@@ -20,8 +20,8 @@ class FinalPath extends Action {
     get animation() {
         return {
             targets: this.targets,
-            delay: anime.stagger(50),
-            duration: 500,
+            delay: anime.stagger(50/this.speed),
+            duration: this.duration,
             backgroundColor: '#FEDC97',
         }
     }
@@ -32,10 +32,11 @@ class FinalPath extends Action {
 }
 
 class SearchedPath extends Action {
-    constructor(targets, line=1) {
+    constructor(targets, childAnimation, line=1) {
         super(targets, line)
-        SearchedPath.duration = 300
+        SearchedPath.duration = 600
         this.speed = 1
+        this.childAnimation = childAnimation
     }
 
     get duration() {
@@ -47,12 +48,14 @@ class SearchedPath extends Action {
     }
 
     get animation() {
+        let childAnimation = this.childAnimation
         return {
             targets: this.targets,
             backgroundColor: [
                 { value: "#F26419", duration: 0 },
-                { value: "#28666E", delay: this.duration/this.speed, duration: 1 } //Small wait, then zap the whole line purple
-            ]
+                { value: "#28666E", delay: this.duration-0.01, duration: 0.01 } //Small wait, then zap the whole line purple
+            ],
+            complete: function() {childAnimation?.Animate(this.speed)}
         }
     }
 

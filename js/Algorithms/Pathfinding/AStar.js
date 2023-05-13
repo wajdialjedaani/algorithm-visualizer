@@ -4,6 +4,7 @@ function AStar(graph, start, end) {
     const open = []
     const closed = []
     const actions = []
+    let childAnimation
 
     open.push(start)
     start.g = 0
@@ -23,7 +24,7 @@ function AStar(graph, start, end) {
         for(let parent = current; parent; parent = parent.parent) {
             path.push(document.getElementById(`${parent.y},${parent.x}`))
         }
-        actions.push(new SearchedPath(path))
+
         if (current === end) {//If the current node is the end node
             const pathArr = []
             const pathCells = []
@@ -74,8 +75,10 @@ function AStar(graph, start, end) {
             }
         }
         if(newChildren != []) {
-            actions.push(new NewChildren(newChildren.map((element) => {return document.getElementById(`${element.y},${element.x}`)})))
+            childAnimation = new NewChildren(newChildren.map((element) => {return document.getElementById(`${element.y},${element.x}`)}))
         }
+        const animation = new SearchedPath(path, childAnimation)
+        actions.push(animation)
     }
     //Only executed upon failure to find end
     return undefined
