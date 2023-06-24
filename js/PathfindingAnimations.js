@@ -5,7 +5,7 @@ import anime from "./anime.es.js"
 class FinalPath extends Action {
     constructor(targets, line=2) {
         super(targets, line)
-        FinalPath.duration = 1000
+        FinalPath.duration = 50 * targets.length
         this.speed = 1
     }
 
@@ -67,7 +67,7 @@ class SearchedPath extends Action {
 class NewChildren extends Action {
     constructor(targets, line=3) {
         super(targets, line)
-        NewChildren.duration = 100
+        NewChildren.duration = 1
         this.speed = 1
     }
 
