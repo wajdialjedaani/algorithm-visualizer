@@ -53,7 +53,7 @@ class SearchedPath extends Action {
             targets: this.targets,
             backgroundColor: [
                 { value: "#F26419", duration: 0 },
-                { value: "#28666E", delay: this.duration-0.01, duration: 0.01 } //Small wait, then zap the whole line purple
+                { value: "#28666E", delay: this.duration-0.01, duration: 0.01 }, //Small wait, then zap the whole line purple
             ],
             complete: function() {childAnimation?.Animate(this.speed)}
         }

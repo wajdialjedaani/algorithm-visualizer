@@ -16,7 +16,7 @@ export function CreateShortCircuit(params) {
             reject(params.rejectionMessage || "")
             this.removeEventListener('click', rejectHandler)
         }
-
+        console.log("listening")
         params.rejectElement.addEventListener('click', rejectHandler, {once: true})
         //Wait for animation to finish normally. Will resolve if animation is not cancelled
         await Promise.all(params.otherPromises)

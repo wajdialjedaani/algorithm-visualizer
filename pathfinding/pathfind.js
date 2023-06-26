@@ -124,6 +124,24 @@ document.querySelector("#maze").onclick = function() {
 }
 
 document.querySelector("#grid-container").addEventListener('ontouchstart' in document.documentElement === true ? 'touchstart' : 'mousedown', CellHandler.bind(canvas), {passive: false})
+document.querySelector("#Progress-Bar-Outline").addEventListener('click', async function(event) {
+    if(!animationController.inProgress) {
+        return
+    }
+    const barFill = this.firstElementChild
+    let percentage = event.offsetX / this.clientWidth * 100
+    barFill.style.width = `${percentage}%`
+    try {
+        let result = await animationController.SeekAnimation(percentage)
+        if(result === "Seeking") {
+            return
+        }
+        SetResetButton()
+    }
+    catch(error) {
+        Alert(alertContainer, error.message, 'danger')
+    }
+})
 
 function SetCellSize(newSize) {
     if(newSize < 10) {

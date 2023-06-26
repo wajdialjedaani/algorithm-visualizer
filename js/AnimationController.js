@@ -27,6 +27,7 @@ export class AnimationController {
         const animationGen = this.#StepThroughAll(options?.timeline || this.timeline)
         let currentStep = animationGen.next()
         while(!currentStep.done) {
+
             this.#progressBar.style.width = `${this.progress}%`
 
             //Custom promise to handle animation interrupts
@@ -97,5 +98,20 @@ export class AnimationController {
         this.Pause()
         this.inProgress = false
         this.playing = false
+    }
+
+    //Interrupts the current timeline flow and resumes it at another point
+    async SeekAnimation(percentage) {
+        let startPosition = Math.floor((this.timeline.length-1) * percentage / 100)
+        const newTimeline = this.timeline.slice(startPosition, this.timeline.length)
+        this.#shortCircuitFunc("Seeking")
+        this.Pause()
+        ClearAnimation()
+        for(let i=0; i<startPosition; i++) {
+            const animation = this.timeline[i].Animate()
+            animation.seek(animation.duration)
+        }
+
+        return await this.PlayTimeline({timeline: newTimeline})
     }
 }
