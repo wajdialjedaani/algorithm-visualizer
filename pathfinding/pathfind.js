@@ -11,7 +11,7 @@ import { JPS } from "../js/Algorithms/Pathfinding/JPS.js";
 
 const alertContainer = document.getElementById('alertContainer')
 
-const animationController = new AnimationController()
+const animationController = new AnimationController({progressBar: document.querySelector("#Progress-Bar-Fill"), cancelButton: document.querySelector("#cancel")})
 const pageAlgorithm = new PageAlgorithm()
 const canvas = new Table()
 
@@ -49,7 +49,7 @@ window.onresize = debounce(() => {
     canvas.UpdateTable()
 }, 50)
 
-document.querySelector("#generate").addEventListener("click", () => {
+document.querySelector("#generate").addEventListener("click", async () => {
     //If there is already an animation, do nothing
     //let graph = Graph.ParseTable(document.querySelector("#grid-container"))
     //JPS(graph, graph.start, graph.end)
@@ -62,37 +62,32 @@ document.querySelector("#generate").addEventListener("click", () => {
 
     //Find path
     try {
-        animationController.animations = FindPath(document.querySelector("#grid-container"))
+        animationController.timeline = FindPath(document.querySelector("#grid-container"))
     }
     catch(error) {
         Alert(alertContainer, error.message, 'danger')
         return
     }
 
-    //If a path was found, begin animation
-    animationController.inProgress = true
     //Change Go button to Cancel button
-    document.querySelector("#generate").style.display = "none"
-    document.querySelector("#cancel").style.display = "inline"
-    animateResults(animationController.animations)
-    .then(
-        function(value) {
-            document.querySelector("#cancel").style.display = "none"
-            document.querySelector("#reset").style.display = "inline"
-    })
-    .catch(
-        function(error) {
-            Alert(alertContainer, error.message, 'danger')
-    })
-    .finally(
-        () => {
-            animationController.inProgress = false
+    SetCancelButton()
+    //Begin animation
+    try {
+        let message = await animateResults(animationController.timeline)
+        if(message === "Seeking") {
+            return
         }
-    )
+        SetResetButton()
+    } catch(error) {
+        Alert(alertContainer, error.message, 'danger')
+    }
 })
 
 //Button hidden until the animation has finished.
-document.querySelector("#reset").addEventListener("click", ClearAnimation)
+document.querySelector("#reset").addEventListener("click", ()=>{
+    ClearAnimation()
+    SetGoButton()
+})
 
 document.querySelector("#resetSettings").addEventListener("click", Reset)
 
@@ -143,12 +138,12 @@ function SetCellSize(newSize) {
 
 function ChangeAlgorithm(event) {
     if(animationController.inProgress) {
-        animationController.CancelAnimation()
+        animationController.CancelTimeline()
     }
     pageAlgorithm.changeAlgo.call(pageAlgorithm, event)
 
     //Reset call is done after a 0ms timeout to ensure it runs AFTER all promises relating to the animation resolve.
-    setTimeout(()=>{ClearAnimation()}, 0)
+    setTimeout(()=>{ClearAnimation(); SetGoButton()}, 0)
 }
 
 function FindPath(table)
@@ -167,28 +162,40 @@ function FindPath(table)
 }
 
 async function animateResults(actions) {
-    animationController.playing = true
     try {
-        await animationController.PlayAllAnimations({progressBar: document.querySelector("#Progress-Bar"), cancel: document.querySelector("#cancel")})
+        let result = await animationController.PlayTimeline()
+        return result
     }
     catch(err) {
         Alert(alertContainer, err.message, 'danger')
     }
-    animationController.playing = false
 }
 
 function Reset() {
     canvas.CreateTable()
-    document.querySelector("#Progress-Bar").style.width = "0%"
+    document.querySelector("#Progress-Bar-Fill").style.width = "0%"
+    SetGoButton()
+}
+
+export function ClearAnimation() {
+    canvas.ClearDOMStyles()
+    document.querySelector("#Progress-Bar-Fill").style.width = "0%"
+}
+
+function SetGoButton() {
     document.querySelector("#reset").style.display = "none"
     document.querySelector('#cancel').style.display = "none"
     document.querySelector("#generate").style.display = "inline"
 }
 
-function ClearAnimation() {
-    canvas.ClearDOMStyles()
-    document.querySelector("#Progress-Bar").style.width = "0%"
+function SetCancelButton() {
     document.querySelector("#reset").style.display = "none"
+    document.querySelector('#cancel').style.display = "inline"
+    document.querySelector("#generate").style.display = "none"
+}
+
+function SetResetButton() {
+    document.querySelector("#reset").style.display = "inline"
     document.querySelector('#cancel').style.display = "none"
-    document.querySelector("#generate").style.display = "inline"
+    document.querySelector("#generate").style.display = "none"
 }

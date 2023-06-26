@@ -1,99 +1,101 @@
+import { CreateShortCircuit } from "./ShortCircuitPromise.js"
+import { ClearAnimation } from "../pathfinding/pathfind.js"
+
 export class AnimationController {
+    #progressBar
+    #cancelButton
+    #shortCircuitFunc
+
     constructor(params) {
         this.speeds = params?.speeds || [1, 5, 10]
         this.speed = params?.speed || this.speeds[0]
-        this.animations = params?.animation || undefined
+        this.timeline = params?.timeline || undefined
+        this.#progressBar = params?.progressBar || document.querySelector("#Progress-Bar-Fill")
+        this.#cancelButton = params?.cancelButton || document.querySelector("#cancel")
         this.playing = false
         this.currentAnim = []
         this.progress = 0
-        this.cancel = false
         this.inProgress = false
-        this.shortCircuitFunc = undefined
     }
 
     //Play entire list of animations from beginning to end
-    async PlayAllAnimations(options) {
-        const progress = options?.progressBar || document.querySelector("#Progress-Bar")
-        const animationGen = this.StepThroughAll()
+    async PlayTimeline(options) {
+        this.playing = true
+        this.inProgress = true
+
+        //Create generator and step through the timeline
+        const animationGen = this.#StepThroughAll(options?.timeline || this.timeline)
         let currentStep = animationGen.next()
         while(!currentStep.done) {
-            progress.style.width = `${this.progress}%`
+            this.#progressBar.style.width = `${this.progress}%`
 
             //Custom promise to handle animation interrupts
-            const animationController = this
-            const shortCircuit = new Promise(async (resolve, reject) => {
-                this.shortCircuitFunc = reject
-                //Called when cancel is pressed, rejects the promise short circuiting the promise.all
-                function handler() {
-                    animationController.CancelAnimation()
-                    options?.cancel?.removeEventListener('click', handler)
-                }
-                options?.cancel?.addEventListener('click', handler, {once: true})
+            const [shortCircuitPromise, shortCircuitFunc] = CreateShortCircuit({rejectElement: this.#cancelButton,
+                rejectCallback: this.CancelTimeline.bind(this),
+                otherPromises: [currentStep.value[0].finished, currentStep.value[1].finished],
+                rejectionMessage: "Cancelled"})
+            this.#shortCircuitFunc = shortCircuitFunc
 
-                //Wait for animation to finish normally. Will resolve if animation is not cancelled
-                await Promise.all([currentStep.value[0].finished, currentStep.value[1].finished])
-                options?.cancel?.removeEventListener('click', handler)
-                resolve()
-            })
-
-            //Start animations and await their finish.
+            //Start each action in the animation and await their finish.
             try {
-                await Promise.all([currentStep.value[0].finished, currentStep.value[1].finished, shortCircuit])
-            } catch(error) {
+                await Promise.all([currentStep.value[0].finished, currentStep.value[1].finished, shortCircuitPromise])
+            } catch(message) {
                 //Runs in the case of the animation being cancelled.
-                
-                this.Pause()
-                this.inProgress = false
-                return
+                return message
             }
             currentStep = animationGen.next()
         }
         this.currentAnim = []
         this.inProgress = false
+        this.playing = false
     }
     //Play given animation
-    async PlayAnimation(anim) {
+    async #PlayAnimation(anim) {
         this.currentAnim = [anim.Animate()]
         await this.currentAnim[0].finished
         this.currentAnim = []
     }
+
     //Play through animations 1 at a time, returning promise for the animation completing
-    *StepThroughAnimation() {
-        for(let step of this.animations) {
+    *#StepThroughAnimation() {
+        for(let step of this.timeline) {
             yield step.Animate(this.speed)
         }
     }
     //Play through pseudocode animations 1 at a time, returning promise for the animation completing
-    *StepThroughPseudo() {
-        for(let step of this.animations) {
+    *#StepThroughPseudo() {
+        for(let step of this.timeline) {
             yield step.AnimatePseudocode(this.speed)
         }
     }
-    //Step through both animations and pseudocode, returning array of finish promises
-    //Proper use: Promise.all(gen.next())
-    *StepThroughAll(animationList) {
-        for(let action of animationList || this.animations) {
-            this.progress = (this.animations.indexOf(action)+1) / this.animations.length * 100
-            this.currentAnim = [action.Animate(this.speed), action.AnimatePseudocode.call(action, this.speed)]
+    //Step through timeline, each step yielding an array of the actions in the next animation
+    *#StepThroughAll(timeline) {
+        for(let anim of timeline) {
+            this.progress = (this.timeline.indexOf(anim)+1) / this.timeline.length * 100
+            this.currentAnim = [anim.Animate(this.speed), anim.AnimatePseudocode.call(anim, this.speed)]
             yield this.currentAnim
         }
-        this.currentAnim = []
     }
     
+    //Resume the current animation.
     Play() {
-        for(let animation of this.currentAnim) {
-            animation.play()
-        }
-    }
-    Pause() {
-        for(let animation of this.currentAnim) {
-            animation.pause()
+        for(let action of this.currentAnim) {
+            action.play()
         }
     }
 
-    CancelAnimation() {
-        this.cancel = true
+    //Pause the current animation.
+    Pause() {
+        for(let action of this.currentAnim) {
+            action.pause()
+        }
+    }
+
+    //Called when the timeline is stopped by the cancel button to handle cleanup.
+    CancelTimeline() {
         this.progress = 0
-        this.shortCircuitFunc("Animation cancelled")
+        this.Pause()
+        this.inProgress = false
+        this.playing = false
     }
 }
