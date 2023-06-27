@@ -31,7 +31,8 @@ document.querySelector("#cellSizeInput").value = PathfindingCookies.GetCellSize(
 CheckFirstVisit('pathVisited')
 
 document.querySelector("#AnimSpeed").addEventListener("click", function() {
-    animationController.speed = animationController.speeds[(animationController.speeds.indexOf(animationController.speed)+1)%animationController.speeds.length]
+    //animationController.speed = animationController.speeds[(animationController.speeds.indexOf(animationController.speed)+1)%animationController.speeds.length]
+    animationController.SetSpeed(animationController.speeds[(animationController.speeds.indexOf(animationController.speed)+1)%animationController.speeds.length])
     this.innerHTML = `${animationController.speed}x`
 })
 
@@ -55,7 +56,7 @@ document.querySelector("#generate").addEventListener("click", async () => {
     //JPS(graph, graph.start, graph.end)
     //return
 
-    if(animationController.inProgress) {
+    if(animationController.IsInProgress()) {
         Alert(alertContainer, "Animation in progress, can't play", 'warning')
         return
     }
@@ -85,61 +86,75 @@ document.querySelector("#generate").addEventListener("click", async () => {
 
 //Button hidden until the animation has finished.
 document.querySelector("#reset").addEventListener("click", ()=>{
+    if(animationController.IsInProgress()) {
+        Alert(alertContainer, "Animation still in progress. Something went wrong.", 'danger')
+    }
     ClearAnimation()
     SetGoButton()
+})
+
+document.querySelector("#cancel").addEventListener("click", () => {
+    animationController.CancelTimeline()
+    SetResetButton()
 })
 
 document.querySelector("#resetSettings").addEventListener("click", Reset)
 
 document.querySelector("#PlayPause").onclick = function() {
-    if(typeof animationController.currentAnim === "undefined" || !animationController.inProgress) {
+    if(!animationController.IsInProgress()) {
         Alert(alertContainer, "No animation playing", 'warning')
         return
     }
 
     //Play or pause depending on current animation state, then toggle button state
-    if(animationController.playing) {
-        animationController.playing = false
+    if(animationController.IsPlaying()) {
         animationController.Pause()
         this.firstChild.setAttribute("src", "../Assets/play-fill.svg")
     }
     else {
-        animationController.playing = true
         animationController.Play()
         this.firstChild.setAttribute("src", "../Assets/pause-fill.svg")
     }
 }
 
 document.querySelector("#maze").onclick = function() {
-    if(animationController.inProgress) {
+    if(animationController.IsInProgress()) {
         Alert(alertContainer, "Animation in progress", 'warning')
         return
     }
 
-    //let graph = Graph.ParseTable(document.querySelector("#grid-container"))
     Graph.PartitionGraph(canvas)
     DFSMaze(canvas)
-    //setTimeout(()=>{Reset()}, 0)
-    //setTimeout(()=>{canvas.NewTable(graph)}, 0)
 }
 
 document.querySelector("#grid-container").addEventListener('ontouchstart' in document.documentElement === true ? 'touchstart' : 'mousedown', CellHandler.bind(canvas), {passive: false})
-document.querySelector("#Progress-Bar-Outline").addEventListener('click', async function(event) {
-    if(!animationController.inProgress) {
+document.querySelector("#Progress-Bar-Outline").addEventListener('mousedown', function(event) {
+    if(!animationController.IsInProgress()) {
         return
     }
-    const barFill = this.firstElementChild
-    let percentage = event.offsetX / this.clientWidth * 100
-    barFill.style.width = `${percentage}%`
-    try {
-        let result = await animationController.SeekAnimation(percentage)
-        if(result === "Seeking") {
-            return
+    //Bind the progress bar to allow the inner functions to reference it after being triggered later on
+    const seekFunc = seekDrag.bind(this)
+    const cleanUpFunc = cleanUp.bind(this)
+
+    document.addEventListener("mousemove", seekFunc)
+    document.addEventListener("mouseup", cleanUpFunc)
+
+    function seekDrag(event) {
+        //Calculate the progress bar percentage, set the fill, then set the animation to that point
+        const barFill = this.firstElementChild
+        let percentage = (event.clientX-this.offsetLeft) / this.clientWidth
+        if(percentage<0) {
+            percentage = 0
+        } else if(percentage > 1) {
+            percentage = 1
         }
-        SetResetButton()
+        barFill.style.width = `${percentage}%`
+        animationController.SeekAnimation(percentage)
     }
-    catch(error) {
-        Alert(alertContainer, error.message, 'danger')
+
+    function cleanUp(event) {
+        document.removeEventListener("mousemove", seekFunc)
+        document.removeEventListener("mouseup", cleanUpFunc)
     }
 })
 
@@ -155,7 +170,7 @@ function SetCellSize(newSize) {
 }
 
 function ChangeAlgorithm(event) {
-    if(animationController.inProgress) {
+    if(animationController.IsInProgress()) {
         animationController.CancelTimeline()
     }
     pageAlgorithm.changeAlgo.call(pageAlgorithm, event)
@@ -181,7 +196,7 @@ function FindPath(table)
 
 async function animateResults(actions) {
     try {
-        let result = await animationController.PlayTimeline()
+        let result = await animationController.PlayTimeline().then()
         return result
     }
     catch(err) {

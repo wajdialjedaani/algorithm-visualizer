@@ -3,6 +3,7 @@ import { AnimationController } from "./AnimationController.js"
 import anime from "./anime.es.js"
 
 class FinalPath extends Action {
+    static duration = 5
     constructor(targets, line=2) {
         super(targets, line)
         FinalPath.duration = 50 * targets.length
@@ -29,18 +30,29 @@ class FinalPath extends Action {
     Animate(speed) {
         return super.Animate.call(this, speed)
     }
+
+    static AddToTimeline(timeline, params) {
+        return timeline.to(params.target, {
+            keyframes: [
+                {backgroundColor: "#FEDC97", duration: FinalPath.duration},
+            ],
+            stagger: {
+                amount: FinalPath.duration,
+            },
+        })
+    }
 }
 
 class SearchedPath extends Action {
+    static duration = .6
     constructor(targets, childAnimation, line=1) {
         super(targets, line)
-        SearchedPath.duration = 600
         this.speed = 1
         this.childAnimation = childAnimation
     }
 
     get duration() {
-        return SearchedPath.duration / this.speed
+        return (SearchedPath.duration / this.speed) || SearchedPath.duration
     }
 
     get annotation() {
@@ -62,9 +74,19 @@ class SearchedPath extends Action {
     Animate(speed) {
         return super.Animate.call(this, speed)
     }
+
+    static AddToTimeline(timeline, params) {
+        return timeline.to(params.target, {
+            keyframes: [
+                {backgroundColor: "#F26419", duration: 0},
+                {backgroundColor: "#28666E", delay: SearchedPath.duration - 0.01, duration: 0.01},
+            ],
+        })
+    }
 }
 
 class NewChildren extends Action {
+    static duration = 0
     constructor(targets, line=3) {
         super(targets, line)
         NewChildren.duration = 1
@@ -89,6 +111,13 @@ class NewChildren extends Action {
 
     Animate(speed) {
         return super.Animate.call(this, speed)
+    }
+
+    static AddToTimeline(timeline, params) {
+        return timeline.to(params.target, {
+            backgroundColor: "#696464",
+            duration: 0,
+        })
     }
 }
 

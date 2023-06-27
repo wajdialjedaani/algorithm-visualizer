@@ -258,6 +258,11 @@ img {
     margin: 10px;
 }
 
+.progress-bar {
+    background-color: #0d6efd;
+    transition: 0s;
+}
+
 .back-btn {
     position: absolute;
     margin: 0 -12px;

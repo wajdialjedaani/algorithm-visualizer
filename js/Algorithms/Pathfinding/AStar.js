@@ -4,6 +4,8 @@ function AStar(graph, start, end) {
     const open = []
     const closed = []
     const actions = []
+    const progressBar = document.querySelector("#Progress-Bar-Fill")
+    const timeline = gsap.timeline({paused: true, onUpdate: function(){progressBar.style.width = `${this.progress()*100}%`}})
     let childAnimation
 
     open.push(start)
@@ -33,8 +35,10 @@ function AStar(graph, start, end) {
                 pathCells.push(document.getElementById(`${current.y},${current.x}`))
                 current = current.parent
             }
-            actions.push(new FinalPath(pathCells.reverse()))
-            return actions
+            //actions.push(new FinalPath(pathCells.reverse()))
+            FinalPath.AddToTimeline(timeline, {target: pathCells.reverse()})
+            //return actions
+            return timeline
         }
 
         let children = []
@@ -75,10 +79,12 @@ function AStar(graph, start, end) {
             }
         }
         if(newChildren != []) {
-            childAnimation = new NewChildren(newChildren.map((element) => {return document.getElementById(`${element.y},${element.x}`)}))
+            //childAnimation = new NewChildren(newChildren.map((element) => {return document.getElementById(`${element.y},${element.x}`)}))
+            NewChildren.AddToTimeline(timeline, {target: newChildren.map((element) => {return document.getElementById(`${element.y},${element.x}`)})})
         }
-        const animation = new SearchedPath(path, childAnimation)
-        actions.push(animation)
+        //const animation = new SearchedPath(path, childAnimation)
+        //actions.push(animation)
+        SearchedPath.AddToTimeline(timeline, {target: path})
     }
     //Only executed upon failure to find end
     return undefined
