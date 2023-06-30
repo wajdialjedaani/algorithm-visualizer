@@ -2,19 +2,18 @@ import { CreateShortCircuit } from "./ShortCircuitPromise.js"
 import { ClearAnimation } from "../pathfinding/pathfind.js"
 
 export class AnimationController {
-    #progressBar
-    #cancelButton
-    #shortCircuitFunc
-
     constructor(params) {
         this.speeds = params?.speeds || [1, 5, 10]
         this.speed = params?.speed || this.speeds[0]
         this.timeline = params?.timeline || undefined
-        this.#progressBar = params?.progressBar || document.querySelector("#Progress-Bar-Fill")
-        this.#cancelButton = params?.cancelButton || document.querySelector("#cancel")
-        this.currentAnim = []
     }
-    
+
+    //Begin an animation timeline with the current speed
+    PlayTimeline() {
+        this.timeline.play().timeScale(this.speed)
+        return this.timeline
+    }
+
     //Resume the current animation.
     Play() {
         this.timeline.resume()
@@ -23,11 +22,6 @@ export class AnimationController {
     //Pause the current animation.
     Pause() {
         this.timeline.pause()
-    }
-
-    PlayTimeline() {
-        this.timeline.play().timeScale(this.speed)
-        return this.timeline
     }
 
     SetSpeed(speed) {

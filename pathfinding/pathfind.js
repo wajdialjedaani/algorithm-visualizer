@@ -139,6 +139,12 @@ document.querySelector("#Progress-Bar-Outline").addEventListener('mousedown', fu
     document.addEventListener("mousemove", seekFunc)
     document.addEventListener("mouseup", cleanUpFunc)
 
+    //Pausing makes the bar less finnicky while seeking. Resumed in cleanUp()
+    animationController.Pause()
+
+    //Calling here allows for quick skipping with a click
+    seekDrag.call(this, event)
+
     function seekDrag(event) {
         //Calculate the progress bar percentage, set the fill, then set the animation to that point
         const barFill = this.firstElementChild
@@ -155,6 +161,7 @@ document.querySelector("#Progress-Bar-Outline").addEventListener('mousedown', fu
     function cleanUp(event) {
         document.removeEventListener("mousemove", seekFunc)
         document.removeEventListener("mouseup", cleanUpFunc)
+        animationController.Play()
     }
 })
 

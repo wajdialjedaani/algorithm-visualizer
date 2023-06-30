@@ -3,12 +3,12 @@ import { FinalPath, SearchedPath, NewChildren } from "../../PathfindingAnimation
 function Djikstra(graph, start, end) {
     const open = []
     const closed = []
-    const actions = []
+    const progressBar = document.querySelector("#Progress-Bar-Fill")
+    const timeline = gsap.timeline({paused: true, onUpdate: function(){progressBar.style.width = `${this.progress()*100}%`}})
     open.push(start)
     start.g = 0
     
     while (open.length != 0) {
-        console.log("outer loop")
         open.sort((a, b) => {return a.g - b.g}) //Sort ascending by cost
 
         let current = open.shift()
@@ -18,19 +18,18 @@ function Djikstra(graph, start, end) {
         for(let parent = current; parent; parent = parent.parent) {
             path.push(document.getElementById(`${parent.y},${parent.x}`))
         }
-        actions.push(new SearchedPath(path))
+        SearchedPath.AddToTimeline(timeline, {target: path})
 
         if (current === end) {//If the current node is the end node
             const pathArr = []
             const pathCells = []
             while(current) {
-                console.log(`${current.y},${current.x}`)
                 pathArr.push(current)
                 pathCells.push(document.getElementById(`${current.y},${current.x}`))
                 current = current.parent
             }
-            actions.push(new FinalPath(pathCells.reverse()))
-            return actions
+            FinalPath.AddToTimeline(timeline, {target: pathCells.reverse()})
+            return timeline
         }
 
         let children = []
@@ -63,8 +62,9 @@ function Djikstra(graph, start, end) {
                 newChildren.push(child)
             }
         }
-        if(newChildren != []) {
-            actions.push(new NewChildren(newChildren.map((element) => {return document.getElementById(`${element.y},${element.x}`)})))
+        //if new children to be added to the open queue exist, make an animation for them
+        if(newChildren.length) {
+            NewChildren.AddToTimeline(timeline, {target: newChildren.map((element) => {return document.getElementById(`${element.y},${element.x}`)})})
         }
     }
     //Only executed upon failure to find end
