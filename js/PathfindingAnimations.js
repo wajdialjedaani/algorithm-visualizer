@@ -2,7 +2,7 @@ import { Action } from "./Action.js"
 import { AnimationController } from "./AnimationController.js"
 import anime from "./anime.es.js"
 
-class FinalPath extends Action {
+export class FinalPath extends Action {
     static duration = 5
     constructor(targets, line=2) {
         super(targets, line)
@@ -43,7 +43,7 @@ class FinalPath extends Action {
     }
 }
 
-class SearchedPath extends Action {
+export class SearchedPath extends Action {
     static duration = .6
     constructor(targets, childAnimation, line=1) {
         super(targets, line)
@@ -85,7 +85,7 @@ class SearchedPath extends Action {
     }
 }
 
-class NewChildren extends Action {
+export class NewChildren extends Action {
     static duration = 0
     constructor(targets, line=3) {
         super(targets, line)
@@ -121,4 +121,34 @@ class NewChildren extends Action {
     }
 }
 
-export { FinalPath, SearchedPath, NewChildren }
+export class SkippedNode extends Action {
+    static duration = 0.02
+    static AddToTimeline(timeline, params) {
+        return timeline.to(params.target, {
+            backgroundColor: "#808080F0",
+            duration: SkippedNode.duration,
+        })
+    }
+}
+
+export class JumpNode extends Action {
+    static duration = 1
+    static AddToTimeline(timeline, params) {
+        return timeline.to(params.target, {
+            backgroundColor: "#00FF00A0",
+            duration: SkippedNode.duration,
+        })
+    }
+    static InsertToTimeline(timeline, params) {
+        const tween = gsap.to(params.target, {
+            keyframes: [
+                {backgroundColor: "#00FF00A0", duration: 0},
+                {backgroundColor: "#00FF00A0", duration: JumpNode.duration},
+            ],
+            backgroundColor: "#00FF00A0",
+            duration: JumpNode.duration,
+        })
+        timeline.shiftChildren(JumpNode.duration, true, params.label)
+        return timeline.add(tween, params.label)
+    }
+}
