@@ -142,11 +142,9 @@ export class JumpNode extends Action {
     static InsertToTimeline(timeline, params) {
         const tween = gsap.to(params.target, {
             keyframes: [
-                {backgroundColor: "#00FF00A0", duration: 0},
-                {backgroundColor: "#00FF00A0", duration: JumpNode.duration},
-            ],
-            backgroundColor: "#00FF00A0",
-            duration: JumpNode.duration,
+                {backgroundColor: "#F26419", duration: 0},
+                {backgroundColor: "#F26419", duration: JumpNode.duration},
+            ], 
         })
         timeline.shiftChildren(JumpNode.duration, true, params.label)
         return timeline.add(tween, params.label)
