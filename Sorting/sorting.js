@@ -12,18 +12,19 @@ const animationController = new AnimationController()
 
 window.onload = generateBars
 window.onresize = generateBars
-//Initialize dropdown menu buttons
 
+//Initialize dropdown menu buttons
 document.querySelectorAll(".InsertionSort").forEach((element) => {element.onclick=ChangeAlgorithm})
 document.querySelectorAll(".SelectionSort").forEach((element) => {element.onclick=ChangeAlgorithm})
 document.querySelectorAll(".BubbleSort").forEach((element) => {element.onclick=ChangeAlgorithm})
 document.querySelectorAll(".QuickSort").forEach((element) => {element.onclick=ChangeAlgorithm})
 
 function ChangeAlgorithm(event) {
-    if(animationController.inProgress) {
+    if(animationController.IsInProgress()) {
         animationController.CancelAnimation()
     }
-    pageAlgorithm.changeAlgo.call(pageAlgorithm, event)
+    //pageAlgorithm.changeAlgo.call(pageAlgorithm, event)
+    pageAlgorithm.changeAlgo(event)
 
     //Reset call is done after a 0ms timeout to ensure it runs AFTER all promises relating to the animation resolve.
     setTimeout(()=>{Reset()}, 0)

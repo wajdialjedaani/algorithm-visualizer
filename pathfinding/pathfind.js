@@ -3,7 +3,7 @@ import { Alert } from "../js/Alert.js"
 import { CheckFirstVisit, PathfindingCookies } from "../js/Cookies.js";
 import { PageAlgorithm, DisplayAnnotation } from "../js/SetAlgorithm.js";
 import { AnimationController } from "../js/AnimationController.js";
-import { Table, Graph, DFSMaze, CellHandler } from "../js/Canvas.js";
+import { Table, Graph, DFSMaze, CellHandler } from "../js/PathfindingCanvas.js";
 import { debounce } from "../js/Utility.js";
 
 const alertContainer = document.getElementById('alertContainer')
@@ -177,7 +177,8 @@ function ChangeAlgorithm(event) {
     if(animationController.IsInProgress()) {
         animationController.CancelTimeline()
     }
-    pageAlgorithm.changeAlgo.call(pageAlgorithm, event)
+    //pageAlgorithm.changeAlgo.call(pageAlgorithm, event)
+    pageAlgorithm.changeAlgo(event)
 
     //Reset call is done after a 0ms timeout to ensure it runs AFTER all promises relating to the animation resolve.
     setTimeout(()=>{ClearAnimation(); SetGoButton()}, 0)
