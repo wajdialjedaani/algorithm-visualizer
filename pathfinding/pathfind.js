@@ -1,13 +1,10 @@
 import { dragElement, ResizeHandler } from "../js/draggableCard.js";
-import { Action } from "../js/Action.js";
 import { Alert } from "../js/Alert.js"
 import { CheckFirstVisit, PathfindingCookies } from "../js/Cookies.js";
-import anime from "../js/anime.es.js"
 import { PageAlgorithm, DisplayAnnotation } from "../js/SetAlgorithm.js";
 import { AnimationController } from "../js/AnimationController.js";
 import { Table, Graph, DFSMaze, CellHandler } from "../js/Canvas.js";
 import { debounce } from "../js/Utility.js";
-import { JPS } from "../js/Algorithms/Pathfinding/JPS.js";
 
 const alertContainer = document.getElementById('alertContainer')
 
@@ -217,7 +214,7 @@ function Reset() {
     SetGoButton()
 }
 
-export function ClearAnimation() {
+function ClearAnimation() {
     canvas.ClearDOMStyles()
     document.querySelector("#Progress-Bar-Fill").style.width = "0%"
 }

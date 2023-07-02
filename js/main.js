@@ -193,17 +193,11 @@ function pathfindingBack() { // animation if sorting back button is selected
 
 window.addEventListener('load', function() {
     if(!Cookies.get('darkMode')) { //If no cookie, default to light mode
-        console.log("no cookie. creating cookie rn")
         Cookies.set('darkMode', '0', {expires: 999, sameSite: 'strict'})
     }
     else if(Cookies.get('darkMode') === '1') { //Cookie says dark mode
-        console.log("darkmode")
         document.querySelector("#darkModeSwitch").toggleAttribute('checked')
         darkMode()
-    }
-    else
-    {
-        console.log('lightmode')
     }
 })
 

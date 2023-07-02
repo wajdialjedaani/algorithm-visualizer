@@ -1,8 +1,6 @@
 import { dragElement, ResizeHandler } from "../js/draggableCard.js"
-import { Action } from "../js/Action.js"
 import { Alert } from "../js/Alert.js"
 import { CheckFirstVisit } from "../js/Cookies.js"
-import anime from "../js/anime.es.js"
 import { PageAlgorithm, DisplayAnnotation } from "../js/SetAlgorithm.js";
 import { AnimationController } from "../js/AnimationController.js";
 

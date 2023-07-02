@@ -1,6 +1,3 @@
-import { CreateShortCircuit } from "./ShortCircuitPromise.js"
-import { ClearAnimation } from "../pathfinding/pathfind.js"
-
 export class AnimationController {
     constructor(params) {
         this.speeds = params?.speeds || [1, 5, 10]
