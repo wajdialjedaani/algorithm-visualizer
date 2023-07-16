@@ -21,19 +21,20 @@ export class AnimationController {
         this.timeline.pause()
     }
 
+    //Sets current speed. Applies it to timeline if present. New timelines will apply most recent speed on start.
     SetSpeed(speed) {
         this.speed = speed
-        this.timeline.timeScale(speed)
+        this.timeline?.timeScale(speed)
     }
 
     //Called when the timeline is stopped by the cancel button to handle cleanup.
     CancelTimeline() {
-        this.timeline.kill()
+        this.timeline?.kill()
         this.timeline = undefined
     }
 
     //Interrupts the current timeline flow and resumes it at another point
-    async SeekAnimation(percentage) {
+    async SeekTimeline(percentage) {
         this.timeline.progress(percentage)
     }
 

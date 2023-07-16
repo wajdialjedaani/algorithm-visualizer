@@ -49,16 +49,12 @@ window.onresize = debounce(() => {
 
 document.querySelector("#generate").addEventListener("click", async () => {
     //If there is already an animation, do nothing
-    //let graph = Graph.ParseTable(document.querySelector("#grid-container"))
-    //JPS(graph, graph.start, graph.end)
-    //return
-
     if(animationController.IsInProgress()) {
         Alert(alertContainer, "Animation in progress, can't play", 'warning')
         return
     }
 
-    //Find path
+    //Run the algorithm and save the returned timeline
     try {
         animationController.timeline = FindPath(document.querySelector("#grid-container"))
     }
@@ -67,14 +63,12 @@ document.querySelector("#generate").addEventListener("click", async () => {
         return
     }
 
-    //Change Go button to Cancel button
+    //Set cancel button before running animation to allow cancellation if anything goes wrong
     SetCancelButton()
-    //Begin animation
+
+    //Run animation
     try {
-        let message = await animateResults(animationController.timeline)
-        if(message === "Seeking") {
-            return
-        }
+        await animateResults(animationController.timeline)
         SetResetButton()
     } catch(error) {
         Alert(alertContainer, error.message, 'danger')
@@ -95,7 +89,12 @@ document.querySelector("#cancel").addEventListener("click", () => {
     SetResetButton()
 })
 
-document.querySelector("#resetSettings").addEventListener("click", Reset)
+document.querySelector("#resetSettings").addEventListener("click", function () {
+    animationController.CancelTimeline()
+    canvas.CreateTable()
+    document.querySelector("#Progress-Bar-Fill").style.width = "0%"
+    SetGoButton()
+})
 
 document.querySelector("#PlayPause").onclick = function() {
     if(!animationController.IsInProgress()) {
@@ -152,7 +151,7 @@ document.querySelector("#Progress-Bar-Outline").addEventListener('mousedown', fu
             percentage = 1
         }
         barFill.style.width = `${percentage}%`
-        animationController.SeekAnimation(percentage)
+        animationController.SeekTimeline(percentage)
     }
 
     function cleanUp(event) {
@@ -207,12 +206,6 @@ async function animateResults(actions) {
     catch(err) {
         Alert(alertContainer, err.message, 'danger')
     }
-}
-
-function Reset() {
-    canvas.CreateTable()
-    document.querySelector("#Progress-Bar-Fill").style.width = "0%"
-    SetGoButton()
 }
 
 function ClearAnimation() {
