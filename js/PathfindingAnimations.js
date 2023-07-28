@@ -1,6 +1,7 @@
 import { Action } from "./Action.js"
 import { AnimationController } from "./AnimationController.js"
 import anime from "./anime.es.js"
+import { gsap } from "./gsap-core.js"
 
 export class FinalPath extends Action {
     static duration = 5

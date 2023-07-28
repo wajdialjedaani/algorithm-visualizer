@@ -8,7 +8,7 @@ import { debounce } from "../js/Utility.js";
 
 const alertContainer = document.getElementById('alertContainer')
 
-const animationController = new AnimationController({progressBar: document.querySelector("#Progress-Bar-Fill"), cancelButton: document.querySelector("#cancel")})
+const animationController = new AnimationController({/* progressBar: document.querySelector("#Progress-Bar-Fill"),  */cancelButton: document.querySelector("#cancel")})
 const pageAlgorithm = new PageAlgorithm()
 const canvas = new Table()
 
@@ -96,7 +96,7 @@ document.querySelector("#resetSettings").addEventListener("click", function () {
     SetGoButton()
 })
 
-document.querySelector("#PlayPause").onclick = function() {
+document.querySelector("#PlayPause").addEventListener("click", function() {
     if(!animationController.IsInProgress()) {
         Alert(alertContainer, "No animation playing", 'warning')
         return
@@ -105,15 +105,15 @@ document.querySelector("#PlayPause").onclick = function() {
     //Play or pause depending on current animation state, then toggle button state
     if(animationController.IsPlaying()) {
         animationController.Pause()
-        this.firstChild.setAttribute("src", "../Assets/play-fill.svg")
+        SetPlayButton()
     }
     else {
         animationController.Play()
-        this.firstChild.setAttribute("src", "../Assets/pause-fill.svg")
+        SetPauseButton()
     }
-}
+})
 
-document.querySelector("#maze").onclick = function() {
+document.querySelector("#maze").addEventListener("click", function() {
     if(animationController.IsInProgress()) {
         Alert(alertContainer, "Animation in progress", 'warning')
         return
@@ -121,9 +121,10 @@ document.querySelector("#maze").onclick = function() {
 
     Graph.PartitionGraph(canvas)
     DFSMaze(canvas)
-}
+})
 
 document.querySelector("#grid-container").addEventListener('ontouchstart' in document.documentElement === true ? 'touchstart' : 'mousedown', CellHandler.bind(canvas), {passive: false})
+
 document.querySelector("#Progress-Bar-Outline").addEventListener('mousedown', function(event) {
     if(!animationController.IsInProgress()) {
         return
@@ -176,14 +177,13 @@ function ChangeAlgorithm(event) {
     if(animationController.IsInProgress()) {
         animationController.CancelTimeline()
     }
-    //pageAlgorithm.changeAlgo.call(pageAlgorithm, event)
     pageAlgorithm.changeAlgo(event)
 
     //Reset call is done after a 0ms timeout to ensure it runs AFTER all promises relating to the animation resolve.
     setTimeout(()=>{ClearAnimation(); SetGoButton()}, 0)
 }
 
-function FindPath(table)
+function FindPath()
 {
     let graph = Graph.ParseTable(document.querySelector("#grid-container"))
     if(typeof graph.start == "undefined") {
@@ -198,7 +198,7 @@ function FindPath(table)
     return actions
 }
 
-async function animateResults(actions) {
+async function animateResults() {
     try {
         let result = await animationController.PlayTimeline().then()
         return result
@@ -210,6 +210,7 @@ async function animateResults(actions) {
 
 function ClearAnimation() {
     canvas.ClearDOMStyles()
+    SetPauseButton()
     document.querySelector("#Progress-Bar-Fill").style.width = "0%"
 }
 
@@ -229,4 +230,12 @@ function SetResetButton() {
     document.querySelector("#reset").style.display = "inline"
     document.querySelector('#cancel').style.display = "none"
     document.querySelector("#generate").style.display = "none"
+}
+
+function SetPauseButton() {
+    document.querySelector("#PlayPause").firstChild.setAttribute("src", "../Assets/pause-fill.svg")
+}
+
+function SetPlayButton() {
+    document.querySelector("#PlayPause").firstChild.setAttribute("src", "../Assets/play-fill.svg")
 }

@@ -140,27 +140,28 @@ function printArr(arr) {
 }
 */
 
-function start() {
-    if(animationController.inProgress) {
+async function start() {
+    if(animationController.IsInProgress()) {
         Alert(alertContainer, "Animation in progress, can't play", 'warning')
         return
     }
-    animationController.inProgress = true
 
-    //Change Go button to Cancel button
-    document.querySelector("#start").style.display = "none"
-    document.querySelector("#cancel").style.display = "inline"
+    //Change Go to Cancel 
+    SetCancelButton()
 
-    animationController.animations = pageAlgorithm.selectedFunction(input, 0, input.length - 1);
-    swapAnimation(animationController.animations)
-    .then(function(value) {
-        document.querySelector("#cancel").style.display = "none"
-        document.querySelector("#reset").style.display = "inline"
-    })
-    .catch((error) => {console.log(error.message)})
-    .finally( function() {
-        animationController.inProgress = false
-    })
+    //animationController.animations = pageAlgorithm.selectedFunction(input, 0, input.length - 1);
+    animationController.timeline = Sort()
+
+    
+    //swapAnimation(animationController.animations)
+    //.then(function(value) {
+    //    document.querySelector("#cancel").style.display = "none"
+    //    document.querySelector("#reset").style.display = "inline"
+    //})
+    //.catch((error) => {console.log(error.message)})
+    //.finally( function() {
+    //    animationController.inProgress = false
+    //})
 }
 
 function Reset() {
@@ -228,3 +229,26 @@ document.querySelector("#PlayPause").onclick = function() {
     }
 }
 // ----------------------------------------------------------------
+
+function SetGoButton() {
+    document.querySelector("#reset").style.display = "none"
+    document.querySelector('#cancel').style.display = "none"
+    document.querySelector("#start").style.display = "inline"
+}
+
+function SetCancelButton() {
+    document.querySelector("#reset").style.display = "none"
+    document.querySelector('#cancel').style.display = "inline"
+    document.querySelector("#start").style.display = "none"
+}
+
+function SetResetButton() {
+    document.querySelector("#reset").style.display = "inline"
+    document.querySelector('#cancel').style.display = "none"
+    document.querySelector("#start").style.display = "none"
+}
+
+function Sort() {
+    const timeline = pageAlgorithm.selectedFunction(input, 0, input.length - 1)
+    return timeline
+}

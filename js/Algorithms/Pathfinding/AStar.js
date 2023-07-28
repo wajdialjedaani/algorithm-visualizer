@@ -1,10 +1,10 @@
 import { FinalPath, SearchedPath, NewChildren } from "../../PathfindingAnimations.js"
+import Timeline from "../../Timeline.js"
 
 function AStar(graph, start, end) {
     const open = []
     const closed = []
-    const progressBar = document.querySelector("#Progress-Bar-Fill")
-    const timeline = gsap.timeline({paused: true, onUpdate: function(){progressBar.style.width = `${this.progress()*100}%`}})
+    const timeline = Timeline()
 
     open.push(start)
     start.g = 0
