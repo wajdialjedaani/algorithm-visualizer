@@ -1,8 +1,11 @@
 import { Action } from "./Action.js"
 import { AnimationController } from "./AnimationController.js"
+import Timeline from "./Timeline.js"
 import anime from "./anime.es.js"
+import { gsap } from "./gsap-core.js"
 
-class Swap extends Action {
+export class Swap extends Action {
+    static duration = 1
     constructor(targets, line=2) {
         super(targets, line)
         Swap.duration = 1000
@@ -63,16 +66,39 @@ class Swap extends Action {
         }
     }
 
-    AddToTimeline(tl) {
-        let animations = this.animation
-        console.log("timeline")
-        tl.add(animations[0])
-        .add(animations[1], `-=${this.duration}`)
+    static AddToTimeline(tl, params) {
+        if(params?.target?.length < 2) return
+
+        let selected1 = document.querySelector(`${params.target[0].id}`)
+        let selected2 = document.querySelector(`${params.target[1].id}`)
+        //Convenience vars in order to not have to retrieve the value and convert to number several times
+        let [originalPos1, originalPos2] = [Number(selected1.style.getPropertyValue('--position')), Number(selected2.style.getPropertyValue('--position'))]
+        //Used to track the translation at the start of each tween
+        let startingPos1, startingPos2
+
+        const innerTL = gsap.timeline()
+        innerTL.to(selected1, {
+            keyframes: [
+                {x: ()=>originalPos2+Number(selected2.style.getPropertyValue('--translation'))-originalPos1, duration: Swap.duration},
+            ],
+            ease: "expo.out", 
+            onStart: ()=>{startingPos1 = originalPos1 + Number(selected1.style.getPropertyValue('--translation'))},
+            onComplete: ()=>{selected1.style.setProperty('--translation', startingPos2 - selected1.style.getPropertyValue('--position'))}
+        })
+        innerTL.to(selected2, {
+            keyframes: [
+                {x: ()=>originalPos1+Number(selected1.style.getPropertyValue('--translation'))-originalPos2, duration: Swap.duration},
+            ],
+            ease: "expo.out", 
+            onStart: ()=>{startingPos2 = originalPos2 + Number(selected2.style.getPropertyValue('--translation'))},
+            onComplete: ()=>{selected2.style.setProperty('--translation', startingPos1 - selected2.style.getPropertyValue('--position'))}
+        }, "<")
+        return tl.add(innerTL)
     }
 
 }
 
-class Comparison extends Action {
+export class Comparison extends Action {
     constructor (targets, line=1) {
         super(targets.filter(obj => typeof obj !== "undefined"), line)
         Comparison.duration = 1000
@@ -131,7 +157,7 @@ class Comparison extends Action {
 
 }
 
-class Sorted extends Action {
+export class Sorted extends Action {
     constructor(targets, line=3) {
         super(targets, line)
         Sorted.duration = 1
@@ -159,7 +185,7 @@ class Sorted extends Action {
     }
 }
 
-class PivotToggle extends Action {
+export class PivotToggle extends Action {
     constructor(targets, line=1) {
         super(targets, line)
         PivotToggle.duration = 500
@@ -188,7 +214,7 @@ class PivotToggle extends Action {
     }
 }
 
-class Subarray extends Action {
+export class Subarray extends Action {
     constructor(targets, line=1) {
         super(targets, line)
         Subarray.duration = 0
@@ -237,4 +263,48 @@ class Subarray extends Action {
 
 }
 
-export { Swap, Comparison, Sorted, PivotToggle, Subarray }
+/**
+ * Gets computed translate values
+ * @param {HTMLElement} element
+ * @returns {Object}
+ */
+function getTranslateValues(element) {
+    const style = window.getComputedStyle(element)
+    const matrix =
+      style['transform'] || style.webkitTransform || style.mozTransform
+  
+    // No transform property. Simply return 0 values.
+    if (matrix === 'none' || typeof matrix === 'undefined') {
+      return {
+        x: 0,
+        y: 0,
+        z: 0,
+      }
+    }
+  
+    // Can either be 2d or 3d transform
+    const matrixType = matrix.includes('3d') ? '3d' : '2d'
+    const matrixValues = matrix.match(/matrix.*\((.+)\)/)[1].split(', ')
+  
+    // 2d matrices have 6 values
+    // Last 2 values are X and Y.
+    // 2d matrices does not have Z value.
+    if (matrixType === '2d') {
+      return {
+        x: Number(matrixValues[4]),
+        y: Number(matrixValues[5]),
+        z: 0,
+      }
+    }
+  
+    // 3d matrices have 16 values
+    // The 13th, 14th, and 15th values are X, Y, and Z
+    if (matrixType === '3d') {
+      return {
+        x: Number(matrixValues[12]),
+        y: Number(matrixValues[13]),
+        z: Number(matrixValues[14]),
+      }
+    }
+  }
+  

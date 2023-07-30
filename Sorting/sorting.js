@@ -119,10 +119,13 @@ function removeBars() {
 }
 
 // highlights and swaps bars
-async function swapAnimation(actions) {
-    animationController.playing = true
-    await animationController.PlayAllAnimations({progressBar: document.querySelector("#Progress-Bar"), cancel: document.querySelector("#cancel")})
-    animationController.playing = false
+async function swapAnimation() {
+    try {
+        let result = await animationController.PlayTimeline().then()
+        return result
+    } catch(error) {
+        Alert(alertContainer, error.message, 'danger')
+    }
 }
 
 // prints array to console
@@ -152,24 +155,19 @@ async function start() {
     //animationController.animations = pageAlgorithm.selectedFunction(input, 0, input.length - 1);
     animationController.timeline = Sort()
 
-    
-    //swapAnimation(animationController.animations)
-    //.then(function(value) {
-    //    document.querySelector("#cancel").style.display = "none"
-    //    document.querySelector("#reset").style.display = "inline"
-    //})
-    //.catch((error) => {console.log(error.message)})
-    //.finally( function() {
-    //    animationController.inProgress = false
-    //})
+    try {
+        await swapAnimation(animationController.timeline)
+        SetResetButton()
+    } catch(error) {
+        Alert(alertContainer, 'Error at swapAnimation: ' + error.message, 'danger')
+    }
 }
 
 function Reset() {
+    if(animationController.IsInProgress()) Alert(alertContainer, "Animation still in progress. Something went wrong.", 'danger')
     generateBars()
-    document.querySelector("#Progress-Bar").style.width = "0%"
-    document.querySelector("#reset").style.display = "none"
-    document.querySelector("#start").style.display = "inline"
-    animationController.inProgress = false;
+    ClearAnimation()
+    SetGoButton()
 }
 
 // Draggable ----------------------------------------------------------------
@@ -199,35 +197,72 @@ document.querySelector('#input').addEventListener('keypress', function(e) {
     }
 })
 document.querySelector("#AnimSpeed").addEventListener("click", function() {
-    animationController.speed = animationController.speeds[(animationController.speeds.indexOf(animationController.speed)+1)%animationController.speeds.length]
+    animationController.SetSpeed(animationController.speeds[(animationController.speeds.indexOf(animationController.speed)+1)%animationController.speeds.length])
     this.innerHTML = `${animationController.speed}x`
 })
 document.querySelector("#reset").addEventListener("click", Reset)
-//document.querySelector("#cancel").addEventListener("click", () => {
-//    if(!animationController.inProgress) {
-//        Alert(alertContainer, "No in-progress animation to cancel.", "warning")
-//        return
-//    }
-//    animationController.CancelAnimation()
-//})
-document.querySelector("#PlayPause").onclick = function() {
-    if(typeof animationController.currentAnim === "undefined" || !animationController.inProgress) {
+
+document.querySelector("#cancel").addEventListener("click", () => {
+    animationController.CancelTimeline()
+    SetResetButton()
+})
+
+document.querySelector("#PlayPause").addEventListener("click", function() {
+    if(!animationController.IsInProgress()) {
         Alert(alertContainer, "No animation playing", 'warning')
         return
     }
 
     //Play or pause depending on current animation state, then toggle button state
-    if(animationController.playing) {
-        animationController.playing = false
+    if(animationController.IsPlaying()) {
         animationController.Pause()
-        this.firstChild.setAttribute("src", "../Assets/play-fill.svg")
+        SetPlayButton()
     }
     else {
-        animationController.playing = true
         animationController.Play()
-        this.firstChild.setAttribute("src", "../Assets/pause-fill.svg")
+        SetPauseButton()
     }
-}
+})
+
+document.querySelector("#Progress-Bar-Outline").addEventListener('mousedown', function(event) {
+    if(!animationController.IsInProgress()) {
+        return
+    }
+    //Bind the progress bar to allow the inner functions to reference it after being triggered later on
+    const seekFunc = seekDrag.bind(this)
+    const cleanUpFunc = cleanUp.bind(this)
+
+    //Tracked in order remain in correct state after mouse release
+    const paused = animationController.IsPlaying()
+
+    document.addEventListener("mousemove", seekFunc)
+    document.addEventListener("mouseup", cleanUpFunc)
+
+    //Pausing makes the bar less finnicky while seeking. Resumed in cleanUp()
+    animationController.Pause()
+
+    //Calling here allows for quick skipping with a click
+    seekDrag.call(this, event)
+
+    function seekDrag(event) {
+        //Calculate the progress bar percentage, set the fill, then set the animation to that point
+        const barFill = this.firstElementChild
+        let percentage = (event.clientX-this.offsetLeft) / this.clientWidth
+        if(percentage<0) {
+            percentage = 0
+        } else if(percentage > 1) {
+            percentage = 1
+        }
+        barFill.style.width = `${percentage}%`
+        animationController.SeekTimeline(percentage)
+    }
+
+    function cleanUp(event) {
+        document.removeEventListener("mousemove", seekFunc)
+        document.removeEventListener("mouseup", cleanUpFunc)
+        if(paused) animationController.Play()
+    }
+})
 // ----------------------------------------------------------------
 
 function SetGoButton() {
@@ -248,7 +283,20 @@ function SetResetButton() {
     document.querySelector("#start").style.display = "none"
 }
 
+function SetPauseButton() {
+    document.querySelector("#PlayPause").firstChild.setAttribute("src", "../Assets/pause-fill.svg")
+}
+
+function SetPlayButton() {
+    document.querySelector("#PlayPause").firstChild.setAttribute("src", "../Assets/play-fill.svg")
+}
+
 function Sort() {
     const timeline = pageAlgorithm.selectedFunction(input, 0, input.length - 1)
     return timeline
+}
+
+function ClearAnimation() {
+    SetPauseButton()
+    document.querySelector("#Progress-Bar-Fill").style.width = "0%"
 }

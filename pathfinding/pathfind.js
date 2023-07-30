@@ -8,7 +8,7 @@ import { debounce } from "../js/Utility.js";
 
 const alertContainer = document.getElementById('alertContainer')
 
-const animationController = new AnimationController({/* progressBar: document.querySelector("#Progress-Bar-Fill"),  */cancelButton: document.querySelector("#cancel")})
+const animationController = new AnimationController()
 const pageAlgorithm = new PageAlgorithm()
 const canvas = new Table()
 
@@ -28,7 +28,6 @@ document.querySelector("#cellSizeInput").value = PathfindingCookies.GetCellSize(
 CheckFirstVisit('pathVisited')
 
 document.querySelector("#AnimSpeed").addEventListener("click", function() {
-    //animationController.speed = animationController.speeds[(animationController.speeds.indexOf(animationController.speed)+1)%animationController.speeds.length]
     animationController.SetSpeed(animationController.speeds[(animationController.speeds.indexOf(animationController.speed)+1)%animationController.speeds.length])
     this.innerHTML = `${animationController.speed}x`
 })
