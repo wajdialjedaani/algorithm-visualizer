@@ -21,36 +21,6 @@ export class Swap extends Action {
         return Swap.duration / this.speed
     }
 
-    get animation() {
-        let selected1 = document.querySelector(`${this.targets[0].id}`)
-        let selected2 = document.querySelector(`${this.targets[1].id}`)
-        let currentPos1 = Number(selected1.style.getPropertyValue('--position')) + Number(selected1.style.getPropertyValue('--translation'))
-        let currentPos2 = Number(selected2.style.getPropertyValue('--position')) + Number(selected2.style.getPropertyValue('--translation'))
-        let duration = this.duration
-        return [{
-            targets: selected1,
-            translateX: Number(selected1.style.getPropertyValue('--translation')) + currentPos2 - currentPos1,
-            //backgroundColor: [
-            //    {value: "#FFFFFF", duration: duration-1},
-            //    {value: anime.get(selected1, "backgroundColor"), duration: 1}
-            //],
-            easing: 'easeOutCubic',
-            duration: duration,
-            complete: function() {selected1.style.setProperty('--translation', currentPos2 - selected1.style.getPropertyValue('--position'))}
-        },
-        {
-            targets: selected2,
-            translateX: Number(selected2.style.getPropertyValue('--translation')) + currentPos1 - currentPos2,
-            //backgroundColor: [
-            //    {value: "#000000", duration: duration-1},
-            //    {value: anime.get(selected2, "backgroundColor"), duration: 1}
-            //],
-            easing: 'easeOutCubic',
-            duration: duration,
-            complete: function() {selected2.style.setProperty('--translation', currentPos1 - selected2.style.getPropertyValue('--position'))}
-        }]
-    }
-
     Animate(speed) {
         this.speed = speed || this.speed
         let anims = [anime(this.animation[0]), anime(this.animation[1])]
@@ -69,29 +39,31 @@ export class Swap extends Action {
     static AddToTimeline(tl, params) {
         if(params?.target?.length < 2) return
 
-        let selected1 = document.querySelector(`${params.target[0].id}`)
-        let selected2 = document.querySelector(`${params.target[1].id}`)
+        let target1 = document.querySelector(`${params.target[0]}`)
+        let target2 = document.querySelector(`${params.target[1]}`)
         //Convenience vars in order to not have to retrieve the value and convert to number several times
-        let [originalPos1, originalPos2] = [Number(selected1.style.getPropertyValue('--position')), Number(selected2.style.getPropertyValue('--position'))]
+        let [originalPos1, originalPos2] = [Number(target1.style.getPropertyValue('--position')), Number(target2.style.getPropertyValue('--position'))]
         //Used to track the translation at the start of each tween
         let startingPos1, startingPos2
 
         const innerTL = gsap.timeline()
-        innerTL.to(selected1, {
+        innerTL.to(target1, {
             keyframes: [
-                {x: ()=>originalPos2+Number(selected2.style.getPropertyValue('--translation'))-originalPos1, duration: Swap.duration},
+                {x: ()=>originalPos2+Number(target2.style.getPropertyValue('--translation'))-originalPos1, duration: Swap.duration},
             ],
             ease: "expo.out", 
-            onStart: ()=>{startingPos1 = originalPos1 + Number(selected1.style.getPropertyValue('--translation'))},
-            onComplete: ()=>{selected1.style.setProperty('--translation', startingPos2 - selected1.style.getPropertyValue('--position'))}
+            //Update the closure var so that the translation can be properly tracked
+            onStart: ()=>{startingPos1 = originalPos1 + Number(target1.style.getPropertyValue('--translation'))},
+            //Track the movement of each bar for later swaps
+            onComplete: ()=>{target1.style.setProperty('--translation', startingPos2 - target1.style.getPropertyValue('--position'))}
         })
-        innerTL.to(selected2, {
+        innerTL.to(target2, {
             keyframes: [
-                {x: ()=>originalPos1+Number(selected1.style.getPropertyValue('--translation'))-originalPos2, duration: Swap.duration},
+                {x: ()=>originalPos1+Number(target1.style.getPropertyValue('--translation'))-originalPos2, duration: Swap.duration},
             ],
             ease: "expo.out", 
-            onStart: ()=>{startingPos2 = originalPos2 + Number(selected2.style.getPropertyValue('--translation'))},
-            onComplete: ()=>{selected2.style.setProperty('--translation', startingPos1 - selected2.style.getPropertyValue('--position'))}
+            onStart: ()=>{startingPos2 = originalPos2 + Number(target2.style.getPropertyValue('--translation'))},
+            onComplete: ()=>{target2.style.setProperty('--translation', startingPos1 - target2.style.getPropertyValue('--position'))}
         }, "<")
         return tl.add(innerTL)
     }
@@ -99,6 +71,7 @@ export class Swap extends Action {
 }
 
 export class Comparison extends Action {
+    static duration = 0.5
     constructor (targets, line=1) {
         super(targets.filter(obj => typeof obj !== "undefined"), line)
         Comparison.duration = 1000
@@ -147,17 +120,20 @@ export class Comparison extends Action {
         }
     }
 
-    AddToTimeline(tl) {
-        this.animation.forEach((animation, index) => {
-            index == 0 ? tl.add(animation) : tl.add(animation, `-=${this.duration}`)
+    static AddToTimeline(tl, params) {
+        params.target = params.target.filter(x => x !== undefined)
+        return tl.to(params.target, {
+            backgroundColor: "#228C22",
+            duration: Comparison.duration,
+            yoyo: true,
+            repeat: 1
         })
-        //tl.add(animations[0])
-        //.add(animations[1], `-=${this.duration}`)
     }
 
 }
 
 export class Sorted extends Action {
+    static duration = 0
     constructor(targets, line=3) {
         super(targets, line)
         Sorted.duration = 1
@@ -180,12 +156,15 @@ export class Sorted extends Action {
         return super.Animate.call(this, speed)
     }
 
-    AddToTimeline(tl) {
-        tl.add(this.animation)
+    static AddToTimeline(tl, params) {
+        return tl.set(params.target, {
+            backgroundColor: "#FFA500"
+        })
     }
 }
 
 export class PivotToggle extends Action {
+    static duration = 0
     constructor(targets, line=1) {
         super(targets, line)
         PivotToggle.duration = 500
@@ -209,12 +188,20 @@ export class PivotToggle extends Action {
         return super.Animate.call(this, speed)
     }
 
-    AddToTimeline(tl) {
-        tl.add(this.animation)
+    static AddToTimeline(tl, params) {
+        const targetElement = document.querySelector(params.target)
+
+        return tl.to(params.target, {
+            onStart: ()=>{console.log(targetElement.style.backgroundColor)},
+            onComplete:()=>{console.log("testing")} ,
+            backgroundColor: ()=>targetElement.style.backgroundColor !== "rgb(160, 32, 240)" ? "#A020F0" : "#6290C8",
+            duration: PivotToggle.duration
+        })
     }
 }
 
 export class Subarray extends Action {
+    static duration = 0
     constructor(targets, line=1) {
         super(targets, line)
         Subarray.duration = 0
@@ -255,9 +242,12 @@ export class Subarray extends Action {
         }
     }
 
-    AddToTimeline(tl) {
-        this.animation.forEach((animation, index) => {
-            index == 0 ? tl.add(animation) : tl.add(animation, `-=${this.duration}`)
+    static AddToTimeline(tl, params) {
+        return tl.to(params.target, {
+            backgroundColor: (index, target)=>{
+                return target.style.backgroundColor !== "rgb(246, 143, 88)" ? "#f68f58" : "#6290C8"
+            },
+            duration: 0,
         })
     }
 

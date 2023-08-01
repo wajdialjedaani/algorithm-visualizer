@@ -1,4 +1,5 @@
 import { Swap, Comparison, Sorted, PivotToggle, Subarray } from "../../SortingAnimations.js"
+import Timeline from "../../Timeline.js";
 
 function swap(arr, i, j) {
     let temp = arr[i];
@@ -8,23 +9,22 @@ function swap(arr, i, j) {
 
 export function InsertionSort(arr) {
     let j, current, i
-    const actions = []
+    const timeline = Timeline()
     for(i = 1; i < arr.length; i++) {
         current = arr[i]
         j = i - 1
-        actions.push(new Sorted(arr[j]))
-        actions.push(new Comparison([arr[j], current]))
+        Sorted.AddToTimeline(timeline, {target: arr[j]?.id})
+        Comparison.AddToTimeline(timeline, {target: [arr[j]?.id, current.id]})
         while(j >= 0 && arr[j].value > current.value) { // checks if j is outside of array and compares j position value with current
-            actions.push(new Swap([current, arr[j]]))
-            //actions.push(new Sorted(arr[j]))
+            Swap.AddToTimeline(timeline, {target: [current.id, arr[j]?.id]})
 
             arr[j + 1] = arr[j]
             j--
 
-            actions.push(new Comparison([arr[j], current]))
+            Comparison.AddToTimeline(timeline, {target: [arr[j]?.id, current.id]})
         }
         arr[j + 1] = current   // once while is false, the last j position is current
-        actions.push(new Sorted(current))
+        Sorted.AddToTimeline(timeline, {target: current.id})
     }
-    return actions
+    return timeline
 }
