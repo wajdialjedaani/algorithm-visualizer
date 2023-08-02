@@ -23,7 +23,6 @@ export function QuickSort(arr, low, high, timeline) {
 function Partition(arr, low, high, timeline) {
     let pivot = arr[high].value
     PivotToggle.AddToTimeline(timeline, {target: arr[high].id})
-    // actions.push(new Subarray(arr.slice(low, high)))
     Subarray.AddToTimeline(timeline, {target: arr.slice(low, high).map(x=>x.id)})
     let i = (low - 1)
 
@@ -37,7 +36,6 @@ function Partition(arr, low, high, timeline) {
     }
     Swap.AddToTimeline(timeline, {target: [arr[i+1]?.id, arr[high]?.id]})
     PivotToggle.AddToTimeline(timeline, {target: arr[high].id})
-    // actions.push(new Subarray(arr.slice(low, high)))
     Subarray.AddToTimeline(timeline, {target: arr.slice(low, high).map(x=>x.id)})
     swap(arr, i + 1, high)
     return (i + 1)
