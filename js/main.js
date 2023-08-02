@@ -16,10 +16,14 @@ function darkMode() {   // enables dark mode
         Cookies.set('darkMode', '1', {expires: 999, sameSite: 'strict'})
     }
 
+    var darkSwitch = document.querySelector("#darkModeSwitch")
     var settingModal = document.getElementById("settingModalDialog")
     var back = document.body
     var algoCard = document.querySelectorAll(".card-algorithm-type")
-    var btnOutline = [].concat(...document.querySelectorAll(".btnResize")).concat(document.querySelector(".btn-left")).concat(document.querySelector(".btn-right"))
+    var btnOutline = [].concat(...document.querySelectorAll(".btnResize"))
+    .concat(document.querySelector(".btn-left"))
+    .concat(document.querySelector(".btn-right"))
+    .filter(e=>e)
     var introModal = document.querySelector("#introModal")
     var grid = document.querySelector("#grid-container")
     var draggable = document.querySelectorAll(".draggable")

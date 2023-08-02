@@ -30,13 +30,12 @@ function ChangeAlgorithm(event) {
     setTimeout(()=>{Reset()}, 0)
 }
 
-
-//Initialize sorting-specific buttons
-document.querySelector("#randomNumbers").addEventListener('click', randomInput)
-
 CheckFirstVisit('sortVisited')
 
 pageAlgorithm.changeAlgo((new URLSearchParams(window.location.search)).get("func") || "insertionsort")
+
+//Initialize sorting-specific buttons
+document.querySelector("#randomNumbers").addEventListener('click', randomInput)
 
 // gets input and splits it into an array
 function getInput() {
@@ -95,27 +94,43 @@ function generateBars() {
     let maxHeight = document.querySelector('#arrCanvas').offsetHeight
 
     for(let i = 0; i < input.length; i++) {
-        let arrBar = document.createElement('div')
+        const barContainer = document.createElement('div')
+        const arrBar = document.createElement('div')
+        const numberDiv = document.createElement('div')
         let arrBarID = 'arrBar' + i
         arrBar.classList.add('arrBar')
         if((Cookies.get('darkMode') === '1') && (!arrBar.classList.contains('arrBar-dark'))) {  // if dark mode and arrBar does not have dark, add dark
             arrBar.classList.add('arrBar-dark')
-            console.log("true");
         }
-        arrBar.setAttribute('id', arrBarID)
-        arrBar.style.setProperty('--position', `${i * document.querySelector('#arrCanvas').clientWidth / input.length}`)
-        arrBar.style.setProperty('--translation', 0)
+        //arrBar.setAttribute('id', arrBarID)
+        barContainer.setAttribute('id', arrBarID)
+        numberDiv.style.textAlign = "center"
+        // arrBar.style.setProperty('--position', `${i * document.querySelector('#arrCanvas').clientWidth / input.length}`)
+        // arrBar.style.setProperty('--translation', 0)
+        barContainer.style.setProperty('--position', `${i * document.querySelector('#arrCanvas').clientWidth / input.length}`)
+        barContainer.style.setProperty('--translation', 0)
         arrBar.style.height = (maxHeight * (input[i].value / max)) + 'px'
-        arrBar.innerHTML = input[i].value
-        arrBar.style.lineHeight = (parseFloat(arrBar.style.height.replace('px', '')) * 2 + 20) + 'px'
-        container.appendChild(arrBar)
+        const value = document.createElement('p')
+        value.style.display="inline"
+        value.innerHTML = input[i].value
+        numberDiv.appendChild(value)
+        const delButton = document.createElement('img')
+        delButton.addEventListener("click", ()=>{DeleteBar(input[i])})
+        delButton.src = "../Assets/x.svg"
+        numberDiv.appendChild(delButton)
+        //arrBar.innerHTML = input[i].value
+        //arrBar.style.lineHeight = (parseFloat(arrBar.style.height.replace('px', '')) * 2 + 20) + 'px'
+        barContainer.appendChild(arrBar)
+        barContainer.appendChild(numberDiv)
+        container.appendChild(barContainer)
     }
 }
 
 // removes existing bars
 function removeBars() { 
-    var bars = document.querySelectorAll('.arrBar')
-    bars.forEach(element => element.remove())
+    //var bars = document.querySelectorAll('.arrBar')
+    //bars.forEach(element => element.remove())
+    document.querySelector("#arrCanvas").innerHTML = ''
 }
 
 // highlights and swaps bars
@@ -299,4 +314,9 @@ function Sort() {
 function ClearAnimation() {
     SetPauseButton()
     document.querySelector("#Progress-Bar-Fill").style.width = "0%"
+}
+
+function DeleteBar(barObj) {
+    document.querySelector(`${barObj.id}`).remove()
+    input = input.filter(e=>e!==barObj)
 }
