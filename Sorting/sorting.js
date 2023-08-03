@@ -3,12 +3,17 @@ import { Alert } from "../js/Alert.js"
 import { CheckFirstVisit } from "../js/Cookies.js"
 import { PageAlgorithm, DisplayAnnotation } from "../js/SetAlgorithm.js";
 import { AnimationController } from "../js/AnimationController.js";
+import { Input } from "../js/Input.js";
 
 let input = []
+
+
+
 const alertContainer = document.getElementById('alertContainer')
 
 const pageAlgorithm = new PageAlgorithm()
 const animationController = new AnimationController()
+const InputManager = Input.GetInstance()
 
 window.onload = generateBars
 window.onresize = generateBars
@@ -31,28 +36,11 @@ function ChangeAlgorithm(event) {
 }
 
 CheckFirstVisit('sortVisited')
-
+InputManager.SetInput([32, 24, 10, 22, 18, 40, 4, 43, 2, 25])
 pageAlgorithm.changeAlgo((new URLSearchParams(window.location.search)).get("func") || "insertionsort")
 
 //Initialize sorting-specific buttons
 document.querySelector("#randomNumbers").addEventListener('click', randomInput)
-
-// gets input and splits it into an array
-function getInput() {
-    let max = window.innerWidth < 768 ? 15 : 25
-    max = window.innerWidth < 300 ? 10 : max
-    var inputString = document.getElementById('input').value
-    input = inputString.split(", ")
-    input.forEach((val, i, arr) => {
-        if(Number.isNaN(Number(val))) {
-            throw new Error("Something went wrong with the input - check to make sure you put all necessary commas and only inserted numbers.")
-        }
-        arr[i] = {
-        value: Number(val),
-        id: `#arrBar${i}`
-    }})
-    return input.length > max ? input.slice(0, max) : input
-}
 
 function getRandomIntInclusive(min, max) {
     min = Math.ceil(min);
@@ -81,7 +69,7 @@ function randomInput() {
 // generates the bars, can be used with user inputs
 function generateBars() {
     try {
-        input = getInput()
+        input = InputManager.GetInput()
     }
     catch(error) {
         throw error
