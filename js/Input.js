@@ -23,7 +23,7 @@ export class Input {
         let max = window.innerWidth < 768 ? 15 : 25
         max = window.innerWidth < 300 ? 10 : max
 
-        return this.input.length > max ? this.input.slice(0, max) : this.input
+        return this.input.length > max ? this.input.slice(0, max) : this.input.slice()
     }
 
     AddNumber(num) {

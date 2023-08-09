@@ -4,16 +4,17 @@ import { CheckFirstVisit } from "../js/Cookies.js"
 import { PageAlgorithm, DisplayAnnotation } from "../js/SetAlgorithm.js";
 import { AnimationController } from "../js/AnimationController.js";
 import { Input } from "../js/Input.js";
+import SortingCanvas from "../js/SortingCanvas.js"
 
 let input = []
 
 
 
 const alertContainer = document.getElementById('alertContainer')
-
 const pageAlgorithm = new PageAlgorithm()
 const animationController = new AnimationController()
 const InputManager = Input.GetInstance()
+const Canvas = new SortingCanvas({canvasElement: document.querySelector("#arrCanvas"), input: InputManager.input})
 
 window.onload = generateBars
 window.onresize = generateBars
@@ -68,16 +69,13 @@ function randomInput() {
 
 // generates the bars, can be used with user inputs
 function generateBars() {
-    try {
-        input = InputManager.GetInput()
-    }
-    catch(error) {
-        throw error
-    }
+    const input = InputManager.GetInput()
     removeBars()
+
     let container = document.querySelector('#arrCanvas')
     container.style.setProperty("--columns", input.length)
-    container.style.setProperty("--width", document.querySelector('#arrCanvas').clientWidth / input.length)
+    container.style.setProperty("--width", document.querySelector('#arrCanvas').getBoundingClientRect().width / input.length)
+    
     let max = Math.max(...input.map(o => o.value))
     let maxHeight = document.querySelector('#arrCanvas').offsetHeight
 
@@ -93,9 +91,10 @@ function generateBars() {
         //arrBar.setAttribute('id', arrBarID)
         barContainer.setAttribute('id', arrBarID)
         numberDiv.style.textAlign = "center"
+        numberDiv.classList.add('barFooter')
         // arrBar.style.setProperty('--position', `${i * document.querySelector('#arrCanvas').clientWidth / input.length}`)
         // arrBar.style.setProperty('--translation', 0)
-        barContainer.style.setProperty('--position', `${i * document.querySelector('#arrCanvas').clientWidth / input.length}`)
+        barContainer.style.setProperty('--position', `${i * document.querySelector('#arrCanvas').getBoundingClientRect().width / input.length}`)
         barContainer.style.setProperty('--translation', 0)
         arrBar.style.height = (maxHeight * (input[i].value / max)) + 'px'
         const value = document.createElement('p')
@@ -189,15 +188,19 @@ document.querySelector('#getNewInput').addEventListener('click', function() {
         Alert(alertContainer, error.message, 'danger')
     }
 })
-document.querySelector('#input').addEventListener('keypress', function(e) {
-    if(e.key === 'Enter') {    
-        e.preventDefault()
-        if(document.getElementById('input').value == "") {
-            document.querySelector('#randomNumbers').click()
-        } else {
-            document.querySelector('#getNewInput').click()
-        }
-    }
+document.querySelector('#input').addEventListener('change', function(e) {
+    let values = this.value.split(',')
+    values = values.map((e)=>Number(e)).filter((e)=>e)
+    InputManager.SetInput(values)
+    generateBars()
+    // if(e.key === 'Enter') {    
+    //     e.preventDefault()
+    //     if(document.getElementById('input').value == "") {
+    //         document.querySelector('#randomNumbers').click()
+    //     } else {
+    //         document.querySelector('#getNewInput').click()
+    //     }
+    // }
 })
 document.querySelector("#AnimSpeed").addEventListener("click", function() {
     animationController.SetSpeed(animationController.speeds[(animationController.speeds.indexOf(animationController.speed)+1)%animationController.speeds.length])
@@ -295,7 +298,7 @@ function SetPlayButton() {
 }
 
 function Sort() {
-    const timeline = pageAlgorithm.selectedFunction(input, 0, input.length - 1)
+    const timeline = pageAlgorithm.selectedFunction(InputManager.GetInput(), 0, InputManager.GetInput().length - 1)
     return timeline
 }
 
