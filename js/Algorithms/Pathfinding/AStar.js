@@ -1,10 +1,10 @@
 import { FinalPath, SearchedPath, NewChildren } from "../../PathfindingAnimations.js"
+import Timeline from "../../Timeline.js"
 
 function AStar(graph, start, end) {
     const open = []
     const closed = []
-    const actions = []
-    let childAnimation
+    const timeline = Timeline()
 
     open.push(start)
     start.g = 0
@@ -33,8 +33,8 @@ function AStar(graph, start, end) {
                 pathCells.push(document.getElementById(`${current.y},${current.x}`))
                 current = current.parent
             }
-            actions.push(new FinalPath(pathCells.reverse()))
-            return actions
+            FinalPath.AddToTimeline(timeline, {target: pathCells.reverse()})
+            return timeline
         }
 
         let children = []
@@ -74,11 +74,11 @@ function AStar(graph, start, end) {
                 newChildren.push(child)
             }
         }
-        if(newChildren != []) {
-            childAnimation = new NewChildren(newChildren.map((element) => {return document.getElementById(`${element.y},${element.x}`)}))
+        //if new children to be added to the open queue exist, make an animation for them
+        if(newChildren.length) {
+            NewChildren.AddToTimeline(timeline, {target: newChildren.map((element) => {return document.getElementById(`${element.y},${element.x}`)})})
         }
-        const animation = new SearchedPath(path, childAnimation)
-        actions.push(animation)
+        SearchedPath.AddToTimeline(timeline, {target: path})
     }
     //Only executed upon failure to find end
     return undefined

@@ -1,9 +1,10 @@
-import { FinalPath, SearchedPath, NewChildren } from "../../PathfindingAnimations.js"
+import { FinalPath, SearchedPath, NewChildren, SkippedNode, JumpNode } from "../../PathfindingAnimations.js"
+import Timeline from "../../Timeline.js"
 
 function JPS(graph, start, end) {
     const open = []
     const closed = []
-    const actions = []
+    const timeline = Timeline()
 
     open.push(start)
     start.g = 0
@@ -22,16 +23,19 @@ function JPS(graph, start, end) {
         closed.push(current)
 
         if (current === end) {//If the current node is the end node
-            const pathArr = []
-            //const pathCells = []
+            const jumpArr = []
+            //Follow the line of parent nodes until undefined, this
+            //gives the jumps in the final path, not the full path
             while(current) {
-                pathArr.push(current)
+                jumpArr.push(current)
                 current = current.parent
             }
-            ExpandPath(pathArr).forEach(element => {
-                document.getElementById(`${element.y},${element.x}`).style.backgroundColor = "#FF0000FF"
-            });
-            return actions
+            //Expand the list of jumps to a full path
+            const expanded = ExpandPath(jumpArr)
+            //Convert path of vertices to DOMElements, animate
+            expanded.forEach((node, index)=>{expanded[index]=document.getElementById(`${node.y},${node.x}`)})
+            FinalPath.AddToTimeline(timeline, {target: expanded.reverse()})
+            return timeline
         }
 
         FindSuccessors(current)
@@ -43,9 +47,13 @@ function JPS(graph, start, end) {
         const neighbors = FindNeighbors(node)
         for(let i=0, l=neighbors.length; i < l; i++) {
             let neighbor = neighbors[i]
+            const timelinePreJumpPos = timeline.addLabel("PreJump")
             let jumpPoint = _jump(neighbor, node)
             if(jumpPoint) {
-                document.getElementById(`${jumpPoint.y},${jumpPoint.x}`).style.backgroundColor = "#00FF00A0"
+                const element = document.getElementById(`${jumpPoint.y},${jumpPoint.x}`)
+                JumpNode.InsertToTimeline(timeline, {target: element, label:"PreJump"})
+                timeline.removeLabel("PreJump")
+
                 let jx = jumpPoint.x
                 let jy = jumpPoint.y
                 if(typeof closed.find(element=>element==jumpPoint) !== "undefined") {
@@ -125,6 +133,7 @@ function JPS(graph, start, end) {
             return node
         }
         if(dx !== 0) {
+            //Essentially checks if the pathfinder is at a corner with tiles to be checked on the other side. If so, make this a jump point
             if((neighbors.find(element=>element.x==node.x && element.y==node.y-1)?.walkable && !graph.vertices.find(element=>element.x==node.x-dx && element.y==node.y-1)?.walkable)
             ||
             (neighbors.find(element=>element.x==node.x && element.y==node.y+1)?.walkable && !graph.vertices.find(element=>element.x==node.x-dx && element.y==node.y+1)?.walkable)) {
@@ -132,11 +141,13 @@ function JPS(graph, start, end) {
             }
         }
         else if(dy !== 0) {
+            //Essentially checks if the pathfinder is at a corner with tiles to be checked on the other side. If so, make this a jump point
             if((neighbors.find(element=>element.x==node.x-1 && element.y==node.y)?.walkable && !graph.vertices.find(element=>element.x==node.x-1 && element.y==node.y-dy)?.walkable)
             ||
             (neighbors.find(element=>element.x==node.x+1 && element.y==node.y)?.walkable && !graph.vertices.find(element=>element.x==node.x+1 && element.y==node.y-dy)?.walkable)) {
                 return node
             }
+            //Find jump points horizontally when moving vertically
             if(_jump(neighbors.find(element=>element.x==node.x+1 && element.y==node.y), node) || _jump(neighbors.find(element=>element.x==node.x-1 && element.y==node.y), node)) {
                 return node
             }
@@ -144,7 +155,10 @@ function JPS(graph, start, end) {
         else {
             throw new Error("Only cardinal directions allowed")
         }
-        document.getElementById(`${node.y},${node.x}`).style.backgroundColor = "#808080F0"
+        const element = document.getElementById(`${node.y},${node.x}`)
+        //element.style.backgroundColor = "#808080F0"
+        SkippedNode.AddToTimeline(timeline, {target: element})
+        //If not a point of interest, continue jumping in the same direction
         return _jump(neighbors.find(element=>element.x==node.x+dx && element.y==node.y+dy), node)
     }
 

@@ -16,10 +16,14 @@ function darkMode() {   // enables dark mode
         Cookies.set('darkMode', '1', {expires: 999, sameSite: 'strict'})
     }
 
+    var darkSwitch = document.querySelector("#darkModeSwitch")
     var settingModal = document.getElementById("settingModalDialog")
     var back = document.body
     var algoCard = document.querySelectorAll(".card-algorithm-type")
-    var btnOutline = [].concat(...document.querySelectorAll(".btnResize")).concat(document.querySelector(".btn-left")).concat(document.querySelector(".btn-right"))
+    var btnOutline = [].concat(...document.querySelectorAll(".btnResize"))
+    .concat(document.querySelector(".btn-left"))
+    .concat(document.querySelector(".btn-right"))
+    .filter(e=>e)
     var introModal = document.querySelector("#introModal")
     var grid = document.querySelector("#grid-container")
     var draggable = document.querySelectorAll(".draggable")
@@ -193,17 +197,11 @@ function pathfindingBack() { // animation if sorting back button is selected
 
 window.addEventListener('load', function() {
     if(!Cookies.get('darkMode')) { //If no cookie, default to light mode
-        console.log("no cookie. creating cookie rn")
         Cookies.set('darkMode', '0', {expires: 999, sameSite: 'strict'})
     }
     else if(Cookies.get('darkMode') === '1') { //Cookie says dark mode
-        console.log("darkmode")
         document.querySelector("#darkModeSwitch").toggleAttribute('checked')
         darkMode()
-    }
-    else
-    {
-        console.log('lightmode')
     }
 })
 

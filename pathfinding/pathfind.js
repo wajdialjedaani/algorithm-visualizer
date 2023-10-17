@@ -1,13 +1,10 @@
 import { dragElement, ResizeHandler } from "../js/draggableCard.js";
-import { Action } from "../js/Action.js";
 import { Alert } from "../js/Alert.js"
 import { CheckFirstVisit, PathfindingCookies } from "../js/Cookies.js";
-import anime from "../js/anime.es.js"
 import { PageAlgorithm, DisplayAnnotation } from "../js/SetAlgorithm.js";
 import { AnimationController } from "../js/AnimationController.js";
-import { Table, Graph, DFSMaze, CellHandler } from "../js/Canvas.js";
+import { Table, Graph, DFSMaze, CellHandler } from "../js/PathfindingCanvas.js";
 import { debounce } from "../js/Utility.js";
-import { JPS } from "../js/Algorithms/Pathfinding/JPS.js";
 
 const alertContainer = document.getElementById('alertContainer')
 
@@ -31,7 +28,7 @@ document.querySelector("#cellSizeInput").value = PathfindingCookies.GetCellSize(
 CheckFirstVisit('pathVisited')
 
 document.querySelector("#AnimSpeed").addEventListener("click", function() {
-    animationController.speed = animationController.speeds[(animationController.speeds.indexOf(animationController.speed)+1)%animationController.speeds.length]
+    animationController.SetSpeed(animationController.speeds[(animationController.speeds.indexOf(animationController.speed)+1)%animationController.speeds.length])
     this.innerHTML = `${animationController.speed}x`
 })
 
@@ -49,86 +46,120 @@ window.onresize = debounce(() => {
     canvas.UpdateTable()
 }, 50)
 
-document.querySelector("#generate").addEventListener("click", () => {
+document.querySelector("#generate").addEventListener("click", async () => {
     //If there is already an animation, do nothing
-    //let graph = Graph.ParseTable(document.querySelector("#grid-container"))
-    //JPS(graph, graph.start, graph.end)
-    //return
-
-    if(animationController.inProgress) {
+    if(animationController.IsInProgress()) {
         Alert(alertContainer, "Animation in progress, can't play", 'warning')
         return
     }
 
-    //Find path
+    //Run the algorithm and save the returned timeline
     try {
-        animationController.animations = FindPath(document.querySelector("#grid-container"))
+        animationController.timeline = FindPath(document.querySelector("#grid-container"))
     }
     catch(error) {
         Alert(alertContainer, error.message, 'danger')
         return
     }
 
-    //If a path was found, begin animation
-    animationController.inProgress = true
-    //Change Go button to Cancel button
-    document.querySelector("#generate").style.display = "none"
-    document.querySelector("#cancel").style.display = "inline"
-    animateResults(animationController.animations)
-    .then(
-        function(value) {
-            document.querySelector("#cancel").style.display = "none"
-            document.querySelector("#reset").style.display = "inline"
-    })
-    .catch(
-        function(error) {
-            Alert(alertContainer, error.message, 'danger')
-    })
-    .finally(
-        () => {
-            animationController.inProgress = false
-        }
-    )
+    //Set cancel button before running animation to allow cancellation if anything goes wrong
+    SetCancelButton()
+
+    //Run animation
+    try {
+        await animateResults(animationController.timeline)
+        SetResetButton()
+    } catch(error) {
+        Alert(alertContainer, error.message, 'danger')
+    }
 })
 
 //Button hidden until the animation has finished.
-document.querySelector("#reset").addEventListener("click", ClearAnimation)
+document.querySelector("#reset").addEventListener("click", ()=>{
+    if(animationController.IsInProgress()) {
+        Alert(alertContainer, "Animation still in progress. Something went wrong.", 'danger')
+    }
+    ClearAnimation()
+    SetGoButton()
+})
 
-document.querySelector("#resetSettings").addEventListener("click", Reset)
+document.querySelector("#cancel").addEventListener("click", () => {
+    animationController.CancelTimeline()
+    SetResetButton()
+})
 
-document.querySelector("#PlayPause").onclick = function() {
-    if(typeof animationController.currentAnim === "undefined" || !animationController.inProgress) {
+document.querySelector("#resetSettings").addEventListener("click", function () {
+    animationController.CancelTimeline()
+    canvas.CreateTable()
+    document.querySelector("#Progress-Bar-Fill").style.width = "0%"
+    SetGoButton()
+})
+
+document.querySelector("#PlayPause").addEventListener("click", function() {
+    if(!animationController.IsInProgress()) {
         Alert(alertContainer, "No animation playing", 'warning')
         return
     }
 
     //Play or pause depending on current animation state, then toggle button state
-    if(animationController.playing) {
-        animationController.playing = false
+    if(animationController.IsPlaying()) {
         animationController.Pause()
-        this.firstChild.setAttribute("src", "../Assets/play-fill.svg")
+        SetPlayButton()
     }
     else {
-        animationController.playing = true
         animationController.Play()
-        this.firstChild.setAttribute("src", "../Assets/pause-fill.svg")
+        SetPauseButton()
     }
-}
+})
 
-document.querySelector("#maze").onclick = function() {
-    if(animationController.inProgress) {
+document.querySelector("#maze").addEventListener("click", function() {
+    if(animationController.IsInProgress()) {
         Alert(alertContainer, "Animation in progress", 'warning')
         return
     }
 
-    //let graph = Graph.ParseTable(document.querySelector("#grid-container"))
     Graph.PartitionGraph(canvas)
     DFSMaze(canvas)
-    //setTimeout(()=>{Reset()}, 0)
-    //setTimeout(()=>{canvas.NewTable(graph)}, 0)
-}
+})
 
 document.querySelector("#grid-container").addEventListener('ontouchstart' in document.documentElement === true ? 'touchstart' : 'mousedown', CellHandler.bind(canvas), {passive: false})
+
+document.querySelector("#Progress-Bar-Outline").addEventListener('mousedown', function(event) {
+    if(!animationController.IsInProgress()) {
+        return
+    }
+    //Bind the progress bar to allow the inner functions to reference it after being triggered later on
+    const seekFunc = seekDrag.bind(this)
+    const cleanUpFunc = cleanUp.bind(this)
+
+    document.addEventListener("mousemove", seekFunc)
+    document.addEventListener("mouseup", cleanUpFunc)
+
+    //Pausing makes the bar less finnicky while seeking. Resumed in cleanUp()
+    animationController.Pause()
+
+    //Calling here allows for quick skipping with a click
+    seekDrag.call(this, event)
+
+    function seekDrag(event) {
+        //Calculate the progress bar percentage, set the fill, then set the animation to that point
+        const barFill = this.firstElementChild
+        let percentage = (event.clientX-this.offsetLeft) / this.clientWidth
+        if(percentage<0) {
+            percentage = 0
+        } else if(percentage > 1) {
+            percentage = 1
+        }
+        barFill.style.width = `${percentage}%`
+        animationController.SeekTimeline(percentage)
+    }
+
+    function cleanUp(event) {
+        document.removeEventListener("mousemove", seekFunc)
+        document.removeEventListener("mouseup", cleanUpFunc)
+        animationController.Play()
+    }
+})
 
 function SetCellSize(newSize) {
     if(newSize < 10) {
@@ -142,16 +173,16 @@ function SetCellSize(newSize) {
 }
 
 function ChangeAlgorithm(event) {
-    if(animationController.inProgress) {
-        animationController.CancelAnimation()
+    if(animationController.IsInProgress()) {
+        animationController.CancelTimeline()
     }
-    pageAlgorithm.changeAlgo.call(pageAlgorithm, event)
+    pageAlgorithm.changeAlgo(event)
 
     //Reset call is done after a 0ms timeout to ensure it runs AFTER all promises relating to the animation resolve.
-    setTimeout(()=>{ClearAnimation()}, 0)
+    setTimeout(()=>{ClearAnimation(); SetGoButton()}, 0)
 }
 
-function FindPath(table)
+function FindPath()
 {
     let graph = Graph.ParseTable(document.querySelector("#grid-container"))
     if(typeof graph.start == "undefined") {
@@ -166,29 +197,44 @@ function FindPath(table)
     return actions
 }
 
-async function animateResults(actions) {
-    animationController.playing = true
+async function animateResults() {
     try {
-        await animationController.PlayAllAnimations({progressBar: document.querySelector("#Progress-Bar"), cancel: document.querySelector("#cancel")})
+        let result = await animationController.PlayTimeline().then()
+        return result
     }
     catch(err) {
         Alert(alertContainer, err.message, 'danger')
     }
-    animationController.playing = false
-}
-
-function Reset() {
-    canvas.CreateTable()
-    document.querySelector("#Progress-Bar").style.width = "0%"
-    document.querySelector("#reset").style.display = "none"
-    document.querySelector('#cancel').style.display = "none"
-    document.querySelector("#generate").style.display = "inline"
 }
 
 function ClearAnimation() {
     canvas.ClearDOMStyles()
-    document.querySelector("#Progress-Bar").style.width = "0%"
+    SetPauseButton()
+    document.querySelector("#Progress-Bar-Fill").style.width = "0%"
+}
+
+function SetGoButton() {
     document.querySelector("#reset").style.display = "none"
     document.querySelector('#cancel').style.display = "none"
     document.querySelector("#generate").style.display = "inline"
+}
+
+function SetCancelButton() {
+    document.querySelector("#reset").style.display = "none"
+    document.querySelector('#cancel').style.display = "inline"
+    document.querySelector("#generate").style.display = "none"
+}
+
+function SetResetButton() {
+    document.querySelector("#reset").style.display = "inline"
+    document.querySelector('#cancel').style.display = "none"
+    document.querySelector("#generate").style.display = "none"
+}
+
+function SetPauseButton() {
+    document.querySelector("#PlayPause").firstChild.setAttribute("src", "../Assets/pause-fill.svg")
+}
+
+function SetPlayButton() {
+    document.querySelector("#PlayPause").firstChild.setAttribute("src", "../Assets/play-fill.svg")
 }

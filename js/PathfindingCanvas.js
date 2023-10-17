@@ -1,6 +1,11 @@
 "use strict";
 
 import { PathfindingCookies } from "./Cookies.js";
+/*
+* Contains classes and functions used in the canvas of the
+* pathfinding page. DOMElement handling and interactions,
+* data structures and helper functions for the algorithms, etc.
+*/
 
 /*
 Holds the TD elements displayed in the canvas.
