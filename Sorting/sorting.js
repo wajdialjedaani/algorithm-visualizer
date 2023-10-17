@@ -50,7 +50,7 @@ function getRandomIntInclusive(min, max) {
 }
 
 function randomInput() {
-    input = []
+    let input = []
     let inputString
     let length = getRandomIntInclusive(5, 20)
     
@@ -302,6 +302,7 @@ function ClearAnimation() {
 }
 
 function DeleteBar(barObj) {
+    const input = InputManager.GetInput()
     document.querySelector(`${barObj.id}`).remove()
-    input = input.filter(e=>e!==barObj)
+    InputManager.RemoveNumber(barObj.id)
 }

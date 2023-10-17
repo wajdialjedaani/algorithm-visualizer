@@ -36,8 +36,18 @@ export class Input {
     }
 
     RemoveNumber(num) {
-        const index = this.input.findIndex((e)=>e.value === num)
-        this.input = this.input.splice(index, 1)
+        let index;
+        if(typeof num === 'number') {
+            index = this.input.findIndex((e)=>e.value === num)
+        }
+        else if (typeof num === 'string') {
+            index = this.input.findIndex((e) => e.id === num)
+        }
+
+        if(typeof index === 'undefined') {
+            return;
+        }
+        this.input.splice(index, 1)
         this.UpdateInputBox()
     }
 
