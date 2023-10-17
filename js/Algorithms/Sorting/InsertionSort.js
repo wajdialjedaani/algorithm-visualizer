@@ -13,7 +13,7 @@ export function InsertionSort(arr) {
     for(i = 1; i < arr.length; i++) {
         current = arr[i]
         j = i - 1
-        Sorted.AddToTimeline(timeline, {target: arr[j]?.id})
+        Sorted.AddToTimeline(timeline, {target: [arr[j]?.id]})
         Comparison.AddToTimeline(timeline, {target: [arr[j]?.id, current.id]})
         while(j >= 0 && arr[j].value > current.value) { // checks if j is outside of array and compares j position value with current
             Swap.AddToTimeline(timeline, {target: [current.id, arr[j]?.id]})
@@ -24,7 +24,7 @@ export function InsertionSort(arr) {
             Comparison.AddToTimeline(timeline, {target: [arr[j]?.id, current.id]})
         }
         arr[j + 1] = current   // once while is false, the last j position is current
-        Sorted.AddToTimeline(timeline, {target: current.id})
+        Sorted.AddToTimeline(timeline, {target: [current.id]})
     }
     return timeline
 }

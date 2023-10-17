@@ -54,13 +54,12 @@ function randomInput() {
     let inputString
     let length = getRandomIntInclusive(5, 20)
     
-    inputString = getRandomIntInclusive(1, 100) + ", "
-    for (let i = 0; i < length - 2; i++) {
-        inputString += getRandomIntInclusive(1, 100) + ", "
+    for (let i = 0; i < length; i++) {
+        input.push(getRandomIntInclusive(1, 100))
     }
-    inputString += getRandomIntInclusive(1, 100)
 
-    document.querySelector("#input").value = inputString
+    InputManager.SetInput(input)
+    //document.querySelector("#input").value = inputString
     document.querySelector("#reset").style.display = "none"
     document.querySelector("#start").style.display = "inline"
     
@@ -172,6 +171,13 @@ function Reset() {
     SetGoButton()
 }
 
+function SetInput(e) {
+    let values = this.value.split(',')
+    values = values.map((e)=>Number(e)).filter((e)=>e)
+    InputManager.SetInput(values)
+    generateBars()
+}
+
 // Draggable ----------------------------------------------------------------
 document.querySelectorAll(".draggable").forEach((element) => {dragElement(element)})
 document.querySelectorAll(".resizer").forEach((element) => {ResizeHandler(element)})
@@ -181,6 +187,7 @@ document.querySelectorAll(".resizer").forEach((element) => {ResizeHandler(elemen
 // Bottom Bar Elements --------------------------------------------
 document.querySelector('#start').addEventListener('click', start)
 document.querySelector('#getNewInput').addEventListener('click', function() {
+    SetInput.call(document.querySelector('#input'))
     try {
     generateBars()
     }
@@ -188,20 +195,7 @@ document.querySelector('#getNewInput').addEventListener('click', function() {
         Alert(alertContainer, error.message, 'danger')
     }
 })
-document.querySelector('#input').addEventListener('change', function(e) {
-    let values = this.value.split(',')
-    values = values.map((e)=>Number(e)).filter((e)=>e)
-    InputManager.SetInput(values)
-    generateBars()
-    // if(e.key === 'Enter') {    
-    //     e.preventDefault()
-    //     if(document.getElementById('input').value == "") {
-    //         document.querySelector('#randomNumbers').click()
-    //     } else {
-    //         document.querySelector('#getNewInput').click()
-    //     }
-    // }
-})
+document.querySelector('#input').addEventListener('change', SetInput)
 document.querySelector("#AnimSpeed").addEventListener("click", function() {
     animationController.SetSpeed(animationController.speeds[(animationController.speeds.indexOf(animationController.speed)+1)%animationController.speeds.length])
     this.innerHTML = `${animationController.speed}x`
