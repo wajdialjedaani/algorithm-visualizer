@@ -305,4 +305,6 @@ function DeleteBar(barObj) {
     const input = InputManager.GetInput()
     document.querySelector(`${barObj.id}`).remove()
     InputManager.RemoveNumber(barObj.id)
+    SetInput.call(document.querySelector('#input'))
+    generateBars()
 }
