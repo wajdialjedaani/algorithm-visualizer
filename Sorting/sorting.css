@@ -17,17 +17,22 @@
     border: 1px solid black;
     /* margin: 0 3px; */
     text-align: center;
+    margin-left: 1.5px;
+    margin-right: 1.5px;
+    cursor: pointer;
 }
 
 .barFooter {
     max-height: 2rem;
+    min-height: 2rem;
     overflow: hidden;
     text-align: center;
 }
 
 @media (max-width: 767.98px) {
     .arrBar {
-        /* margin: 0 1px; */
+        margin-left: 1px;
+        margin-right: 1px;
     }
 }
 
@@ -53,8 +58,8 @@
     height: 30vh;
     display: grid;
     align-items: end;
-    grid-template-columns: repeat(var(--columns), 1fr);
-    column-gap: 3px;
+    grid-template-columns: repeat(var(--columns), var(--widthCSS));
+    /* column-gap: 3px; */
     box-sizing: border-box;
     margin: 0;
     padding: 0;

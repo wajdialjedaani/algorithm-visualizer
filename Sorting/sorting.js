@@ -75,6 +75,7 @@ function generateBars() {
     const container = document.querySelector('#arrCanvas')
     container.style.setProperty("--columns", input.length)
     container.style.setProperty("--width", container.getBoundingClientRect().width / input.length)
+    container.style.setProperty("--widthCSS", `${container.getBoundingClientRect().width / input.length}px`)
     
     //Used to calculate each bar's height as a percentage of the tallest bar.
     const max = Math.max(...input.map(o => o.value))
@@ -95,18 +96,16 @@ function generateBars() {
             arrBar.classList.add('arrBar-dark')
         }
         arrBar.style.height = (maxHeight * (input[i].value / max)) + 'px'
+        arrBar.addEventListener("click", ()=>{DeleteBar(input[i])})
 
         numberDiv.classList.add('barFooter')
 
         const value = document.createElement('p')
-        value.style.display="inline"
+        
+        value.style.display = "inline"
+        // value.style.overflow="hidden"
         value.innerHTML = input[i].value
         numberDiv.appendChild(value)
-
-        const delButton = document.createElement('img')
-        delButton.addEventListener("click", ()=>{DeleteBar(input[i])})
-        delButton.src = "../Assets/x.svg"
-        numberDiv.appendChild(delButton)
         
         barContainer.appendChild(arrBar)
         barContainer.appendChild(numberDiv)
