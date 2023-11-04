@@ -4,6 +4,7 @@ import { CheckFirstVisit } from "../js/Cookies.js"
 import { PageAlgorithm, DisplayAnnotation } from "../js/SetAlgorithm.js";
 import { AnimationController } from "../js/AnimationController.js";
 import { Input } from "../js/Input.js";
+import { debounce } from "../js/Utility.js";
 import SortingCanvas from "../js/SortingCanvas.js"
 
 let input = []
@@ -17,7 +18,7 @@ const InputManager = Input.GetInstance()
 const Canvas = new SortingCanvas({canvasElement: document.querySelector("#arrCanvas"), input: InputManager.input})
 
 window.onload = generateBars
-window.onresize = generateBars
+window.onresize = debounce(()=>{generateBars()}, 50)
 
 //Initialize dropdown menu buttons
 document.querySelectorAll(".InsertionSort").forEach((element) => {element.onclick=ChangeAlgorithm})
@@ -71,11 +72,11 @@ function generateBars() {
     const input = InputManager.GetInput()
     removeBars()
 
-
     const container = document.querySelector('#arrCanvas')
     container.style.setProperty("--columns", input.length)
-    container.style.setProperty("--width", container.getBoundingClientRect().width / input.length)
-    container.style.setProperty("--widthCSS", `${container.getBoundingClientRect().width / input.length}px`)
+    const width = container.getBoundingClientRect().width / input.length
+    container.style.setProperty("--width", width)
+    container.style.setProperty("--widthCSS", `${width}px`)
     
     //Used to calculate each bar's height as a percentage of the tallest bar.
     const max = Math.max(...input.map(o => o.value))
@@ -90,20 +91,24 @@ function generateBars() {
         barContainer.setAttribute('id', `arrBar${i}`)
         barContainer.style.setProperty('--position', `${i * document.querySelector('#arrCanvas').getBoundingClientRect().width / input.length}`)
         barContainer.style.setProperty('--translation', 0)
-
+        //barContainer.style.height = (maxHeight * (input[i].value / max)) + 'px'
+        barContainer.style.height = "100%"
+        //Build the bar itself, deciding dimensions and color
         arrBar.classList.add('arrBar')
         if((Cookies.get('darkMode') === '1') && (!arrBar.classList.contains('arrBar-dark'))) {  // if dark mode and arrBar does not have dark, add dark
             arrBar.classList.add('arrBar-dark')
         }
-        arrBar.style.height = (maxHeight * (input[i].value / max)) + 'px'
+        
+        //Bar footer height is set to 10% in the CSS, have the bar take up some percentage
+        //of the remaining 90%
+        arrBar.style.height = `${(input[i].value / max) * 90}%`
         arrBar.addEventListener("click", ()=>{DeleteBar(input[i])})
+        arrBar.style.margin = width > 30 ? "0px 1.5px" : "0px 0px"
 
         numberDiv.classList.add('barFooter')
 
         const value = document.createElement('p')
-        
         value.style.display = "inline"
-        // value.style.overflow="hidden"
         value.innerHTML = input[i].value
         numberDiv.appendChild(value)
         

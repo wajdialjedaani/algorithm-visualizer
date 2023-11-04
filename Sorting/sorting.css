@@ -52,17 +52,17 @@
 
 #arrCanvas {
     position: relative;
-    min-height: calc(100% - 60px);
-    max-height: calc(60vh - 60px);
+    /* min-height: calc(100% - 60px); */
+    /* max-height: calc(60vh - 60px); */
     width: 90vw;
     height: 30vh;
     display: grid;
-    align-items: end;
     grid-template-columns: repeat(var(--columns), var(--widthCSS));
     /* column-gap: 3px; */
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+    align-items: baseline;
 }
 
 @media (max-width: 767.98px) {
