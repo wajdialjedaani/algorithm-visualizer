@@ -71,41 +71,43 @@ function generateBars() {
     const input = InputManager.GetInput()
     removeBars()
 
-    let container = document.querySelector('#arrCanvas')
+
+    const container = document.querySelector('#arrCanvas')
     container.style.setProperty("--columns", input.length)
-    container.style.setProperty("--width", document.querySelector('#arrCanvas').getBoundingClientRect().width / input.length)
+    container.style.setProperty("--width", container.getBoundingClientRect().width / input.length)
     
-    let max = Math.max(...input.map(o => o.value))
-    let maxHeight = document.querySelector('#arrCanvas').offsetHeight
+    //Used to calculate each bar's height as a percentage of the tallest bar.
+    const max = Math.max(...input.map(o => o.value))
+    const maxHeight = container.offsetHeight
 
     for(let i = 0; i < input.length; i++) {
         const barContainer = document.createElement('div')
         const arrBar = document.createElement('div')
         const numberDiv = document.createElement('div')
-        let arrBarID = 'arrBar' + i
+
+        //Build the container for each bar
+        barContainer.setAttribute('id', `arrBar${i}`)
+        barContainer.style.setProperty('--position', `${i * document.querySelector('#arrCanvas').getBoundingClientRect().width / input.length}`)
+        barContainer.style.setProperty('--translation', 0)
+
         arrBar.classList.add('arrBar')
         if((Cookies.get('darkMode') === '1') && (!arrBar.classList.contains('arrBar-dark'))) {  // if dark mode and arrBar does not have dark, add dark
             arrBar.classList.add('arrBar-dark')
         }
-        //arrBar.setAttribute('id', arrBarID)
-        barContainer.setAttribute('id', arrBarID)
-        numberDiv.style.textAlign = "center"
-        numberDiv.classList.add('barFooter')
-        // arrBar.style.setProperty('--position', `${i * document.querySelector('#arrCanvas').clientWidth / input.length}`)
-        // arrBar.style.setProperty('--translation', 0)
-        barContainer.style.setProperty('--position', `${i * document.querySelector('#arrCanvas').getBoundingClientRect().width / input.length}`)
-        barContainer.style.setProperty('--translation', 0)
         arrBar.style.height = (maxHeight * (input[i].value / max)) + 'px'
+
+        numberDiv.classList.add('barFooter')
+
         const value = document.createElement('p')
         value.style.display="inline"
         value.innerHTML = input[i].value
         numberDiv.appendChild(value)
+
         const delButton = document.createElement('img')
         delButton.addEventListener("click", ()=>{DeleteBar(input[i])})
         delButton.src = "../Assets/x.svg"
         numberDiv.appendChild(delButton)
-        //arrBar.innerHTML = input[i].value
-        //arrBar.style.lineHeight = (parseFloat(arrBar.style.height.replace('px', '')) * 2 + 20) + 'px'
+        
         barContainer.appendChild(arrBar)
         barContainer.appendChild(numberDiv)
         container.appendChild(barContainer)
@@ -129,21 +131,6 @@ async function swapAnimation() {
     }
 }
 
-// prints array to console
-/*
-function printArrValue(arr) { 
-    for(let i = 0; i < arr.length; i++) {
-        console.log(arr[i].value)
-    }
-}
-
-function printArr(arr) {
-    for(let i = 0; i < arr.length; i++) {
-        console.log(arr[i])
-    }
-}
-*/
-
 async function start() {
     if(animationController.IsInProgress()) {
         Alert(alertContainer, "Animation in progress, can't play", 'warning')
@@ -153,7 +140,6 @@ async function start() {
     //Change Go to Cancel 
     SetCancelButton()
 
-    //animationController.animations = pageAlgorithm.selectedFunction(input, 0, input.length - 1);
     animationController.timeline = Sort()
 
     try {
@@ -171,8 +157,8 @@ function Reset() {
     SetGoButton()
 }
 
-function SetInput(e) {
-    let values = this.value.split(',')
+function SetInputFromText(textInput) {
+    let values = textInput.split(',')
     values = values.map((e)=>Number(e)).filter((e)=>e)
     InputManager.SetInput(values)
     generateBars()
@@ -187,7 +173,7 @@ document.querySelectorAll(".resizer").forEach((element) => {ResizeHandler(elemen
 // Bottom Bar Elements --------------------------------------------
 document.querySelector('#start').addEventListener('click', start)
 document.querySelector('#getNewInput').addEventListener('click', function() {
-    SetInput.call(document.querySelector('#input'))
+    SetInputFromText(document.querySelector('#input').value)
     try {
     generateBars()
     }
@@ -195,7 +181,7 @@ document.querySelector('#getNewInput').addEventListener('click', function() {
         Alert(alertContainer, error.message, 'danger')
     }
 })
-document.querySelector('#input').addEventListener('change', SetInput)
+document.querySelector('#input').addEventListener('change', function(){SetInputFromText(this.value)})
 document.querySelector("#AnimSpeed").addEventListener("click", function() {
     animationController.SetSpeed(animationController.speeds[(animationController.speeds.indexOf(animationController.speed)+1)%animationController.speeds.length])
     this.innerHTML = `${animationController.speed}x`
@@ -302,9 +288,12 @@ function ClearAnimation() {
 }
 
 function DeleteBar(barObj) {
-    const input = InputManager.GetInput()
+    if(animationController.IsInProgress()) {
+        Alert(alertContainer, "Animation currently playing", 'warning')
+        return
+    }
     document.querySelector(`${barObj.id}`).remove()
     InputManager.RemoveNumber(barObj.id)
-    SetInput.call(document.querySelector('#input'))
+    SetInputFromText(document.querySelector('#input').value)
     generateBars()
 }

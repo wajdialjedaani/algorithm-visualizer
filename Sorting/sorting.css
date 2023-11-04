@@ -19,6 +19,12 @@
     text-align: center;
 }
 
+.barFooter {
+    max-height: 2rem;
+    overflow: hidden;
+    text-align: center;
+}
+
 @media (max-width: 767.98px) {
     .arrBar {
         /* margin: 0 1px; */

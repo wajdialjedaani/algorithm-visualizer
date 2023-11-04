@@ -44,13 +44,17 @@ export class Input {
             index = this.input.findIndex((e) => e.id === num)
         }
 
-        if(typeof index === 'undefined') {
+        if(typeof index === 'undefined' || index == -1) {
             return;
         }
         this.input.splice(index, 1)
         this.UpdateInputBox()
     }
 
+    /*
+    Takes an array of numbers, sets input member to an array of objects mapping numbers to bar IDs
+    Also updates the input box in case this function was called from elsewhere (random input button)
+    */
     SetInput(arr) {
         this.input = arr.map((val, i) => {
             if(Number.isNaN(Number(val))) {
