@@ -7,16 +7,6 @@ class Action {
         this.speed = 1
     }
 
-    get duration() {
-        return 1000 / this.speed
-    }
-
-    get animation() {
-        return {
-
-        }
-    }
-
     AnimatePseudocode(speed) {
         this.speed = speed || this.speed
         return anime({
@@ -26,11 +16,6 @@ class Action {
             color: [{value: "#FFFFFF", duration: this.duration-1},
                 {value: anime.get(document.querySelector(`${this.line}`), "color"), duration: 1}]
         })
-    }
-
-    Animate(speed) {
-        this.speed = speed || this.speed
-        return anime(this.animation)
     }
 }
 

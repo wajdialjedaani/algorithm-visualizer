@@ -8,17 +8,7 @@ export class Swap extends Action {
     static duration = 1
     constructor(targets, line=2) {
         super(targets, line)
-        Swap.duration = 1000
         this.speed = 1
-    }
-
-    get annotation() {
-        return `${this.targets[0].value < this.targets[1].value ? this.targets[0].value : this.targets[1].value} is less than 
-        ${this.targets[0].value > this.targets[1].value ? this.targets[0].value : this.targets[1].value}, so we will swap them.`
-    }
-
-    get duration() {
-        return Swap.duration / this.speed
     }
 
     //TODO: Add annotation param that takes in an activate and deactivate tween. These will be inserted before and after
@@ -70,19 +60,7 @@ export class Comparison extends Action {
     static duration = 0.5
     constructor (targets, line=1) {
         super(targets.filter(obj => typeof obj !== "undefined"), line)
-        Comparison.duration = 1000
         this.speed = 1
-    }
-
-    get duration() {
-        return Comparison.duration / this.speed
-    }
-
-    get annotation() {
-        if(this.targets.length == 1) {
-            return `The element reached the first spot - it is the smallest in the list.`
-        }
-        return `Checking if ${this.targets[1].value} is less than ${this.targets[0].value}. If it is, then we will swap them.`
     }
 
     static AddToTimeline(tl, params) {
@@ -102,12 +80,7 @@ export class Sorted extends Action {
     static duration = 0
     constructor(targets, line=3) {
         super(targets, line)
-        Sorted.duration = 1
         this.speed = 1
-    }
-
-    get duration() {
-        return Sorted.duration / this.speed
     }
 
     static AddToTimeline(tl, params) {
@@ -122,21 +95,14 @@ export class PivotToggle extends Action {
     static duration = 0
     constructor(targets, line=1) {
         super(targets, line)
-        PivotToggle.duration = 500
         this.speed = 1
-    }
-
-    get duration() {
-        return PivotToggle.duration / this.speed
     }
 
     static AddToTimeline(tl, params) {
         const targetElement = document.querySelector(params.target).firstElementChild
 
         return tl.to(targetElement, {
-            onStart: ()=>{console.log(targetElement.style.backgroundColor)},
-            onComplete:()=>{console.log("testing")} ,
-            backgroundColor: ()=>targetElement.style.backgroundColor !== "rgb(160, 32, 240)" ? "#A020F0" : "#6290C8",
+            backgroundColor: ()=>targetElement.style.backgroundColor !== "rgb(160, 32, 240)" ? "#A020F0" : "#6290C8", //Style computed at animation execution time.
             duration: PivotToggle.duration
         })
     }
@@ -146,12 +112,7 @@ export class Subarray extends Action {
     static duration = 0
     constructor(targets, line=1) {
         super(targets, line)
-        Subarray.duration = 0
         this.speed = 1
-    }
-
-    get duration() {
-        return Subarray.duration / this.speed
     }
 
     static AddToTimeline(tl, params) {
