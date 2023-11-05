@@ -89,6 +89,9 @@ function generateBars() {
 
         //Build the container for each bar
         barContainer.setAttribute('id', `arrBar${i}`)
+        barContainer.style.setProperty("display", "flex")
+        barContainer.style.setProperty("flex-direction", "column")
+        barContainer.style.setProperty("justify-content", "flex-end")
         barContainer.style.setProperty('--position', `${i * document.querySelector('#arrCanvas').getBoundingClientRect().width / input.length}`)
         barContainer.style.setProperty('--translation', 0)
         //barContainer.style.height = (maxHeight * (input[i].value / max)) + 'px'

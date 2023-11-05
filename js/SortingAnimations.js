@@ -21,8 +21,20 @@ export class Swap extends Action {
         return Swap.duration / this.speed
     }
 
+    //TODO: Add annotation param that takes in an activate and deactivate tween. These will be inserted before and after
+    //the actual sorting animation.
     static AddToTimeline(tl, params) {
-        if(params?.target?.length < 2) return
+        if(!params) return
+        if(params.target?.length < 2) return
+
+        const innerTL = gsap.timeline()
+        //Check for user-provided annotations and highlights and 
+        if(params.annotation) {
+            
+        }
+        if(params.highlight) {
+
+        }
 
         let target1 = document.querySelector(`${params.target[0]}`)
         let target2 = document.querySelector(`${params.target[1]}`)
@@ -31,7 +43,6 @@ export class Swap extends Action {
         //Used to track the translation at the start of each tween
         let startingPos1, startingPos2
 
-        const innerTL = gsap.timeline()
         innerTL.to(target1, {
             keyframes: [
                 {x: ()=>originalPos2+Number(target2.style.getPropertyValue('--translation'))-originalPos1, duration: Swap.duration},

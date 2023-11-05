@@ -62,7 +62,8 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    align-items: baseline;
+    /* align-items: end; */
+    /* justify-items: end; */
 }
 
 @media (max-width: 767.98px) {
