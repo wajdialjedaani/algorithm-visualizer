@@ -7,42 +7,39 @@ import { Input } from "../js/Input.js";
 import { debounce } from "../js/Utility.js";
 import SortingCanvas from "../js/SortingCanvas.js"
 
-let input = []
-
-
+CheckFirstVisit('sortVisited')
 
 const alertContainer = document.getElementById('alertContainer')
 const pageAlgorithm = new PageAlgorithm()
 const animationController = new AnimationController()
 const InputManager = Input.GetInstance()
+InputManager.SetInput([32, 24, 10, 22, 18, 40, 4, 43, 2, 25]) //Initial dummy input
+//Planned redesign, but currently unused as current method is performant enough using realistic array sizes
 const Canvas = new SortingCanvas({canvasElement: document.querySelector("#arrCanvas"), input: InputManager.input})
 
+//Bar sizing is only done on creation, so if the window gets resized, the bars need to be recreated to adapt
 window.onload = generateBars
 window.onresize = debounce(()=>{generateBars()}, 50)
 
-//Initialize dropdown menu buttons
+//Initialize dropdown menu buttons. Uses SelectorAll so as to grab the mobile menu buttons as well.
 document.querySelectorAll(".InsertionSort").forEach((element) => {element.onclick=ChangeAlgorithm})
 document.querySelectorAll(".SelectionSort").forEach((element) => {element.onclick=ChangeAlgorithm})
 document.querySelectorAll(".BubbleSort").forEach((element) => {element.onclick=ChangeAlgorithm})
 document.querySelectorAll(".QuickSort").forEach((element) => {element.onclick=ChangeAlgorithm})
 
+//Callback passed to dropdown buttons, so it takes an event.
 function ChangeAlgorithm(event) {
     if(animationController.IsInProgress()) {
         animationController.CancelAnimation()
     }
-    //pageAlgorithm.changeAlgo.call(pageAlgorithm, event)
     pageAlgorithm.changeAlgo(event)
 
     //Reset call is done after a 0ms timeout to ensure it runs AFTER all promises relating to the animation resolve.
     setTimeout(()=>{Reset()}, 0)
 }
 
-CheckFirstVisit('sortVisited')
-InputManager.SetInput([32, 24, 10, 22, 18, 40, 4, 43, 2, 25])
 pageAlgorithm.changeAlgo((new URLSearchParams(window.location.search)).get("func") || "insertionsort")
 
-//Initialize sorting-specific buttons
-document.querySelector("#randomNumbers").addEventListener('click', randomInput)
 
 function getRandomIntInclusive(min, max) {
     min = Math.ceil(min);
@@ -67,7 +64,8 @@ function randomInput() {
     generateBars()
 }
 
-// generates the bars, can be used with user inputs
+//Creates the canvas. Called on load and resize. Does not modify state.
+//Just reads the current user input and creates HTML from it.
 function generateBars() {
     const input = InputManager.GetInput()
     removeBars()
@@ -128,16 +126,7 @@ function removeBars() {
     document.querySelector("#arrCanvas").innerHTML = ''
 }
 
-// highlights and swaps bars
-async function swapAnimation() {
-    try {
-        let result = await animationController.PlayTimeline().then()
-        return result
-    } catch(error) {
-        Alert(alertContainer, error.message, 'danger')
-    }
-}
-
+//Entrypoint for animation - executes the algorithm and starts the animation
 async function start() {
     if(animationController.IsInProgress()) {
         Alert(alertContainer, "Animation in progress, can't play", 'warning')
@@ -156,6 +145,20 @@ async function start() {
         Alert(alertContainer, 'Error at swapAnimation: ' + error.message, 'danger')
     }
 }
+//Take input and run current algorithm
+function Sort() {
+    const timeline = pageAlgorithm.selectedFunction(InputManager.GetInput(), 0, InputManager.GetInput().length - 1)
+    return timeline
+}
+//Take results and run animation
+async function swapAnimation() {
+    try {
+        let result = await animationController.PlayTimeline().then()
+        return result
+    } catch(error) {
+        Alert(alertContainer, error.message, 'danger')
+    }
+}
 
 function Reset() {
     if(animationController.IsInProgress()) Alert(alertContainer, "Animation still in progress. Something went wrong.", 'danger')
@@ -171,35 +174,21 @@ function SetInputFromText(textInput) {
     generateBars()
 }
 
-// Draggable ----------------------------------------------------------------
+// Initialize Draggable cards
 document.querySelectorAll(".draggable").forEach((element) => {dragElement(element)})
 document.querySelectorAll(".resizer").forEach((element) => {ResizeHandler(element)})
-// ----------------------------------------------------------------
 
-
-// Bottom Bar Elements --------------------------------------------
+//Initialize playbar bar elements
 document.querySelector('#start').addEventListener('click', start)
-document.querySelector('#getNewInput').addEventListener('click', function() {
-    SetInputFromText(document.querySelector('#input').value)
-    try {
-    generateBars()
-    }
-    catch(error) {
-        Alert(alertContainer, error.message, 'danger')
-    }
-})
-document.querySelector('#input').addEventListener('change', function(){SetInputFromText(this.value)})
 document.querySelector("#AnimSpeed").addEventListener("click", function() {
     animationController.SetSpeed(animationController.speeds[(animationController.speeds.indexOf(animationController.speed)+1)%animationController.speeds.length])
     this.innerHTML = `${animationController.speed}x`
 })
 document.querySelector("#reset").addEventListener("click", Reset)
-
 document.querySelector("#cancel").addEventListener("click", () => {
     animationController.CancelTimeline()
     SetResetButton()
 })
-
 document.querySelector("#PlayPause").addEventListener("click", function() {
     if(!animationController.IsInProgress()) {
         Alert(alertContainer, "No animation playing", 'warning')
@@ -216,7 +205,6 @@ document.querySelector("#PlayPause").addEventListener("click", function() {
         SetPauseButton()
     }
 })
-
 document.querySelector("#Progress-Bar-Outline").addEventListener('mousedown', function(event) {
     if(!animationController.IsInProgress()) {
         return
@@ -256,8 +244,22 @@ document.querySelector("#Progress-Bar-Outline").addEventListener('mousedown', fu
         if(paused) animationController.Play()
     }
 })
+
+//Input sidebar elements
+document.querySelector("#randomNumbers").addEventListener('click', randomInput)
+document.querySelector('#getNewInput').addEventListener('click', function() {
+    SetInputFromText(document.querySelector('#input').value)
+    try {
+    generateBars()
+    }
+    catch(error) {
+        Alert(alertContainer, error.message, 'danger')
+    }
+})
+document.querySelector('#input').addEventListener('change', function(){SetInputFromText(this.value)})
 // ----------------------------------------------------------------
 
+//Helper functions that assist in syncing page with state
 function SetGoButton() {
     document.querySelector("#reset").style.display = "none"
     document.querySelector('#cancel').style.display = "none"
@@ -282,11 +284,6 @@ function SetPauseButton() {
 
 function SetPlayButton() {
     document.querySelector("#PlayPause").firstChild.setAttribute("src", "../Assets/play-fill.svg")
-}
-
-function Sort() {
-    const timeline = pageAlgorithm.selectedFunction(InputManager.GetInput(), 0, InputManager.GetInput().length - 1)
-    return timeline
 }
 
 function ClearAnimation() {
