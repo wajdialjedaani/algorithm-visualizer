@@ -7,6 +7,13 @@ import { Input } from "../js/Input.js";
 import { debounce } from "../js/Utility.js";
 import SortingCanvas from "../js/SortingCanvas.js"
 
+/*
+*
+*TODO: !!!IMPORTANT!!!
+*   CHANGING FUNCTION MID-ANIMATION IS BROKEN.
+*
+*/
+
 CheckFirstVisit('sortVisited')
 
 const alertContainer = document.getElementById('alertContainer')
