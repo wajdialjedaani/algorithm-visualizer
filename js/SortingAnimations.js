@@ -3,6 +3,7 @@ import { AnimationController } from "./AnimationController.js"
 import Timeline from "./Timeline.js"
 import anime from "./anime.es.js"
 import { gsap } from "./gsap-core.js"
+import { Alert } from "./Alert.js"
 
 export class Swap extends Action {
     static duration = 1
@@ -11,20 +12,10 @@ export class Swap extends Action {
         this.speed = 1
     }
 
-    //TODO: Add annotation param that takes in an activate and deactivate tween. These will be inserted before and after
-    //the actual sorting animation.
-    static AddToTimeline(tl, params) {
-        if(!params) return
-        if(params.target?.length < 2) return
-
+    static CreateAnimation(params) {
+        if(!params) return undefined
+        if(params.target?.length < 2) return undefined
         const innerTL = gsap.timeline()
-        //Check for user-provided annotations and highlights and 
-        if(params.annotation) {
-            
-        }
-        if(params.highlight) {
-
-        }
 
         let target1 = document.querySelector(`${params.target[0]}`)
         let target2 = document.querySelector(`${params.target[1]}`)
@@ -51,7 +42,29 @@ export class Swap extends Action {
             onStart: ()=>{startingPos2 = originalPos2 + Number(target2.style.getPropertyValue('--translation'))},
             onComplete: ()=>{target2.style.setProperty('--translation', startingPos1 - target2.style.getPropertyValue('--position'))}
         }, "<")
-        return tl.add(innerTL)
+
+        return innerTL
+    }
+
+    //TODO: Add annotation param that takes in an activate and deactivate tween. These will be inserted before and after
+    //the actual sorting animation.
+    static AddToTimeline(tl, params) {
+
+        const mainAnimation = this.CreateAnimation(params)
+        if(!mainAnimation) {
+            console.log("Error creating Swap animation")
+            return
+        }
+        tl.add(mainAnimation)
+
+        //Check for user-provided annotations and highlights and 
+        if(params.annotation) {
+            
+        }
+        if(params.highlight) {
+
+        }
+
     }
 
 }
