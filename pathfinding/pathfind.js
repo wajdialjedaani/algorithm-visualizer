@@ -147,8 +147,10 @@ document.querySelector("#Progress-Bar-Outline").addEventListener('mousedown', fu
         let percentage = (event.clientX-this.offsetLeft) / this.clientWidth
         if(percentage<0) {
             percentage = 0
-        } else if(percentage > 1) {
-            percentage = 1
+        } else if(percentage >= 1) {
+            //Percentage set to 0.99 because setting to 1 sets off the code awaiting the end
+            //of the timeline which can't be undone with how it's currently set up. 
+            percentage = 0.99
         }
         barFill.style.width = `${percentage}%`
         animationController.SeekTimeline(percentage)
