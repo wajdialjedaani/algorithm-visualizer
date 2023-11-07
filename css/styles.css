@@ -312,4 +312,19 @@ img {
     bottom: 0%;
     right: 0%;
 }
+
+@keyframes highlight {
+    from {background-color: inherit;}
+    to{background-color: black;}
+}
+
+.pseudoText {
+
+}
+
+.pseudoText-dark {
+
+}
+
+
 /* ---------------------------------------------------- */

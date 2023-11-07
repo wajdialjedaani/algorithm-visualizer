@@ -65,7 +65,9 @@ export class Swap extends Action {
             return
         }
         tl.add(mainAnimation)
-
+        if(params.highlight !== undefined) {
+            Action.InsertHighlight(tl, {target: params.highlight.target, duration: params.highlight.duration = this.duration})
+        }
         //Check for user-provided annotations and highlights and apply their activation and deactivation animations at the beginning and end
         
 
@@ -83,12 +85,17 @@ export class Comparison extends Action {
     static AddToTimeline(tl, params) {
         params.target = params.target.filter(x => x !== undefined)
         .map((e)=>document.querySelector(e).firstElementChild) //This targets the visual bar itself and not the entire container
-        return tl.to(params.target, {
+        
+        tl.to(params.target, {
             backgroundColor: "#228C22",
             duration: Comparison.duration,
             yoyo: true,
             repeat: 1
         })
+
+        if(params.highlight !== undefined) {
+            Action.InsertHighlight(tl, {target: params.highlight.target, duration: params.highlight.duration = this.duration})
+        }
     }
 
 }
@@ -102,9 +109,15 @@ export class Sorted extends Action {
 
     static AddToTimeline(tl, params) {
         params.target = params.target.map((e)=>document.querySelector(e).firstElementChild)
-        return tl.set(params.target, {
+        
+        tl.set(params.target, {
             backgroundColor: "#FFA500"
         })
+
+        if(params.highlight !== undefined) {
+            Action.InsertHighlight(tl, {target: params.highlight.target, duration: params.highlight.duration = this.duration})
+        }
+        
     }
 }
 
@@ -118,10 +131,14 @@ export class PivotToggle extends Action {
     static AddToTimeline(tl, params) {
         const targetElement = document.querySelector(params.target).firstElementChild
 
-        return tl.to(targetElement, {
+        tl.to(targetElement, {
             backgroundColor: ()=>targetElement.style.backgroundColor !== "rgb(160, 32, 240)" ? "#A020F0" : "#6290C8", //Style computed at animation execution time.
             duration: PivotToggle.duration
         })
+
+        if(params.highlight !== undefined) {
+            Action.InsertHighlight(tl, {target: params.highlight.target, duration: params.highlight.duration = this.duration})
+        }
     }
 }
 
@@ -135,12 +152,16 @@ export class Subarray extends Action {
     static AddToTimeline(tl, params) {
         params.target = params.target.map((e)=>document.querySelector(e).firstElementChild)
 
-        return tl.to(params.target, {
+        tl.to(params.target, {
             backgroundColor: (index, target)=>{
                 return target.style.backgroundColor !== "rgb(246, 143, 88)" ? "#f68f58" : "#6290C8"
             },
             duration: 0,
         })
+
+        if(params.highlight !== undefined) {
+            Action.InsertHighlight(tl, {target: params.highlight.target, duration: params.highlight.duration = this.duration})
+        }
     }
 
 }

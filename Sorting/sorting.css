@@ -29,6 +29,10 @@
     text-align: center;
 }
 
+.barFooter-dark {
+    color: white;
+}
+
 @media (max-width: 767.98px) {
     .arrBar {
         margin-left: 1px;

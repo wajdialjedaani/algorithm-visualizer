@@ -7,12 +7,17 @@ class Action {
         this.speed = 1
     }
 
-    static InsertHighlight(timeline, highlight) {
-        if(highlight.active === undefined || highlight.deactive === undefined) {
-            console.log("Error creating highlight animation")
-            return
-        }
-
+    //Highlight object needs activate and deactive animation objects
+    static InsertHighlight(timeline, {target, duration}) {
+        if(target === null) return
+        timeline.to(target, {
+            backgroundColor: "#000000",
+            color: "#FFFFFF",
+            duration: duration/2,
+            yoyo: true,
+            repeat: 1,
+            onComplete: ()=>{target.style = ""},
+        }, "<")
 
     }
 

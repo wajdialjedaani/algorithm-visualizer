@@ -30,6 +30,7 @@ function darkMode() {   // enables dark mode
     var arrBar = document.querySelectorAll(".arrBar")
     var inputTab = document.querySelector(".input-tab")
     var customInput = document.querySelector(".customInputs")
+    var footerVals = document.querySelectorAll(".barFooter")
 
     settingModal.classList.toggle("modal-setting-dark")    // settings
     back.classList.toggle("back-dark")                    // background
@@ -58,6 +59,9 @@ function darkMode() {   // enables dark mode
     if(inputTab) {
         inputTab.classList.toggle("input-tab-dark")
         customInput.classList.toggle("customInputs-dark")
+    }
+    if(footerVals) {
+        footerVals.forEach(e => e.classList.toggle("barFooter-dark"))
     }
 
     dark = !dark

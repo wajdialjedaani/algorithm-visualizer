@@ -5,5 +5,5 @@
     ,
     "desc":"Quick sort is a <b>divide-and-conquer</b> algorithm. It chooses an element to act as a 'pivot', splitting the rest of the array into two subarrays based on if\nthe elements are smaller or larger than the pivot. It repeats this <b>recursively</b> until the arrays are one element and, effectively, sorted."
     ,
-    "pseudo":"pivot = arr[right]<br>\ni = left-1<br>\nfor j = low to right-1<br>\n<span id='pseudo1'>&emsp;if arr[j] < pivot<br></span>\n&emsp;&emsp;i++<br>\n<span id='pseudo21'>&emsp;&emsp;swap arr[i] and arr[j]<br></span>\n<span id='pseudo22'>swap arr[i+1] and arr[high]<br></span>"
+    "pseudo":"pivot = arr[right]<br>\ni = left-1<br>\nfor j = low to right-1<br>\n&emsp;<span id='pseudo1'>if arr[j] < pivot<br></span>\n&emsp;&emsp;i++<br>\n&emsp;&emsp;<span id='pseudo2'>swap arr[i] and arr[j]<br></span>\n<span id='pseudo3'>swap arr[i+1] and arr[high]<br></span>"
 }

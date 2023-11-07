@@ -27,14 +27,23 @@ function Partition(arr, low, high, timeline) {
     let i = (low - 1)
 
     for (let j = low; j <= high - 1; j++) {
-        Comparison.AddToTimeline(timeline, {target: [arr[j]?.id, arr[high]?.id]})
+        Comparison.AddToTimeline(timeline, {
+            target: [arr[j]?.id, arr[high]?.id],
+            highlight: {target: document.querySelector("#pseudo1")},
+        })
         if(arr[j].value < pivot) {
             i++
-            Swap.AddToTimeline(timeline, {target: [arr[i]?.id, arr[j]?.id]})
+            Swap.AddToTimeline(timeline, {
+                target: [arr[i]?.id, arr[j]?.id],
+                highlight: {target: document.querySelector("#pseudo2")},
+            })
             swap(arr, i, j)
         }   
     }
-    Swap.AddToTimeline(timeline, {target: [arr[i+1]?.id, arr[high]?.id]})
+    Swap.AddToTimeline(timeline, {
+        target: [arr[i+1]?.id, arr[high]?.id],
+        highlight: {target: document.querySelector("#pseudo3")},
+    })
     PivotToggle.AddToTimeline(timeline, {target: arr[high].id})
     Subarray.AddToTimeline(timeline, {target: arr.slice(low, high).map(x=>x.id)})
     swap(arr, i + 1, high)

@@ -11,10 +11,19 @@ export function BubbleSort(arr) {
     const timeline = Timeline()
     for(let i = 0; i < arr.length - 1; i++) {
         for(let j = 0; j < arr.length - i - 1; j++) {
-            Comparison.AddToTimeline(timeline, {target: [arr[j].id, arr[j+1].id]})
+            Comparison.AddToTimeline(timeline, {
+                target: [arr[j].id, arr[j+1].id],
+                highlight: {
+                    target: document.querySelector("#pseudo1"),
+                },
+            })
             if(arr[j].value > arr[j + 1].value) {
                 // swap
-                Swap.AddToTimeline(timeline, {target: [arr[j].id, arr[j+1].id]})
+                Swap.AddToTimeline(timeline, {
+                    target: [arr[j].id, arr[j+1].id], 
+                    highlight: {
+                        target: document.querySelector("#pseudo2"),
+                }})
                 swap(arr, j, j + 1)
             }
         }

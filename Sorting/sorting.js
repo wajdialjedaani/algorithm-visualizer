@@ -96,9 +96,6 @@ function generateBars() {
         barContainer.style.height = "100%"
         //Build the bar itself, deciding dimensions and color
         arrBar.classList.add('arrBar')
-        if((Cookies.get('darkMode') === '1') && (!arrBar.classList.contains('arrBar-dark'))) {  // if dark mode and arrBar does not have dark, add dark
-            arrBar.classList.add('arrBar-dark')
-        }
         
         //Bar footer height is set to 10% in the CSS, have the bar take up some percentage
         //of the remaining 90%
@@ -107,6 +104,9 @@ function generateBars() {
         arrBar.style.margin = width > 30 ? "0px 1.5px" : "0px 0px"
 
         numberDiv.classList.add('barFooter')
+        if((Cookies.get('darkMode') === '1')) {  // if dark mode and arrBar does not have dark, add dark
+            numberDiv.classList.add('barFooter-dark')
+        }
 
         const value = document.createElement('p')
         value.style.display = "inline"
@@ -287,6 +287,9 @@ function SetPlayButton() {
 }
 
 function ClearAnimation() {
+    for(const child of document.querySelector(".pseudoText").children) {
+        child.style = ""
+    }
     SetPauseButton()
     document.querySelector("#Progress-Bar-Fill").style.width = "0%"
 }
