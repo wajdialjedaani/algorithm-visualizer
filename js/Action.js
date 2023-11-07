@@ -7,6 +7,24 @@ class Action {
         this.speed = 1
     }
 
+    static InsertHighlight(timeline, highlight) {
+        if(highlight.active === undefined || highlight.deactive === undefined) {
+            console.log("Error creating highlight animation")
+            return
+        }
+
+
+    }
+
+    static InsertAnnotation(timeline, annotation) {
+        if(annotation.active === undefined || annotation.deactive === undefined) {
+            console.log("Error creating annotation animation")
+            return
+        }
+
+        
+    }
+
     AnimatePseudocode(speed) {
         this.speed = speed || this.speed
         return anime({

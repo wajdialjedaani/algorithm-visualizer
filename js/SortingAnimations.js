@@ -17,30 +17,39 @@ export class Swap extends Action {
         if(params.target?.length < 2) return undefined
         const innerTL = gsap.timeline()
 
-        let target1 = document.querySelector(`${params.target[0]}`)
-        let target2 = document.querySelector(`${params.target[1]}`)
+        const target1 = document.querySelector(`${params.target[0]}`)
+        const target2 = document.querySelector(`${params.target[1]}`)
         //Convenience vars in order to not have to retrieve the value and convert to number several times
-        let [originalPos1, originalPos2] = [Number(target1.style.getPropertyValue('--position')), Number(target2.style.getPropertyValue('--position'))]
+        const [originalPos1, originalPos2] = [Number(target1.style.getPropertyValue('--position')), Number(target2.style.getPropertyValue('--position'))]
         //Used to track the translation at the start of each tween
-        let startingPos1, startingPos2
+        let startingPos1, startingPos2, translation1, translation2
 
+        //Very weird animation made necessary by how CSS positioning is done. We do all calculations for both bars in the first animation
+        //to avoid any timing issues. We snapshot all necessary values and then immediately change to what they should be at the end of the animation.
         innerTL.to(target1, {
             keyframes: [
-                {x: ()=>originalPos2+Number(target2.style.getPropertyValue('--translation'))-originalPos1, duration: Swap.duration},
+                {x: ()=>{
+                    //Store the position of both bars at the start of the tween.
+                    startingPos1 = originalPos1 + Number(target1.style.getPropertyValue('--translation'))
+                    startingPos2 = originalPos2 + Number(target2.style.getPropertyValue('--translation'))
+                    //Store both translations so that we can update the DOM for future animations to avoid weird behavior when seeking fast
+                    translation1 = startingPos2 - target1.style.getPropertyValue('--position')
+                    translation2 = startingPos1 - target2.style.getPropertyValue('--position')
+                    target1.style.setProperty('--translation', translation1)
+                    target2.style.setProperty('--translation', translation2)
+                    //And this is the actual value we want to animate to -
+                    //bar1 started at 100px but is currently at 700px, bar 2 is at 800px
+                    //This means bar1 already has a translation of 600px, we want to animate to 700px
+                    return startingPos2-originalPos1
+                }, duration: Swap.duration},
             ],
             ease: "expo.out", 
-            //Update the closure var so that the translation can be properly tracked
-            onStart: ()=>{startingPos1 = originalPos1 + Number(target1.style.getPropertyValue('--translation'))},
-            //Track the movement of each bar for later swaps
-            onComplete: ()=>{target1.style.setProperty('--translation', startingPos2 - target1.style.getPropertyValue('--position'))}
         })
         innerTL.to(target2, {
             keyframes: [
-                {x: ()=>originalPos1+Number(target1.style.getPropertyValue('--translation'))-originalPos2, duration: Swap.duration},
+                {x: ()=>{return startingPos1-originalPos2}, duration: Swap.duration},
             ],
             ease: "expo.out", 
-            onStart: ()=>{startingPos2 = originalPos2 + Number(target2.style.getPropertyValue('--translation'))},
-            onComplete: ()=>{target2.style.setProperty('--translation', startingPos1 - target2.style.getPropertyValue('--position'))}
         }, "<")
 
         return innerTL
@@ -57,13 +66,8 @@ export class Swap extends Action {
         }
         tl.add(mainAnimation)
 
-        //Check for user-provided annotations and highlights and 
-        if(params.annotation) {
-            
-        }
-        if(params.highlight) {
-
-        }
+        //Check for user-provided annotations and highlights and apply their activation and deactivation animations at the beginning and end
+        
 
     }
 
