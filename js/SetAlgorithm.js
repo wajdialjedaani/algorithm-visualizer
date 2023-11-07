@@ -1,4 +1,5 @@
 import { FunctionMapper } from "./FunctionMapper.js"
+import { insertUrlParam } from "./Utility.js"
 
 class PageAlgorithm{
     constructor() {
@@ -26,6 +27,7 @@ class PageAlgorithm{
         //Modify state
         this.selectedFunction = this.fm[file.id]
         //Update page contents to match state
+        insertUrlParam("func", func.toLowerCase())
         document.querySelector("#Header").textContent = file.header
         DisplayAnnotation(file.desc, document.querySelector("#annotation>.card-body>p"))
         DisplayAnnotation(file.pseudo, document.querySelector("#pseudocode>.card-body>p"))

@@ -7,14 +7,22 @@ class Action {
         this.speed = 1
     }
 
-    get duration() {
-        return 1000 / this.speed
+    static InsertHighlight(timeline, highlight) {
+        if(highlight.active === undefined || highlight.deactive === undefined) {
+            console.log("Error creating highlight animation")
+            return
+        }
+
+
     }
 
-    get animation() {
-        return {
-
+    static InsertAnnotation(timeline, annotation) {
+        if(annotation.active === undefined || annotation.deactive === undefined) {
+            console.log("Error creating annotation animation")
+            return
         }
+
+        
     }
 
     AnimatePseudocode(speed) {
@@ -26,11 +34,6 @@ class Action {
             color: [{value: "#FFFFFF", duration: this.duration-1},
                 {value: anime.get(document.querySelector(`${this.line}`), "color"), duration: 1}]
         })
-    }
-
-    Animate(speed) {
-        this.speed = speed || this.speed
-        return anime(this.animation)
     }
 }
 

@@ -47,11 +47,13 @@ function JPS(graph, start, end) {
         const neighbors = FindNeighbors(node)
         for(let i=0, l=neighbors.length; i < l; i++) {
             let neighbor = neighbors[i]
+            //Label is used to position the jump node animation before the skipped nodes to more accurately illustrate
+            //the order of action in the code: while the skipped nodes are "discovered" first, nothing is done upon discovering them, just further recursion.
             const timelinePreJumpPos = timeline.addLabel("PreJump")
             let jumpPoint = _jump(neighbor, node)
             if(jumpPoint) {
                 const element = document.getElementById(`${jumpPoint.y},${jumpPoint.x}`)
-                JumpNode.InsertToTimeline(timeline, {target: element, label:"PreJump"})
+                JumpNode.AddToTimeline(timeline, {target: element, label:"PreJump"})
                 timeline.removeLabel("PreJump")
 
                 let jx = jumpPoint.x
