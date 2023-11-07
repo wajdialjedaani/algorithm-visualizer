@@ -1,6 +1,6 @@
 export class AnimationController {
     constructor(params) {
-        this.speeds = params?.speeds || [1, 5, 10]
+        this.speeds = params?.speeds || [1, 5, 10, 100]
         this.speed = params?.speed || this.speeds[0]
         this.timeline = params?.timeline || undefined
     }
