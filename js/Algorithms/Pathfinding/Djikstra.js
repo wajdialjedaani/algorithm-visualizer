@@ -18,7 +18,10 @@ function Djikstra(graph, start, end) {
         for(let parent = current; parent; parent = parent.parent) {
             path.push(document.getElementById(`${parent.y},${parent.x}`))
         }
-        SearchedPath.AddToTimeline(timeline, {target: path})
+        SearchedPath.AddToTimeline(timeline, {
+            target: path,
+            highlight: {target: document.querySelector("#pseudo1")},
+        })
 
         if (current === end) {//If the current node is the end node
             const pathArr = []
@@ -28,7 +31,10 @@ function Djikstra(graph, start, end) {
                 pathCells.push(document.getElementById(`${current.y},${current.x}`))
                 current = current.parent
             }
-            FinalPath.AddToTimeline(timeline, {target: pathCells.reverse()})
+            FinalPath.AddToTimeline(timeline, {
+                target: pathCells.reverse(),
+                highlight: {target: document.querySelector("#pseudo2")},
+            })
             return timeline
         }
 

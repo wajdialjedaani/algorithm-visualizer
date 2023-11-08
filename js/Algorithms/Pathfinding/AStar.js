@@ -33,7 +33,10 @@ function AStar(graph, start, end) {
                 pathCells.push(document.getElementById(`${current.y},${current.x}`))
                 current = current.parent
             }
-            FinalPath.AddToTimeline(timeline, {target: pathCells.reverse()})
+            FinalPath.AddToTimeline(timeline, {
+                target: pathCells.reverse(),
+                highlight: {target: document.querySelector("#pseudo2")},
+            })
             return timeline
         }
 
@@ -76,9 +79,15 @@ function AStar(graph, start, end) {
         }
         //if new children to be added to the open queue exist, make an animation for them
         if(newChildren.length) {
-            NewChildren.AddToTimeline(timeline, {target: newChildren.map((element) => {return document.getElementById(`${element.y},${element.x}`)})})
+            NewChildren.AddToTimeline(timeline, {
+                target: newChildren.map((element) => {return document.getElementById(`${element.y},${element.x}`)}),
+                highlight: {target: document.querySelector("#pseudo3")},
+            })
         }
-        SearchedPath.AddToTimeline(timeline, {target: path})
+        SearchedPath.AddToTimeline(timeline, {
+            target: path,
+            highlight: {target: document.querySelector("#pseudo1")},
+        })
     }
     //Only executed upon failure to find end
     return undefined

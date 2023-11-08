@@ -11,7 +11,7 @@ export class FinalPath extends Action {
     }
 
     static AddToTimeline(timeline, params) {
-        return timeline.to(params.target, {
+        timeline.to(params.target, {
             keyframes: [
                 {backgroundColor: "#FEDC97", duration: FinalPath.duration},
             ],
@@ -19,6 +19,12 @@ export class FinalPath extends Action {
                 amount: FinalPath.duration,
             },
         })
+
+        if(params.highlight !== undefined) {
+            console.log("highlighting")
+            Action.InsertHighlight(timeline, {target: params.highlight.target, duration: params.highlight.duration = this.duration})
+        }
+
     }
 }
 
@@ -30,12 +36,17 @@ export class SearchedPath extends Action {
     }
 
     static AddToTimeline(timeline, params) {
-        return timeline.to(params.target, {
+        timeline.to(params.target, {
             keyframes: [
                 {backgroundColor: "#F26419", duration: 0},
                 {backgroundColor: "#28666E", delay: SearchedPath.duration - 0.01, duration: 0.01},
             ],
         })
+
+        if(params.highlight !== undefined) {
+            Action.InsertHighlight(timeline, {target: params.highlight.target, duration: params.highlight.duration = this.duration})
+        }
+
     }
 }
 
@@ -47,10 +58,15 @@ export class NewChildren extends Action {
     }
 
     static AddToTimeline(timeline, params) {
-        return timeline.to(params.target, {
+        timeline.to(params.target, {
             backgroundColor: "#696464",
             duration: 0,
         })
+
+        if(params.highlight !== undefined) {
+            Action.InsertHighlight(timeline, {target: params.highlight.target, duration: params.highlight.duration = this.duration})
+        }
+
     }
 }
 
@@ -58,10 +74,15 @@ export class SkippedNode extends Action {
     static duration = 0.02
 
     static AddToTimeline(timeline, params) {
-        return timeline.to(params.target, {
+        timeline.to(params.target, {
             backgroundColor: "#808080F0",
             duration: SkippedNode.duration,
         })
+
+        if(params.highlight !== undefined) {
+            Action.InsertHighlight(timeline, {target: params.highlight.target, duration: params.highlight.duration = this.duration})
+        }
+
     }
 }
 
@@ -84,6 +105,11 @@ export class JumpNode extends Action {
             ], 
         })
         timeline.shiftChildren(JumpNode.duration, true, params.label)
-        return timeline.add(tween, params.label)
+        timeline.add(tween, params.label)
+
+        if(params.highlight !== undefined) {
+            Action.InsertHighlight(timeline, {target: params.highlight.target, duration: params.highlight.duration = this.duration})
+        }
+
     }
 }
