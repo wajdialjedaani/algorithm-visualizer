@@ -1,10 +1,10 @@
 function dragElement(element) {
     var deltaX = 0, deltaY = 0, startingX = 0, startingY = 0;
       element.onmousedown = dragMouseDown;
-  
-      while(element.offsetWidth + element.offsetLeft > window.innerWidth - 20) {
-          element.style.left = ((element.offsetLeft - 10) / window.innerWidth * 100) + "%"
-      }
+
+      //while(element.offsetWidth + element.offsetLeft > window.innerWidth - 20) {
+      //    element.style.left = ((element.offsetLeft - 10) / window.innerWidth * 100) + "%"
+      //}
   
     function dragMouseDown(e) {
       e = e || window.event;

@@ -13,8 +13,16 @@ const pageAlgorithm = new PageAlgorithm()
 const canvas = new Table()
 
 //Initialize the card listeners
-document.querySelectorAll(".draggable").forEach((element) => {dragElement(element)})
+document.querySelectorAll(".draggable").forEach((element) => {
+    dragElement(element)
+    element.style.left = (window.innerWidth - element.offsetWidth) / window.innerWidth * 100 - 1 + "%"
+
+    window.addEventListener("resize", () => {
+      element.style.left = (window.innerWidth - element.offsetWidth) / window.innerWidth * 100 - 1 + "%"
+    })
+})
 document.querySelectorAll(".resizer").forEach((element) => {ResizeHandler(element)})
+
 //Initialize the dropdown menus
 document.querySelectorAll(".AStar").forEach(element => element.onclick=ChangeAlgorithm)
 document.querySelectorAll(".Djikstra").forEach(element => element.onclick=ChangeAlgorithm)
