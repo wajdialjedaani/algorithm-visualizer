@@ -437,6 +437,14 @@ class ElementVertexPair {
         this.vertex.walkable = value
 
         //If walkable, remove wall from classlist. Else add wall
+        if(value) {
+            this.DOMElement.classList.remove("wall")
+        }
+        else {
+            this.DOMElement.classList.add("wall")
+            this.DOMElement.classList.remove("startnode")
+            this.DOMElement.classList.remove("endnode")
+        }
         value ? this.DOMElement.classList.remove("wall") : this.DOMElement.classList.add("wall")
     }
 
