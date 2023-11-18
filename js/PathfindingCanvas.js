@@ -445,7 +445,6 @@ class ElementVertexPair {
             this.DOMElement.classList.remove("startnode")
             this.DOMElement.classList.remove("endnode")
         }
-        value ? this.DOMElement.classList.remove("wall") : this.DOMElement.classList.add("wall")
     }
 
     addPair(table, graph) {
