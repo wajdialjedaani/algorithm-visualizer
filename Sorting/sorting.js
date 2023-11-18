@@ -303,7 +303,7 @@ function DeleteBar(barObj) {
 
     document.querySelector(`${barObj.id}`).remove()
     InputManager.RemoveNumber(barObj.id)
-    Alert(alertContainer, `Removed ${barObj.value}`, 'success')
+    Alert(alertContainer, `Removed ${barObj.value}`, 'success', 2500)
     SetInputFromText(document.querySelector('#input').value)
     generateBars()
 }
