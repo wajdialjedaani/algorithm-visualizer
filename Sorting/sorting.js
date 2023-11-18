@@ -299,8 +299,11 @@ function DeleteBar(barObj) {
         Alert(alertContainer, "Animation currently playing", 'warning')
         return
     }
+
+
     document.querySelector(`${barObj.id}`).remove()
     InputManager.RemoveNumber(barObj.id)
+    Alert(alertContainer, `Removed ${barObj.value}`, 'success')
     SetInputFromText(document.querySelector('#input').value)
     generateBars()
 }
