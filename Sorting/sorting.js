@@ -287,8 +287,8 @@ function SetPlayButton() {
 }
 
 function ClearAnimation() {
-    for(const child of document.querySelector(".pseudoText").children) {
-        child.style = ""
+    for(const element of document.querySelectorAll("span[id^='pseudo']")) {
+        element.style = ""
     }
     SetPauseButton()
     document.querySelector("#Progress-Bar-Fill").style.width = "0%"

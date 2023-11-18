@@ -211,6 +211,9 @@ async function animateResults() {
 
 function ClearAnimation() {
     canvas.ClearDOMStyles()
+    for(const element of document.querySelectorAll("span[id^='pseudo']")) {
+        element.style = ""
+    }
     SetPauseButton()
     document.querySelector("#Progress-Bar-Fill").style.width = "0%"
 }

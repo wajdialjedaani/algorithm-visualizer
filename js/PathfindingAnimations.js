@@ -21,7 +21,6 @@ export class FinalPath extends Action {
         })
 
         if(params.highlight !== undefined) {
-            console.log("highlighting")
             Action.InsertHighlight(timeline, {target: params.highlight.target, duration: params.highlight.duration = this.duration})
         }
 
