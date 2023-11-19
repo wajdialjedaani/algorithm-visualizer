@@ -317,8 +317,8 @@ function CellHandler(event) {
         if(element?.tagName !== "TD") {
             return
         }
-        const distance = (x - origin[0]) + (y - origin[1])
-        if(Math.abs(distance) < this.cellSize/2 && !drag) {
+        const distance = Math.abs(x - origin[0]) + Math.abs(y - origin[1])
+        if(distance < this.cellSize/2 && !drag) {
             return
         }
         drag = true

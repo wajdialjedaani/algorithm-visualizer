@@ -4,24 +4,29 @@ import anime from "./anime.es.js"
 import { gsap } from "./gsap-core.js"
 
 export class FinalPath extends Action {
-    static duration = 5
+    static stagger = 0.2
     constructor(targets, line=2) {
         super(targets, line)
         this.speed = 1
     }
 
     static AddToTimeline(timeline, params) {
+        //Calculate stagger for best experience. 200ms looks best imo, but takes too long to animate for long paths.
+        //So default to 200ms stagger, but cap animation length at 5 seconds and reduce stagger length if it exceed that.
+        let duration = this.stagger * params.target.length
+        let stagger = this.stagger
+        if(duration > 5) {
+            duration = 5
+            stagger = duration / params.target.length
+        }
+
         timeline.to(params.target, {
-            keyframes: [
-                {backgroundColor: "#FEDC97", duration: FinalPath.duration},
-            ],
-            stagger: {
-                amount: FinalPath.duration,
-            },
+            backgroundColor: "#FEDC97",
+            stagger: stagger,
         })
 
         if(params.highlight !== undefined) {
-            Action.InsertHighlight(timeline, {target: params.highlight.target, duration: params.highlight.duration = this.duration})
+            Action.InsertHighlight(timeline, {target: params.highlight.target, duration: params.highlight.duration = duration})
         }
 
     }
