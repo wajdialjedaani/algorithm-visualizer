@@ -87,32 +87,6 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body text">
-                        <div style="display: flex; height: auto; justify-content: space-around; flex-wrap: wrap;">
-                            <div class="intro-cell-div">
-                                <p class="text" style="margin-bottom: 0px;">Start</p>
-                                <div class="intro-cell startnode" style="width: 30px; height: 30px;"></div>
-                            </div>
-                            <div class="intro-cell-div">
-                                <p class="text" style="margin-bottom: 0px;">End</p>
-                                <div class="intro-cell endnode" style="width: 30px; height: 30px;"></div>
-                            </div>
-                            <div class="intro-cell-div">
-                                <p class="text" style="margin-bottom: 0px;">Wall</p>
-                                <div class="intro-cell wall" style="width: 30px; height: 30px;"></div>
-                            </div>
-                            <div class="intro-cell-div">
-                                <p class="text" style="margin-bottom: 0px;">Path</p>
-                                <div class="intro-cell intro-searchpath" style="width: 30px; height: 30px;"></div>
-                            </div>
-                            <div class="intro-cell-div">
-                                <p class="text" style="margin-bottom: 0px;">Final Path</p>
-                                <div class="intro-cell intro-finalpath" style="width: 30px; height: 30px;"></div>
-                            </div>
-                            <div class="intro-cell-div">
-                                <p class="text" style="margin-bottom: 0px;">Neighbors</p>
-                                <div class="intro-cell intro-child" style="width: 30px; height: 30px;"></div>
-                            </div>
-                        </div>
                         <p class="text">Pathfinding Algorithms are used to help find a path between two locations - whether pixels on a screen, addresses in Google Maps, or positions in a video game.</p>
                         <div>
                             <video class="intro-video" autoplay loop muted>
@@ -127,16 +101,55 @@
                             </video>
                             <p class="text">If you want to make it a little more interesting, click and drag to make walls around the map. The computer will have to find its way around the walls.</p>
                         </div>
-                        <p class="text">Remember not to completely block off the start and end from each other - the computer can't find a path that doesn't exist!</p>
-                      </p>
-                    </div>
+                        <div class="py-1" style="display: flex; justify-content: flex-start;">
+                            <div class="intro-cell-div" style="float: left; display: inline-flex; flex-direction: column; align-items: center;">
+                                <p class="text" style="margin-bottom: 0px;">Start</p>
+                                <div class="intro-cell startnode" style="width: 30px; height: 30px;"></div>
+                            </div>
+                            <p>This is the point from which the algorithm begins searching.</p>
+                        </div>
+                        <div class="py-1" style="display: flex; justify-content: flex-start;">
+                            <div class="intro-cell-div" style="float: left; display: inline-flex; flex-direction: column; align-items: center;">
+                                <p class="text" style="margin-bottom: 0px;">End</p>
+                                <div class="intro-cell endnode" style="width: 30px; height: 30px;"></div>
+                            </div>
+                            <p>This is the point the algorithm is searching for.</p>
+                        </div>
+                        <div class="py-1" style="display: flex; justify-content: flex-start;">
+                            <div class="intro-cell-div" style="float: left; display: inline-flex; flex-direction: column; align-items: center;">
+                                <p class="text" style="margin-bottom: 0px;">Wall</p>
+                                <div class="intro-cell wall" style="width: 30px; height: 30px;"></div>
+                            </div>
+                            <p>These are cells that can't be traveled through, forcing the algorithm to find a way around.</p>
+                        </div>
+                        <div class="py-1" style="display: flex; justify-content: flex-start;">
+                            <div class="intro-cell-div" style="float: left; display: inline-flex; flex-direction: column; align-items: center;">
+                                <p class="text" style="margin-bottom: 0px;">Path</p>
+                                <div class="intro-cell intro-searchpath" style="width: 30px; height: 30px;"></div>
+                            </div>
+                            <p>These are cells that make up the path currently being searched.</p>
+                        </div>
+                        <div class="py-1" style="display: flex; justify-content: flex-start;">
+                            <div class="intro-cell-div" style="float: left; display: inline-flex; flex-direction: column; align-items: center;">
+                                <p class="text" style="margin-bottom: 0px;">Final Path</p>
+                                <div class="intro-cell intro-finalpath" style="width: 30px; height: 30px;"></div>
+                            </div>
+                            <p>These are the cells in the path that ended up being the shortest to the end.</p>
+                        </div>
+                        <div class="py-1" style="display: flex; justify-content: flex-start;">
+                            <div class="intro-cell-div" style="float: left; display: inline-flex; flex-direction: column; align-items: center;">
+                                <p class="text" style="margin-bottom: 0px;">Neighbors</p>
+                                <div class="intro-cell intro-child" style="width: 30px; height: 30px;"></div>
+                            </div>
+                            <p>This type of cell is only present in some algorithms - these are cells that are known to be traversable, but haven't been explored yet. They're stored on a stack for later.</p>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- Setting Modal -->
-        <div class="modal fade" id="settingModal" aria-labelledby="Settings" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+        <div class="modal fade" id="settingModal" aria-labelledby="Settings" aria-hidden="true" data-bs-keyboard="false" tabindex="-1">
             <div id="settingModalDialog" class="modal-dialog modal-sm modal-setting">
                 <div class="modal-content">
                     <div class="modal-header">
