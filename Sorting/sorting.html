@@ -98,14 +98,44 @@
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h2 class="modal-title text" id="exampleModalLabel" style="font-size: 1.17em">Sorting Tutorial</h2>
+                        <h5 class="modal-title text" id="exampleModalLabel">Sorting Tutorial</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body">
-                      <p class="text">Sorting Algorithms take lists and sorts them in ascending or descending order.<br><br>
-                        To get started, just press 'Go' at the bottom left corner - a list of numbers is pre-filled for you.<br><br>
-                        You can make your own list by clicking the "Inputs" button and typing a comma-separated list.<br><br>
-                      </p>
+                    <div class="modal-body text">
+                        <p class="text">Sorting Algorithms take lists and sort them in ascending or descending order.</p>
+                        <div class="py-2">
+                            <video class="intro-video" style="max-width: 100%;" autoplay loop muted>
+                                <source src="../Assets/Video/SortingTutorial1.webm" type="video/webm"/>
+                            </video>
+                            <p class="text">You can change the contents of the list by clicking the <b>Inputs</b> tab in the top left corner. The input should be a comma-separated list, and any invalid inputs will be removed before the input is parsed.
+                            Random inputs can also be generated with the <b>Random</b> button.</p>
+                        </div>
+                        <div class="py-2">
+                            <video class="intro-video" style="max-width: 100%;" autoplay loop muted>
+                                <source src="../Assets/Video/SortingTutorial2.webm" type="video/webm"/>
+                            </video>
+                            <p class="text">If you want to delete a certain bar, just click on it.</p>
+                        </div>
+                        <div class="py-2" style="display: flex; justify-content: flex-start; align-items: center;">
+                            <div class="mx-2" style="display: inline; background-color:var(--unitedNationsBlue); border: 1px solid black; min-width: 30px; height: 30px;"></div>
+                            <p class="my-0">Default color of the bars.</p>
+                        </div>
+                        <div class="py-2" style="display: flex; justify-content: flex-start; align-items: center;">
+                            <div class="mx-2" style="display: inline; background-color:#FFA500; border: 1px solid black; min-width: 30px; height: 30px;"></div>
+                            <p class="my-0">Indicates that a bar is in the "sorted subarray", a concept present in algorithms like Insertion Sort.</p>
+                        </div>
+                        <div class="py-2" style="display: flex; justify-content: flex-start; align-items: center;">
+                            <div class="mx-2" style="display: inline; background-color:#228C22; border: 1px solid black; min-width: 30px; height: 30px;"></div>
+                            <p class="my-0">Indicates the two bars whose values are being compared.</p>
+                        </div>
+                        <div class="py-2" style="display: flex; justify-content: flex-start; align-items: center;">
+                            <div class="mx-2" style="display: inline; background-color:#A020F0; border: 1px solid black; min-width: 30px; height: 30px;"></div>
+                            <p class="my-0">Indicates the pivot value in Quick Sort. This is the value used as the "midpoint" when partitioning the array.</p>
+                        </div>
+                        <div class="py-2" style="display: flex; justify-content: flex-start; align-items: center;">
+                            <div class="mx-2" style="display: inline; background-color:#f68f58; border: 1px solid black; min-width: 30px; height: 30px;"></div>
+                            <p class="my-0">Used in Quick Sort, this color indicates the bars in the subarray that is currently being sorted.</p>
+                        </div>
                     </div>
                 </div>
             </div>
