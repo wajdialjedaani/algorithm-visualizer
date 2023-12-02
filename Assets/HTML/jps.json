@@ -3,7 +3,7 @@
         ,
         "header":"Jump Point Search"
         ,
-        "pseudo":""
+        "pseudo":"while Open is not empty<br>\n&emsp;Sort Open by node.f<br>\n<span>&emsp;current = Open[0]<br></span>\n<span id='pseudo1'>&emsp;if current == end<br>\n&emsp;&emsp;return path<br></span>\n&emsp;Prune neighbors<br>\n&emsp;for each remaining neighbor<br>\n&emsp;&emsp;<span id='pseudo2'>Jump in a straight line until a point of interest or no more nodes are found.</span><br>\n<span id='pseudo3'>&emsp;&emsp;Push jump point to Open<br></span>"
         ,
-        "desc":""
+        "desc":"Jump point search is a modified A* that differs in its use of <b>graph pruning</b> to ignore nodes that, due to characteristics of the current node, will not be useful in the search. For example, when searching in an open area, JPS will <b>jump past</b> nodes in a straight line between two points of interest, such as nodes near walls that form a corner."
 }

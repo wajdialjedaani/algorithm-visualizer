@@ -34,7 +34,10 @@ function JPS(graph, start, end) {
             const expanded = ExpandPath(jumpArr)
             //Convert path of vertices to DOMElements, animate
             expanded.forEach((node, index)=>{expanded[index]=document.getElementById(`${node.y},${node.x}`)})
-            FinalPath.AddToTimeline(timeline, {target: expanded.reverse()})
+            FinalPath.AddToTimeline(timeline, {
+                target: expanded.reverse(),
+                highlight: {target: document.querySelector("#pseudo1")},
+            })
             return timeline
         }
 
@@ -53,7 +56,10 @@ function JPS(graph, start, end) {
             let jumpPoint = _jump(neighbor, node)
             if(jumpPoint) {
                 const element = document.getElementById(`${jumpPoint.y},${jumpPoint.x}`)
-                JumpNode.AddToTimeline(timeline, {target: element, label:"PreJump"})
+                JumpNode.AddToTimeline(timeline, {
+                    target: element, label:"PreJump",
+                    highlight: {target: document.querySelector("#pseudo3")},
+                })
                 timeline.removeLabel("PreJump")
 
                 let jx = jumpPoint.x
@@ -159,7 +165,10 @@ function JPS(graph, start, end) {
         }
         const element = document.getElementById(`${node.y},${node.x}`)
         //element.style.backgroundColor = "#808080F0"
-        SkippedNode.AddToTimeline(timeline, {target: element})
+        SkippedNode.AddToTimeline(timeline, {
+            target: element,
+            highlight: {target: document.querySelector("#pseudo2")},
+        })
         //If not a point of interest, continue jumping in the same direction
         return _jump(neighbors.find(element=>element.x==node.x+dx && element.y==node.y+dy), node)
     }
