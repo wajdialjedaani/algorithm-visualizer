@@ -1,132 +1,128 @@
 :root {
-    --charcoal: #2F3E46;
-    --ashGray: #CAD2C5;
-    --darkSeaGreen: #84A98C;
-    --orangeRed: #F26419;
-    --unitedNationsBlue: #6290C8;
-    --ming: #28666E;
-    --navajoWhite: #FEDC97;
-    --outerSpaceCrayola: #2C3639;
-    --darkSlateGray: #3F4E4F;
-    --graniteGray: #696464;
+  --charcoal: #2f3e46;
+  --ashGray: #cad2c5;
+  --darkSeaGreen: #84a98c;
+  --orangeRed: #f26419;
+  --unitedNationsBlue: #6290c8;
+  --ming: #28666e;
+  --navajoWhite: #fedc97;
+  --outerSpaceCrayola: #2c3639;
+  --darkSlateGray: #3f4e4f;
+  --graniteGray: #696464;
 }
 
-td { 
-    box-sizing: border-box;
-    position: relative;
-    border: solid 1px;
-    width: var(--width);
-    height: var(--height);
-    /*background-color: var(--ashGray);*/
+td {
+  box-sizing: border-box;
+  position: relative;
+  border: solid 1px;
+  width: var(--width);
+  height: var(--height);
+  /*background-color: var(--ashGray);*/
 }
 
 body {
-    height: calc(var(--vh, 1vh) * 100);
-    background-color: var(--ashGray);
-    overscroll-behavior: contain;
+  height: calc(var(--vh, 1vh) * 100);
+  background-color: var(--ashGray);
+  overscroll-behavior: contain;
 }
 
 #grid-container {
-    height: calc(100% - 116px);
-    width: 100%;
-    position: relative;
-    display: grid;
-    grid-template-columns: repeat(var(--columns), 1fr);
-    grid-template-rows: repeat(var(--rows), 1fr);
+  height: calc(100% - 116px);
+  width: 100%;
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(var(--columns), 1fr);
+  grid-template-rows: repeat(var(--rows), 1fr);
 }
 
 .wall {
-    background-color: var(--unitedNationsBlue);
+  background-color: var(--unitedNationsBlue);
 }
 
 .startnode {
-    background-color: green;
+  background-color: green;
 }
 
 .endnode {
-    background-color: red;
+  background-color: red;
 }
 
 .top-bar {
-    background-color: var(--charcoal);
-    height: 56px;
+  background-color: var(--charcoal);
+  height: 56px;
 }
 
 .bottom-bar {
-    position: fixed;
-    bottom: 0px;
-    background-color: var(--charcoal);
+  position: fixed;
+  bottom: 0px;
+  background-color: var(--charcoal);
 }
 
 #pseudocode {
-    top: 25%;
-    left: 100%;
+  top: 25%;
+  left: 100%;
 }
 
 #annotation {
-    top: 50%;
-    left: 100%;
+  top: 50%;
+  left: 100%;
 }
 
 #AnimSpeed {
-    width: 40px;
-    border-radius: 50%;
-    margin: 10px;
+  width: 40px;
+  border-radius: 50%;
+  margin: 10px;
 }
 
-.intro-cell { 
-    box-sizing: border-box;
-    position: relative;
-    border: solid 2px;
-    width: 30px;
-    height: 30px;
+.intro-cell {
+  box-sizing: border-box;
+  position: relative;
+  border: solid 2px;
+  width: 30px;
+  height: 30px;
 }
 
 .intro-searchpath {
-    background-color: var(--orangeRed);
+  background-color: var(--orangeRed);
 }
 
 .intro-finalpath {
-    background-color: var(--navajoWhite);
+  background-color: var(--navajoWhite);
 }
 
 .intro-child {
-    background-color: var(--graniteGray);
+  background-color: var(--graniteGray);
 }
 
 .intro-cell-div {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    min-width: 5rem;
-    margin-right: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 5rem;
+  margin-right: 1rem;
 }
 
 .button-group-flex {
-    display: flex;
-    flex-direction: row;
-    justify-content: end;
+  display: flex;
+  flex-direction: row;
+  justify-content: end;
 }
 
 .button-group-flex > .btn-left {
-    border-top-right-radius: 0px;
-    border-bottom-right-radius: 0px;
-    padding: 4px 8px 4px 8px;
+  border-top-right-radius: 0px;
+  border-bottom-right-radius: 0px;
+  padding: 4px 8px 4px 8px;
 }
 
 #cellSizeInput {
-    border-radius: 0px;
-    outline: none;
-    border: 0px;
+  border-radius: 0px;
+  border: 0px;
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
 }
 
 .button-group-flex > .btn-right {
-    border-top-left-radius: 0px;
-    border-bottom-left-radius: 0px;
-    padding: 4px 8px 4px 8px;
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
+  padding: 4px 8px 4px 8px;
 }
-
-
-
-
-
