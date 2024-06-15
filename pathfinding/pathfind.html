@@ -104,42 +104,42 @@
                         <div class="py-1" style="display: flex; justify-content: flex-start;">
                             <div class="intro-cell-div" style="float: left; display: inline-flex; flex-direction: column; align-items: center;">
                                 <p class="text" style="margin-bottom: 0px;">Start</p>
-                                <div class="intro-cell startnode" style="width: 30px; height: 30px;"></div>
+                                <input type="color" class="intro-cell intro-startNode">
                             </div>
                             <p>This is the point from which the algorithm begins searching.</p>
                         </div>
                         <div class="py-1" style="display: flex; justify-content: flex-start;">
                             <div class="intro-cell-div" style="float: left; display: inline-flex; flex-direction: column; align-items: center;">
                                 <p class="text" style="margin-bottom: 0px;">End</p>
-                                <div class="intro-cell endnode" style="width: 30px; height: 30px;"></div>
+                                <input type="color" class="intro-cell intro-endNode" style="width: 30px; height: 30px;">
                             </div>
                             <p>This is the point the algorithm is searching for.</p>
                         </div>
                         <div class="py-1" style="display: flex; justify-content: flex-start;">
                             <div class="intro-cell-div" style="float: left; display: inline-flex; flex-direction: column; align-items: center;">
                                 <p class="text" style="margin-bottom: 0px;">Wall</p>
-                                <div class="intro-cell wall" style="width: 30px; height: 30px;"></div>
+                                <input type="color" class="intro-cell intro-wall" style="width: 30px; height: 30px;">
                             </div>
                             <p>These are cells that can't be traveled through, forcing the algorithm to find a way around.</p>
                         </div>
                         <div class="py-1" style="display: flex; justify-content: flex-start;">
                             <div class="intro-cell-div" style="float: left; display: inline-flex; flex-direction: column; align-items: center;">
                                 <p class="text" style="margin-bottom: 0px;">Path</p>
-                                <div class="intro-cell intro-searchpath" style="width: 30px; height: 30px;"></div>
+                                <input type="color" class="intro-cell intro-searchedPathInProgress" style="width: 30px; height: 30px;">
                             </div>
                             <p>These are cells that make up the path currently being searched.</p>
                         </div>
                         <div class="py-1" style="display: flex; justify-content: flex-start;">
                             <div class="intro-cell-div" style="float: left; display: inline-flex; flex-direction: column; align-items: center;">
                                 <p class="text" style="margin-bottom: 0px;">Final Path</p>
-                                <div class="intro-cell intro-finalpath" style="width: 30px; height: 30px;"></div>
+                                <input type="color" class="intro-cell intro-finalPath" style="width: 30px; height: 30px;">
                             </div>
                             <p>These are the cells in the path that ended up being the shortest to the end.</p>
                         </div>
                         <div class="py-1" style="display: flex; justify-content: flex-start;">
                             <div class="intro-cell-div" style="float: left; display: inline-flex; flex-direction: column; align-items: center;">
                                 <p class="text" style="margin-bottom: 0px;">Neighbors</p>
-                                <div class="intro-cell intro-child" style="width: 30px; height: 30px;"></div>
+                                <input type="color" class="intro-cell intro-newChildren" style="width: 30px; height: 30px;">
                             </div>
                             <p>This type of cell is only present in some algorithms - these are cells that are known to be traversable, but haven't been explored yet. They're stored on a stack for later.</p>
                         </div>
@@ -157,25 +157,42 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <div class="row mt-1">
+                        <div class="row mt-1 align-items-center">
                             <div class="col text">Dark Mode</div>
                             <div class="col-2 form-check form-switch">
                                 <input type="checkbox" class="form-check-input" role="switch" id="darkModeSwitch" aria-label="Dark Mode">
                             </div>
                         </div>
-                        <div class="row mt-1">
+                        <div class="row mt-1 align-items-center">
                             <div class="col text">Text Size</div>
                             <div class="col-4 btn-group btn-group-sm" role="group" aria-label="Increase or decrease text size">
                                 <button type="button" class="btn btn-outline-dark btnResize text" id="fontIncrease">+</button>
                                 <button type="button" class="btn btn-outline-dark btnResize text" id="fontDecrease">-</button>
                             </div>
                         </div>
-                        <div class="row mt-1 justify-content-between">
+                        <div class="row mt-1 justify-content-between align-items-center">
                             <div class="col-auto text">Cell Size</div>
                             <div class="button-group-flex col-8">
                                 <button class="btn btn-outline-dark btn-left text" type="button" id="cellSizeIncrease">+</button>
                                 <input type="text" class="col-2" id="cellSizeInput">
                                 <button class="btn btn-outline-dark btn-right text" type="button" id="cellSizeDecrease">-</button>
+                            </div>
+                        </div>
+                        <div style="display: flex; flex-direction: column; align-items: center">
+                            <div class="">Accessibility Presets</div>
+                            <div style="display: flex; flex-direction: row; flex-wrap: wrap; justify-content: center">
+                                <div class="intro-cell-div">
+                                    <p class="text" style="margin-bottom: 0px;">Protanopia</p>
+                                    <div class="protanopia-preset" style="width: 30px; height: 30px; border: 1px solid black; border-radius: 10%"></div>
+                                </div>
+                                <div class="intro-cell-div">
+                                    <p class="text" style="margin-bottom: 0px;">Deuteranopia</p>
+                                    <div class="deuteranopia-preset" style="width: 30px; height: 30px; border: 1px solid black; border-radius: 10%"></div>
+                                </div>
+                                <div class="intro-cell-div">
+                                    <p class="text" style="margin-bottom: 0px;">Tritanopia</p>
+                                    <div class="tritanopia-preset" style="width: 30px; height: 30px; border: 1px solid black; border-radius: 10%"></div>
+                                </div>
                             </div>
                         </div>
                         <div class="row mt-1 justify-content-end">

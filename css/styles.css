@@ -327,4 +327,25 @@ img {
 .pseudoText-dark {
 }
 
+input[type="color" i]::-webkit-color-swatch,
+input[type="color" i]::-moz-color-swatch {
+    border: none;
+    background: none;
+}
+
+input[type="color" i]::-webkit-color-swatch-wrapper {
+  border: none;
+  border-radius: 10px;
+  padding: 0;
+}
+
+input[type="color"] {
+  -webkit-appearance: none;
+
+}
+
+input[type="color"]:hover {
+  cursor: pointer;
+}
+
 /* ---------------------------------------------------- */

@@ -9,6 +9,15 @@
   --outerSpaceCrayola: #2c3639;
   --darkSlateGray: #3f4e4f;
   --graniteGray: #696464;
+  --finalPath: #fedc97;
+  --searchedPathInProgress: #f26419;
+  --searchedPath: #28666e;
+  --newChildren: #696464;
+  --skippedNode: #808080f0;
+  --jumpNode: #f26419;
+  --startNode: #008000;
+  --endNode: #ff0000;
+  --wall: #6290c8;
 }
 
 td {
@@ -36,15 +45,15 @@ body {
 }
 
 .wall {
-  background-color: var(--unitedNationsBlue);
+  background-color: var(--wall);
 }
 
 .startnode {
-  background-color: green;
+  background-color: var(--startNode);
 }
 
 .endnode {
-  background-color: red;
+  background-color: var(--endNode);
 }
 
 .top-bar {
@@ -82,16 +91,28 @@ body {
   height: 30px;
 }
 
-.intro-searchpath {
-  background-color: var(--orangeRed);
+.intro-startNode {
+  background-color: var(--startNode);
 }
 
-.intro-finalpath {
-  background-color: var(--navajoWhite);
+.intro-endNode {
+  background-color: var(--endNode);
 }
 
-.intro-child {
-  background-color: var(--graniteGray);
+.intro-wall {
+  background-color: var(--wall);
+}
+
+.intro-searchedPathInProgress {
+  background-color: var(--searchedPathInProgress);
+}
+
+.intro-finalPath {
+  background-color: var(--finalPath);
+}
+
+.intro-newChildren {
+  background-color: var(--newChildren);
 }
 
 .intro-cell-div {
@@ -121,8 +142,55 @@ body {
   border-bottom: 1px solid black;
 }
 
+#cellSizeInput.cellSizeInput-dark {
+  border-top: 1px solid white;
+  border-bottom: 1px solid white;
+}
+
 .button-group-flex > .btn-right {
   border-top-left-radius: 0px;
   border-bottom-left-radius: 0px;
   padding: 4px 8px 4px 8px;
+}
+
+.protanopia-preset {
+  background: linear-gradient(
+    to bottom right,
+    #007dff 0%,
+    #007dff 51%,
+    #ff0000 51%,
+    #ff0000 100%
+  );
+}
+
+.protanopia-preset:hover {
+  cursor: pointer;
+}
+
+.deuteranopia-preset {
+  background: linear-gradient(
+    to bottom right,
+    #9e0083 0%,
+    #9e0083 51%,
+    #ff0000 51%,
+    #ff0000 100%
+  );
+}
+
+.deuteranopia-preset:hover {
+  cursor: pointer;
+}
+
+.tritanopia-preset {
+  background: linear-gradient(
+    to bottom right,
+    #008000 0%,
+    #008000 51%,
+    #6e1f88 51%,
+    #6e1f88 100%
+  );
+}
+
+.tritanopia-preset:hover {
+  cursor: pointer;
 }

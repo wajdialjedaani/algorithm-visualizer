@@ -7,6 +7,17 @@ export function CheckFirstVisit(pageName) {
     }
 }
 
+export function GetColors(pageName) {
+    if(!Cookies.get(pageName)) {
+        return undefined
+    }
+    return JSON.parse(Cookies.get(pageName))
+}
+
+export function SetColors(pageName, colors) {
+    Cookies.set(pageName, JSON.stringify(colors), {expires: 999, sameSite: 'strict'})
+}
+
 export class PathfindingCookies {
     static SetCellSize(size) {
         Cookies.set('cellSize', `${size}`, {expires: 999, sameSite: 'strict'})

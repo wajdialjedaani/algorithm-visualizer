@@ -5,6 +5,7 @@ import { PageAlgorithm, DisplayAnnotation } from "../js/SetAlgorithm.js";
 import { AnimationController } from "../js/AnimationController.js";
 import { Table, Graph, DFSMaze, CellHandler } from "../js/PathfindingCanvas.js";
 import { debounce } from "../js/Utility.js";
+import { pathfindingColors } from "../js/ColorSets.js";
 
 const alertContainer = document.getElementById('alertContainer')
 
@@ -100,6 +101,7 @@ document.querySelector("#resetSettings").addEventListener("click", function () {
     animationController.CancelTimeline()
     canvas.CreateTable()
     document.querySelector("#Progress-Bar-Fill").style.width = "0%"
+    pathfindingColors.reset()
     SetGoButton()
 })
 
@@ -170,6 +172,51 @@ document.querySelector("#Progress-Bar-Outline").addEventListener('mousedown', fu
         animationController.Play()
     }
 })
+
+document.querySelector(".protanopia-preset").addEventListener("click", function() {
+    pathfindingColors.reset()
+    pathfindingColors["startNode"] = "#007dff";
+})
+
+document.querySelector(".deuteranopia-preset").addEventListener("click", function() {
+    pathfindingColors.reset()
+    pathfindingColors["startNode"] = "#9e0083";
+})
+
+document.querySelector(".tritanopia-preset").addEventListener("click", function() {
+    pathfindingColors.reset()
+    pathfindingColors["endNode"] = "#6e1f88";
+})
+
+document.querySelector(".intro-cell.intro-startNode").addEventListener("input", function(event) {
+    pathfindingColors["startNode"] = event.target.value
+})
+document.querySelector(".intro-cell.intro-startNode").value = pathfindingColors["startNode"]
+
+document.querySelector(".intro-cell.intro-endNode").addEventListener("input", function(event) {
+    pathfindingColors["endNode"] = event.target.value
+})
+document.querySelector(".intro-cell.intro-endNode").value = pathfindingColors["endNode"]
+
+document.querySelector(".intro-cell.intro-wall").addEventListener("input", function(event) {
+    pathfindingColors["wall"] = event.target.value
+})
+document.querySelector(".intro-cell.intro-wall").value = pathfindingColors["wall"]
+
+document.querySelector(".intro-cell.intro-searchedPathInProgress").addEventListener("input", function(event) {
+    pathfindingColors["searchPathInProgress"] = event.target.value
+})
+document.querySelector(".intro-cell.intro-searchedPathInProgress").value = pathfindingColors["searchedPathInProgress"]
+
+document.querySelector(".intro-cell.intro-finalPath").addEventListener("input", function(event) {
+    pathfindingColors["finalPath"] = event.target.value
+})
+document.querySelector(".intro-cell.intro-finalPath").value = pathfindingColors["finalPath"]
+
+document.querySelector(".intro-cell.intro-newChildren").addEventListener("input", function(event) {
+    pathfindingColors["newChildren"] = event.target.value
+})
+document.querySelector(".intro-cell.intro-newChildren").value = pathfindingColors["newChildren"]
 
 function SetCellSize(newSize) {
     if(newSize < 10) {
