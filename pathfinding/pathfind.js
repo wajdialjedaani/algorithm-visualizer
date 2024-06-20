@@ -173,19 +173,40 @@ document.querySelector("#Progress-Bar-Outline").addEventListener('mousedown', fu
     }
 })
 
-document.querySelector(".protanopia-preset").addEventListener("click", function() {
+document.querySelector(".protanopia-preset").addEventListener("click", function(e) {
     pathfindingColors.reset()
+    if(e.target.classList.contains("selected")) {
+        e.target.classList.toggle("selected");
+        return
+    }
+    e.target.classList.toggle("selected");
     pathfindingColors["startNode"] = "#007dff";
+    document.querySelector(".deuteranopia-preset").classList.remove("selected");
+    document.querySelector(".tritanopia-preset").classList.remove("selected");
 })
 
-document.querySelector(".deuteranopia-preset").addEventListener("click", function() {
+document.querySelector(".deuteranopia-preset").addEventListener("click", function(e) {
     pathfindingColors.reset()
+    if(e.target.classList.contains("selected")) {
+        e.target.classList.toggle("selected");
+        return
+    }
     pathfindingColors["startNode"] = "#9e0083";
+    e.target.classList.toggle("selected");
+    document.querySelector(".protanopia-preset").classList.remove("selected");
+    document.querySelector(".tritanopia-preset").classList.remove("selected");
 })
 
-document.querySelector(".tritanopia-preset").addEventListener("click", function() {
+document.querySelector(".tritanopia-preset").addEventListener("click", function(e) {
     pathfindingColors.reset()
+    if(e.target.classList.contains("selected")) {
+        e.target.classList.toggle("selected");
+        return
+    }
     pathfindingColors["endNode"] = "#6e1f88";
+    e.target.classList.toggle("selected");
+    document.querySelector(".protanopia-preset").classList.remove("selected");
+    document.querySelector(".deuteranopia-preset").classList.remove("selected");
 })
 
 document.querySelector(".intro-cell.intro-startNode").addEventListener("input", function(event) {

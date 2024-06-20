@@ -163,6 +163,18 @@ body {
   );
 }
 
+.protanopia-preset.selected::before {
+  content: "";
+  position: relative;
+  width: 128%;
+  height: 130%;
+  top: -15%;
+  left: -13%;
+  display: block;
+  border: 2px solid black;
+  border-radius: 5px;
+}
+
 .protanopia-preset:hover {
   cursor: pointer;
 }
@@ -177,6 +189,18 @@ body {
   );
 }
 
+.deuteranopia-preset.selected::before {
+  content: "";
+  position: relative;
+  width: 128%;
+  height: 130%;
+  top: -15%;
+  left: -13%;
+  display: block;
+  border: 2px solid black;
+  border-radius: 5px;
+}
+
 .deuteranopia-preset:hover {
   cursor: pointer;
 }
@@ -189,6 +213,18 @@ body {
     #6e1f88 51%,
     #6e1f88 100%
   );
+}
+
+.tritanopia-preset.selected::before {
+  content: "";
+  position: relative;
+  width: 128%;
+  height: 130%;
+  top: -15%;
+  left: -13%;
+  display: block;
+  border: 2px solid black;
+  border-radius: 5px;
 }
 
 .tritanopia-preset:hover {
